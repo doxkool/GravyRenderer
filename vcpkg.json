@@ -1,0 +1,46 @@
+{
+  "name": "renderergl",
+  "version-string": "0.0.1",
+  "dependencies": [
+    {
+      "name": "opengl",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "glew",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "glfw3",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "glm",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "opengl",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "glew",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "glfw3",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "glm",
+      "platform": "linux",
+      "default-features": true
+    }
+  ]
+}
