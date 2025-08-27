@@ -1,8 +1,19 @@
 {
-  "name": "renderergl",
-  "version-string": "0.0.1",
+  "name": "poutineengine",
+  "version-string": "0.1.0",
   "dependencies": [
     {
+      "name": "imgui",
+      "platform": "windows",
+      "default-features": false,
+      "features": [
+        "win32-binding",
+        "docking-experimental",
+        "glfw-binding",
+        "opengl3-binding"
+      ]
+    },
+    {
       "name": "opengl",
       "platform": "windows",
       "default-features": true
@@ -23,6 +34,51 @@
       "default-features": true
     },
     {
+      "name": "spdlog",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "stb",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "tinyobjloader",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "tinygltf",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "nlohmann-json",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "tracy",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "entt",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "imgui",
+      "platform": "linux",
+      "default-features": false,
+      "features": [
+        "docking-experimental",
+        "glfw-binding",
+        "opengl3-binding"
+      ]
+    },
+    {
       "name": "opengl",
       "platform": "linux",
       "default-features": true
@@ -39,6 +95,41 @@
     },
     {
       "name": "glm",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "spdlog",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "stb",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "tinyobjloader",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "tinygltf",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "nlohmann-json",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "tracy",
+      "platform": "linux",
+      "default-features": true
+    },
+    {
+      "name": "entt",
       "platform": "linux",
       "default-features": true
     }
