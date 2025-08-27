@@ -3,12 +3,12 @@ This project is to develop a 3D renderer and tooling to maybe, and some day, be 
 
 There is no documentation for this at the moment and this project is only for my personal use but feel free to have fun with it if you want.
 
-# Setting-up the building environnement for Poutine
+# Setting-up the building environnement
 
 Please note that VSCode IDE is use to develop Poutine.
 
 ## Requirements
-Poutine Engine use `Cmake` to generate the project files.
+This project use `Cmake` to generate the project files.
 
 - VCPKG (Packages manager preconfigured to download the following dependecies automaticaly)
     - OpenGL            (Open Graphics Library)
