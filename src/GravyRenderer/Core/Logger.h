@@ -14,7 +14,7 @@ namespace Gravy
     private:
         
     public:
-        static void Init(std::string app_name = "Gravy");
+        static int Init(std::string app_name = "Gravy");
 	    static void Set_LogLevel(int log_level);
 	    static std::shared_ptr<spdlog::logger>& GetLogger();
     };    

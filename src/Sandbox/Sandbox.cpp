@@ -1,18 +1,36 @@
 #include "Gravy.h"
 
-Gravy::Window* m_Window = nullptr;
-
 void Run()
 {
-    while (!m_Window->GetWindowShouldClose())
+    Gravy::SetClearColor(DARK_ORANGE);
+    
+    while (Gravy::IsRunning())
     {
-        m_Window->Update();
+        Gravy::NewFrame();
+
+        if(Gravy::Input::IsKeyJustPressed(KEY_GRAVE_ACCENT))
+        {
+            Gravy::Shutdown();
+        }
+
+        if(Gravy::Input::IsKeyJustPressed(KEY_1))
+        {
+            Gravy::PlayAudio();
+        }
+
+        Gravy::EndFrame();
     }
 }
 
 int main()
 {
-    Gravy::Init();
+    GrvConfInit confInit = {
+        .renderingAPI = Opengl,
+        .apiVersionMajor = 4,
+        .apiVersionMinor = 6,
+        .apiEnableMessageCallBack = true,
+        .apiLoggingLevel = trace
+    };
 
     GrvConfWindow confWindow = {
         .windowName         = "Sandbox",
@@ -20,12 +38,14 @@ int main()
         .windowResY         = 1080,
         .windowMode         = windowed,
         .windowResizable    = true,
-        .transparentFB      = false,
+        .transparentFB      = false
     };
 
+    int ret = Gravy::Init(&confInit, &confWindow);
+    if(ret == success)
+    {
+        Run();
+    }
 
-    m_Window = Gravy::CreatWindowInst(&confWindow);
-
-    Run();
     return 0;
 }

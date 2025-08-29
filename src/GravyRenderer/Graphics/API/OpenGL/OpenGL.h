@@ -7,6 +7,7 @@
 #include "Core/Time.h"
 #include "Core/Base.h"
 #include "Core/Logger.h"
+#include "Core/ConfigsDef.h"
 
 #include "glshader.h"
 #include "glvao.h"
@@ -19,8 +20,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-//#include <imgui_internal.h>
-
 #define CHECK_GL_ERRORS
 
 #ifdef CHECK_GL_ERRORS
@@ -31,24 +30,33 @@
 
 void GlCheckError(const char *function, const char *file, int line);
 
-namespace OpenGL
+namespace Gravy
 {
-    void Init_OpenGL();
+    class OpenGL
+    {
+        private:
 
-    void SetClearColor(glm::vec4 color);
+        public:
+        OpenGL() {}
+        ~OpenGL() {}
 
-    void ClearBuffer();
+        static int Init(GrvConfInit* confInit);
 
-    void WireframeRendering(bool enable);
-    void WireframeRendering(bool enable, float wireWidth);
+        static void SetClearColor(glm::vec4 color);
 
-    void DrawArray(GLsizei count);
-    void DrawElements(GLsizei count);
+        static void ClearBuffer();
 
-    void SetFrameBufferRes(glm::vec2 resolution);
-    void SetFrameBufferRes(int width, int height);
-    
-    glm::vec2 GetFrameBufferRes();
+        static void WireframeRendering(bool enable);
+        static void WireframeRendering(bool enable, float wireWidth);
 
-    float GetAspectRatio();
+        static void DrawArray(GLsizei count);
+        static void DrawElements(GLsizei count);
+
+        static void SetFrameBufferRes(glm::vec2 resolution);
+        static void SetFrameBufferRes(int width, int height);
+        
+        static glm::vec2 GetFrameBufferRes();
+
+        static float GetAspectRatio();
+    };
 }

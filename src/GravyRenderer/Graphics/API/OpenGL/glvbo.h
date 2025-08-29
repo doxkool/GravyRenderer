@@ -39,20 +39,23 @@ struct Vertex
 	}
 };
 
-class glvbo
+namespace Gravy
 {
-private:
-	GLuint VBO;
-public:
-	GLuint Create(uint32_t size);
-	GLuint Create(std::vector<float> *vertices);
-	GLuint Create(float *vertices, uint32_t size);
-	GLuint Create(std::vector<Vertex> *vertices);
+	class glvbo
+	{
+	private:
+		GLuint VBO;
+	public:
+		GLuint Create(uint32_t size);
+		GLuint Create(std::vector<float> *vertices);
+		GLuint Create(float *vertices, uint32_t size);
+		GLuint Create(std::vector<Vertex> *vertices);
 
-	void Bind();
-	void UnBind();
+		void Bind();
+		void UnBind();
 
-	void Delete(uint32_t bufferSize);
+		void Delete(uint32_t bufferSize);
 
-	void SendData(const void *data, uint32_t size);
-};
+		void SendData(const void *data, uint32_t size);
+	};
+}

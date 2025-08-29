@@ -4,9 +4,15 @@ namespace Gravy
 {
     GrvConfWindow sWindowSettings;
 
-    void Window::InitWindow(GrvConfWindow* confWindow)
+    int Window::Init(GrvConfInit* confInit)
     {
-        m_glfw.InitWindow(confWindow);
+        m_glfw.Init(confInit);
+        return 0;
+    }
+
+    void Window::Create(GrvConfWindow* confWindow)
+    {
+        m_glfw.Create(confWindow);
 
         if(confWindow->iconPath)
         {

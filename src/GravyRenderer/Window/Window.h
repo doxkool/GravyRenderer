@@ -15,7 +15,9 @@ namespace Gravy
         Window() {}
         ~Window() {}
 
-        void InitWindow(GrvConfWindow* confWindow);
+        int Init(GrvConfInit* confInit);
+
+        void Create(GrvConfWindow* confWindow);
         void SwapScreenBuffer();
 
         bool GetWindowShouldClose();

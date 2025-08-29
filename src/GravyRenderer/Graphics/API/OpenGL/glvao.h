@@ -6,17 +6,20 @@
 
 #include <GL/glew.h>
 
-class glvao
+namespace Gravy
 {
-private:
-    GLuint VAO;
-public:
-    GLuint Create();
+    class glvao
+    {
+    private:
+        GLuint VAO;
+    public:
+        GLuint Create();
 
-    void LinkAttribF(GLuint layout, GLuint numComponents, GLsizei stride, void* offset);
+        void LinkAttribF(GLuint layout, GLuint numComponents, GLsizei stride, void* offset);
 
-    void Bind();
-    void UnBind();
+        void Bind();
+        void UnBind();
 
-    void Delete(uint32_t bufferSize);
-};
+        void Delete(uint32_t bufferSize);
+    };
+}

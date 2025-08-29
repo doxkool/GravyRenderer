@@ -1,5 +1,13 @@
 #pragma once
 
+#pragma region Setting Enums
+
+enum e_GrvReturnTypes
+{
+    success,
+    fail
+};
+
 enum e_GrvApi
 {
     Opengl,
@@ -13,9 +21,24 @@ enum e_WindowMode
     fullscreen
 };
 
+enum e_ApiLoggingLevel
+{
+    info,
+    debug,
+    trace
+};
+
+#pragma endregion Setting Enums
+// ---------------------------------------------------------------------------
+#pragma region Settings Structs
+
 struct GrvConfInit
 {
     e_GrvApi renderingAPI = Opengl;
+    int apiVersionMajor = 0;
+    int apiVersionMinor = 0;
+    bool apiEnableMessageCallBack = false;
+    e_ApiLoggingLevel apiLoggingLevel = info;
 };
 
 struct GrvConfWindow
@@ -28,3 +51,5 @@ struct GrvConfWindow
     bool windowResizable    = true;
     bool transparentFB      = false;
 };
+
+#pragma endregion Settings Structs

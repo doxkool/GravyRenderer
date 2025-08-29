@@ -86,9 +86,9 @@ void GlCheckError(const char *function, const char *file, int line)
     #endif
 }
 
-namespace OpenGL
+namespace Gravy
 {
-    void Init_OpenGL()
+    int OpenGL::Init(GrvConfInit* confInit)
     {
         glewExperimental = GL_TRUE;
 
@@ -96,7 +96,9 @@ namespace OpenGL
 
         if (GLEW_OK != err)
         {
-            LOG_CRITICAL("ERROR! GLEW_INIT_FAILED");
+            auto errChar = (const char*)glewGetErrorString(err);
+            LOG_CRITICAL("ERROR! GLEW_INIT_FAILED :: {}", errChar);
+            return -1;
         }
         else
         {
@@ -105,11 +107,12 @@ namespace OpenGL
             glEnable(GL_DEPTH_TEST);
             glEnable(GL_BLEND);
 
-#ifdef DEBUG
-            glEnable(GL_DEBUG_OUTPUT);
-            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-            glDebugMessageCallback(MessageCallback, 0);
-#endif
+            if(confInit->apiEnableMessageCallBack)
+            {
+                glEnable(GL_DEBUG_OUTPUT);
+                glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+                glDebugMessageCallback(MessageCallback, 0);
+            }
 
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
@@ -124,45 +127,44 @@ namespace OpenGL
             std::string gl_version = std::string((const char *)glGetString(GL_VERSION));
 
             LOG_INFO("OpenGL_API Information :\n    {} \n    {}\n    {}\n", gl_vendor, gl_renderer, gl_version);
-
-            //m_GlRenderingSettings = Settings::GetRenderingSettings();
         }
+        return 0;
     }
 
-    void SetClearColor(glm::vec4 color)
+    void OpenGL::SetClearColor(glm::vec4 color)
     {
         glClearColor(color.r, color.g, color.b, color.a); GLCHECK
     }
 
-    void ClearBuffer()
+    void OpenGL::ClearBuffer()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); GLCHECK
     }
 
-    void SetFrameBufferRes(glm::vec2 resolution)
+    void OpenGL::SetFrameBufferRes(glm::vec2 resolution)
     {
         SetFrameBufferRes(resolution.x, resolution.y);
     }
 
-    void SetFrameBufferRes(int width, int height)
+    void OpenGL::SetFrameBufferRes(int width, int height)
     {
         glViewport(0, 0, width, height); GLCHECK
         FrameBuffer_Height = height;
         FrameBuffer_Width = width;
     }
 
-    glm::vec2 GetFrameBufferRes()
+    glm::vec2 OpenGL::GetFrameBufferRes()
     {
         return glm::vec2(FrameBuffer_Width, FrameBuffer_Height);
     }
 
-    float GetAspectRatio()
+    float OpenGL::GetAspectRatio()
     {
         glm::vec2 res = GetFrameBufferRes();
         return res.x / res.y;
     }
 
-    void WireframeRendering(bool enable)
+    void OpenGL::WireframeRendering(bool enable)
     {
         glLineWidth(2.0f);
 
@@ -176,7 +178,7 @@ namespace OpenGL
         }
     }
 
-    void WireframeRendering(bool enable, float wireWidth)
+    void OpenGL::WireframeRendering(bool enable, float wireWidth)
     {
         glLineWidth(wireWidth);
 
@@ -190,12 +192,12 @@ namespace OpenGL
         }
     }
 
-    void DrawArray(GLsizei count)
+    void OpenGL::DrawArray(GLsizei count)
     {
         glDrawArrays(GL_TRIANGLES, 0, count); GLCHECK
     }
 
-    void DrawElements(GLsizei count)
+    void OpenGL::DrawElements(GLsizei count)
     {
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr); GLCHECK
     }

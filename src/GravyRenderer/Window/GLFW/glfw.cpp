@@ -39,31 +39,49 @@ namespace Gravy
 
     glfw::glfw()
     {
+    }
+
+    glfw::~glfw()
+    {
+    }
+
+    int glfw::Init(GrvConfInit* confInit)
+    {
         /* Initialize the library */
         if (!glfwInit())
         {
             LOG_ERROR("ERROR! GLFW_INIT_FAILED");
-
-            glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+            return -1;
         }
 
         #ifdef DEBUG
             //LOG_WARN("Running in Debug mode!");
             glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
         #endif
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, confInit->apiVersionMajor);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, confInit->apiVersionMinor);
+
+        return 0;
     }
 
-    glfw::~glfw()
+    void glfw::Shutdown()
     {
         glfwTerminate();
     }
 
-    void glfw::InitWindow(GrvConfWindow* confWindow)
+    int glfw::Create(GrvConfWindow* confWindow)
     {
         GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+        if (!primaryMonitor) {
+            // Handle error getting primary monitor
+            LOG_CRITICAL("GLFW ERROR :: Failed to get the primary monitor!");
+            glfwTerminate();
+            return -1;
+        }
+
         const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
 
         m_windowName = confWindow->windowName;
@@ -129,6 +147,8 @@ namespace Gravy
         glfwSetCursorPosCallback(window, mouse_callback);
         glfwSetScrollCallback(window, mouse_scroll_callback);
         glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+        return 0;
     }
 
     void glfw::SetWindowIcon(const std::string &IconPath)

@@ -4,18 +4,21 @@
 
 #include <GL/glew.h>
 
-class glibo
+namespace Gravy
 {
-public:
-	GLuint Create(uint32_t* indices, uint32_t count);
+	class glibo
+	{
+	public:
+		GLuint Create(uint32_t* indices, uint32_t count);
 
-	void Bind();
-	void UnBind();
-	void Delete();
+		void Bind();
+		void UnBind();
+		void Delete();
 
-	uint32_t GetCount() const { return m_Count; }
+		uint32_t GetCount() const { return m_Count; }
 
-private:
-	uint32_t m_RendererID;
-	uint32_t m_Count;
-};
+	private:
+		uint32_t m_RendererID;
+		uint32_t m_Count;
+	};
+}

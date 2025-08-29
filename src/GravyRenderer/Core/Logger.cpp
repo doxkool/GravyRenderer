@@ -10,7 +10,7 @@ namespace Gravy
 
     std::string appName;
 
-    void Logger::Init(std::string app_name)
+    int Logger::Init(std::string app_name)
     {
         appName = app_name;
         std::vector<spdlog::sink_ptr> Sinks;
@@ -29,6 +29,7 @@ namespace Gravy
         {
             LOG_DEBUG("Logger is ready!");
         }
+        return 0;
     }
     // Set the logging level for the Renderer | 0 = Trace, 1 = Debug and 2 = Info.
     void Logger::Set_LogLevel(int log_level)
