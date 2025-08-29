@@ -27,11 +27,12 @@ namespace Gravy
         delete m_soloud;
     }
 
-    void Audio::PlayTest()
+    void Audio::PlayWav(const char* filename)
     {
-        int loadResult = testWav.load("test.wav");
+        int loadResult = testWav.load(filename);
         if (loadResult != 0)
         {
+            LOG_ERROR("Error, the audio file {} was not found...", filename);
             return;
         }
 

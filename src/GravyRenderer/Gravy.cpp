@@ -72,9 +72,9 @@ namespace Gravy
         return !m_Window.GetWindowShouldClose();
     }
 
-    void PlayAudio()
+    void PlayWavAudio(const char* filename)
     {
-        m_Audio.PlayTest();
+        m_Audio.PlayWav(filename);
     }
 
     // Use to set the clear color of the framebuffer.

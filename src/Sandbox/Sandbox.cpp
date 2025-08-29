@@ -15,7 +15,7 @@ void Run()
 
         if(Gravy::Input::IsKeyJustPressed(KEY_1))
         {
-            Gravy::PlayAudio();
+            Gravy::PlayWavAudio("test.wav");
         }
 
         Gravy::EndFrame();

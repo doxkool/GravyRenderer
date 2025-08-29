@@ -19,6 +19,6 @@ namespace Gravy
         e_GrvReturnTypes Init();
         void Shutdown();
 
-        void PlayTest();
+        void PlayWav(const char* filename);
     };
 }

@@ -19,6 +19,7 @@ This project use `Cmake` to generate the project files.
     - spdlog            (Logger)
     - STB-IMAGE         (Image/texture loader)
     - Tiny OBJ Loader   (.obj model loader)
+    - SoLoud            (Portable c/c++ audio engine)
     - Tracy             (Profiler)
 
 ## Install VCPKG
