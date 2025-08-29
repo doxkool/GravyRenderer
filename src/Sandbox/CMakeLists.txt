@@ -16,3 +16,13 @@ include_directories(
 SET(soloud_static ${CMAKE_BINARY_DIR}/src/GravyRenderer/Vendors/SoLoud/Debug/soloud.lib)
 
 target_link_libraries(Sandbox PUBLIC ${soloud_static} GravyRenderer)
+
+IF (WIN32)
+    add_custom_target(Copy_Editor_assets_files ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/Sandbox/assets ${CMAKE_BINARY_DIR}/bin/Debug/assets)
+
+ELSEIF (LINUX)
+    add_custom_target(Copy_Editor_assets_files ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/Sandbox/assets ${CMAKE_BINARY_DIR}/bin/assets)
+        
+ENDIF()

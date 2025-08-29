@@ -21,7 +21,10 @@ namespace Gravy
     void SwapScreenBuffer();
     bool IsRunning();
 
-    void PlayWavAudio(const char* filename);
+    int LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo);
+    void PlayAudioTrack(int id);
+    void PlayAudio(const char* filename, bool loop = false);
+    void StopAllAudio();
 
     void SetClearColor(glm::vec4 color);
     void ClearBuffer();

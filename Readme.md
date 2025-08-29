@@ -65,3 +65,11 @@ You need to do a Git clone of the VCPKG repository in your "C:/Users/%username%/
 ```Console
 git clone https://github.com/microsoft/vcpkg.git /Users/$env:USERNAME/vcpkg
 ```
+
+
+## Attrubutions
+
+- Musics assets :
+    - Magic in the Garden by David Krulic   - www.freepd.com
+    - Final Step by Rafael Krux             - www.freepd.com
+    - Go On Without Me by Bryan Teoh        - www.freepd.com

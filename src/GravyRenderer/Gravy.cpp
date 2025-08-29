@@ -72,9 +72,24 @@ namespace Gravy
         return !m_Window.GetWindowShouldClose();
     }
 
-    void PlayWavAudio(const char* filename)
+    int LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo)
     {
-        m_Audio.PlayWav(filename);
+        return m_Audio.LoadAudioTrack(audioTrackInfo);
+    }
+
+    void PlayAudioTrack(int id)
+    {
+        m_Audio.PlayAudioTrack(id);
+    }
+
+    void PlayAudio(const char* filename, bool loop)
+    {
+        m_Audio.PlayAudio(filename, loop);
+    }
+
+    void StopAllAudio()
+    {
+        m_Audio.StopAllAudio();
     }
 
     // Use to set the clear color of the framebuffer.
