@@ -13,9 +13,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-windows/include
     )
 
-SET(soloud_static ${CMAKE_BINARY_DIR}/src/GravyRenderer/Vendors/SoLoud/Debug/soloud.lib)
-
-target_link_libraries(Sandbox PUBLIC ${soloud_static} GravyRenderer)
+target_link_libraries(Sandbox PUBLIC GravyRenderer)
 
 IF (WIN32)
     add_custom_target(Copy_Editor_assets_files ALL

@@ -12,7 +12,7 @@ namespace Gravy
     {
         m_pconfInit = confInit;
         
-        Logger::Init();
+        Logger::Init(confWindow->windowName);
         m_Window.Init(confInit);
         m_Audio.Init();
 
@@ -38,6 +38,7 @@ namespace Gravy
     // Call Shudown() to close the renderer.
     void Shutdown()
     {
+        LOG_DEBUG("Shuting down... bye!");
         m_Window.Quit();
     }
 

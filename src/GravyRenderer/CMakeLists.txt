@@ -2,9 +2,17 @@ cmake_minimum_required(VERSION 3.28)
 
 project(GravyRenderer CXX)
 
-SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+if(WIN32)
+    SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    SET(soloud_static ${CMAKE_BINARY_DIR}/src/GravyRenderer/Vendors/SoLoud/Debug/soloud.lib)
+    add_definitions (-DWITH_WASAPI)
+endif(WIN32)
 
-add_definitions (-DWITH_WASAPI)
+if(UNIX)
+SET(soloud_static ${CMAKE_BINARY_DIR}/src/GravyRenderer/Vendors/SoLoud/libsoloud.a)
+    add_definitions (-DWITH_MINIAUDIO)
+endif(UNIX)
+
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
@@ -26,7 +34,5 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/GravyRenderer/Vendors/SoLoud/include
     ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-windows/include
     )
-
-SET(soloud_static ${CMAKE_BINARY_DIR}/src/GravyRenderer/Vendors/SoLoud/Debug/soloud.lib)
 
 target_link_libraries(GravyRenderer PUBLIC ${soloud_static} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)

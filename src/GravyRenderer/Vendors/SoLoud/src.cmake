@@ -219,7 +219,7 @@ if (SOLOUD_STATIC)
 	add_library(${TARGET_NAME} STATIC ${TARGET_SOURCES})
 endif()
 
-target_link_libraries (soloud ${LINK_LIBRARIES})
+target_link_libraries (${TARGET_NAME} ${LINK_LIBRARIES})
 
 #include (Install)
 #INSTALL(FILES ${TARGET_HEADERS} DESTINATION include/${TARGET_NAME})

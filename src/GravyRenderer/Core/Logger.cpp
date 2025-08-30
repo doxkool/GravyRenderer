@@ -15,7 +15,7 @@ namespace Gravy
         appName = app_name;
         std::vector<spdlog::sink_ptr> Sinks;
         Sinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-        Sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Renderer_log.txt", true));
+        Sinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>(app_name+"_log.txt", true));
         Sinks[0]->set_pattern("[%T] [%^%l%$]	[%n]   	%v");
         Sinks[1]->set_pattern("[%T] [%l]	[%n]   	%v");
 
