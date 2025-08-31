@@ -24,7 +24,7 @@ namespace Time
     float deltaTime = 0.0f; // time between current frame and last frame
     float lastFrame = 0.0f;
 
-    float updateDeltaTime()
+    float UpdateDeltaTime()
     {
         float currentFrame = static_cast<float>(Gravy::glfw::GetTime());
         deltaTime = currentFrame - lastFrame;

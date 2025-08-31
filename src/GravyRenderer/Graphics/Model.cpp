@@ -404,8 +404,29 @@ namespace Gravy
         Meshes[0].MaterialID = materialID;
     }
 
-    void Model::Render()
+    void Model::Render(Shader* shader, Camera* camera)
     {
+        //glm::vec3 position  = {0.0f, 0.0f, 0.0f};
+        //glm::vec3 rotation  = {0.0f, 0.0f, 0.0f};
+        //glm::vec3 scale     = {1.0f, 1.0f, 1.0f};
+
+        shader->Bind();
+
+        // ---- MODEL ----
+        glm::mat4 ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, Position);
+        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Rotation.x),glm::vec3(1,0,0)); //rotation x
+        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Rotation.y),glm::vec3(0,1,0)); //rotation y
+        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Rotation.z),glm::vec3(0,0,1)); //rotation z
+        ModelMatrix = glm::scale(ModelMatrix, Scale);
+
+        // Update the shader with the camera's view and projection matrices
+        auto ViewMatrix = camera->GetViewMatrix();
+        auto ProjectionMatrix = camera->GetProjectionMatrix();
+        shader->SetMat4fv(ViewMatrix, "view");
+        shader->SetMat4fv(ProjectionMatrix, "projection");
+        shader->SetMat4fv(ModelMatrix, "model");
+
         for (auto& mesh : Meshes)
         {
             Materials[mesh.MaterialID].Diffuse_Texture.SetActiveTexture(GL_TEXTURE0);
@@ -418,6 +439,8 @@ namespace Gravy
             Materials[mesh.MaterialID].Diffuse_Texture.UnBind();
             Materials[mesh.MaterialID].Specular_Texture.UnBind();
         }
+
+        shader->UnBind();
     }
 
 }

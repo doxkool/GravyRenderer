@@ -9,10 +9,16 @@
 
 enum e_AudioTrackState
 {
-    Playing,
+    Playing = 0,
     Paused,
     Stoped,
     Waiting
+};
+
+enum e_AudioChannelMode
+{
+    Mono = 0,
+    Stereo
 };
 
 struct t_AudioTrackInfo
@@ -33,6 +39,18 @@ struct t_AudioTrack
     e_AudioTrackState state;
 };
 
+struct t_AudioBusInfo
+{
+    const char* name = "bus";
+    float volume = 1.0;
+    e_AudioChannelMode channelMode = Stereo;
+};
+
+struct t_AudioBus
+{
+    t_AudioBusInfo* audioBusInfo;
+};
+
 struct t_GlobalAudioState
 {
     float volume = 1.0f;
@@ -51,6 +69,8 @@ namespace Gravy
         e_GrvReturnTypes Init();
         void Shutdown();
 
+        void CreateBus(t_AudioBusInfo* audioBusInfo);
+
         int LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo);
         
         void PlayAudioTrack(int id);
@@ -64,5 +84,6 @@ namespace Gravy
 
         t_GlobalAudioState m_GlobalAudioState;
         std::vector<t_AudioTrack> m_AudioTracks;
+        std::vector<t_AudioBus> m_AudioBuses;
     };
 }

@@ -24,6 +24,15 @@ void Run()
     //    .audioBus   = 0
     //};
     //auto MagicInTheGarden = Gravy::LoadAudioTrack(&audio3);
+
+    Gravy::Model cube0;
+    cube0.LoadPrimitive(Cube);
+
+    Gravy::Shader cube0Shader;
+    cube0Shader.loadShader(FLAT_VER_SHADER, FLAT_FRAG_SHADER);
+
+    Gravy::Camera camera;
+    camera.SetPosition({0.0f, 0.0f, -4.0f});
     
     while (Gravy::IsRunning())
     {
@@ -57,6 +66,10 @@ void Run()
             Gravy::StopAllAudio();
             Gravy::SetClearColor(GRAY);
         }
+
+        cube0.Render(&cube0Shader, &camera);
+
+        cube0.Rotation.y = ( cube0.Rotation.y + 50 * Gravy::GetDeltaTime() );
 
         Gravy::EndFrame();
     }

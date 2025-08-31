@@ -32,7 +32,8 @@ namespace Gravy
 
     glm::mat4 Camera::GetProjectionMatrix(float nearPlane, float farPlane)
     {
-        return glm::perspective(glm::radians(FOV), OpenGL::GetAspectRatio(), nearPlane, farPlane);
+        auto aspectRatio = OpenGL::GetAspectRatio();
+        return glm::perspective(glm::radians(FOV), aspectRatio, nearPlane, farPlane);
     }
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)

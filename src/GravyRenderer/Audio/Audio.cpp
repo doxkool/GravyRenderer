@@ -21,6 +21,17 @@ namespace Gravy
         m_soloud.deinit();
     }
 
+    void Audio::CreateBus(t_AudioBusInfo* audioBusInfo)
+    {
+        int id = m_AudioBuses.size();
+        m_AudioBuses.resize(m_AudioBuses.size() + 1);
+
+        auto &newBus = m_AudioBuses[id];
+        newBus.audioBusInfo = audioBusInfo;
+
+        LOG_DEBUG("New audio bus created.\n    ID: {}\n    Name: {}\n    Channel Mode: \n", id, newBus.audioBusInfo->name);//, newBus.audioBusInfo->channelMode);
+    }
+
     int Audio::LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo)
     {
         int id = m_AudioTracks.size();
@@ -40,7 +51,7 @@ namespace Gravy
             return -1;
         }
 
-        LOG_DEBUG("Loaded new audio track:\n    ID: {}\n    File: {}\n    Length: {}\n    Loop: {}", id, filePath, newTrack.trackLength, newTrack.trackInfo->loop);
+        LOG_DEBUG("Loaded new audio track:\n    ID: {}\n    File: {}\n    Length: {}\n    Loop: {}\n", id, filePath, newTrack.trackLength, newTrack.trackInfo->loop);
 
         return id;
     }
@@ -49,7 +60,7 @@ namespace Gravy
     {
         auto &audioTrack = m_AudioTracks[id];
         m_soloud.playBackground(audioTrack.audio);
-        LOG_DEBUG("Playing audio:\n    ID: {}\n    File: {}\n    Length: {}\n    Loop: {}", id, audioTrack.trackInfo->filePath, audioTrack.trackLength, audioTrack.trackInfo->loop);
+        LOG_DEBUG("Playing audio:\n    ID: {}\n    File: {}\n    Length: {}\n    Loop: {}\n", id, audioTrack.trackInfo->filePath, audioTrack.trackLength, audioTrack.trackInfo->loop);
     }
 
     void Audio::PlayAudio(const char* filename, bool loop)

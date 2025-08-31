@@ -20,7 +20,7 @@ namespace Time
 {
     float GetDeltaTime();
 
-    float updateDeltaTime();
+    float UpdateDeltaTime();
 
     double GetTime();
 }

@@ -22,6 +22,7 @@ namespace Gravy
         {
             LOG_INFO("Initating OpenGL renderer...");
             OpenGL::Init(m_pconfInit);
+            OpenGL::SetFrameBufferRes(confWindow->windowResX, confWindow->windowResY);
         }
 
         if(m_pconfInit->renderingAPI == Vulkan)
@@ -45,6 +46,8 @@ namespace Gravy
     // Call this function at each new frame to clear the framebuffer and poll the new event from the window.
     void NewFrame()
     {
+        ::Time::UpdateDeltaTime();
+
         OpenGL::ClearBuffer();
         m_Window.Update();
     }

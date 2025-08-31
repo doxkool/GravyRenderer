@@ -28,9 +28,17 @@ namespace Gravy
         virtual void RemoveMaterial(unsigned int materialID);
         virtual void SetActiveMaterial(unsigned int materialID);
 
-        virtual void Render();
+        virtual void SetPosition(glm::vec3 position) { Position = position; }
+        virtual void SetRotation(glm::vec3 rotation) { Rotation = rotation; }
+        virtual void SetScale(glm::vec3 scale) { Scale = scale; }
+
+        virtual void Render(Shader* shader, Camera* camera);
 
     public:
+        glm::vec3 Position  = {0.0f, 0.0f, 0.0f};
+        glm::vec3 Rotation  = {0.0f, 0.0f, 0.0f};
+        glm::vec3 Scale     = {1.0f, 1.0f, 1.0f};
+
         //std::vector<std::string> ShadersPath;
         std::vector<Mesh> Meshes;
         std::vector<Material> Materials;
