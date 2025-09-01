@@ -1,5 +1,9 @@
 #include "Gravy.h"
 
+#include "Audio/Audio.h"
+
+Audio m_Audio;
+
 void Run()
 {
     Gravy::SetClearColor(GRAY);
@@ -9,21 +13,21 @@ void Run()
         .loop       = true,
         .audioBus   = 0
     };
-    auto IceandSnow = Gravy::LoadAudioTrack(&audio1);
+    auto IceandSnow = m_Audio.LoadAudioTrack(&audio1);
 
     //t_AudioTrackInfo audio2 = {
     //    .filePath   = "assets/musics/Go_On_Without_Me.mp3",
     //    .loop       = false,
     //    .audioBus   = 0
     //};
-    //auto GoOnWithoutMe = Gravy::LoadAudioTrack(&audio2);
+    //auto GoOnWithoutMe = m_Audio.LoadAudioTrack(&audio2);
 
     //t_AudioTrackInfo audio3 = {
     //    .filePath   = "assets/musics/Magic_in_the_Garden.mp3",
     //    .loop       = true,
     //    .audioBus   = 0
     //};
-    //auto MagicInTheGarden = Gravy::LoadAudioTrack(&audio3);
+    //auto MagicInTheGarden = m_Audio.LoadAudioTrack(&audio3);
 
     Gravy::Model cube0;
     cube0.LoadPrimitive(Cube);
@@ -45,25 +49,25 @@ void Run()
 
         if(Gravy::Input::IsKeyJustPressed(KEY_1))
         {
-            Gravy::PlayAudioTrack(IceandSnow);
+            m_Audio.PlayAudioTrack(IceandSnow);
             Gravy::SetClearColor(DARK_ORANGE);
         }
 
         if(Gravy::Input::IsKeyJustPressed(KEY_2))
         {
-            //Gravy::PlayAudioTrack(GoOnWithoutMe);
+            //m_Audio.PlayAudioTrack(GoOnWithoutMe);
             Gravy::SetClearColor(ORANGE);
         }
 
         if(Gravy::Input::IsKeyJustPressed(KEY_3))
         {
-            //Gravy::PlayAudioTrack(MagicInTheGarden);
+            //m_Audio.PlayAudioTrack(MagicInTheGarden);
             Gravy::SetClearColor(RED);
         }
 
         if(Gravy::Input::IsKeyJustPressed(KEY_0))
         {
-            Gravy::StopAllAudio();
+            m_Audio.StopAllAudio();
             Gravy::SetClearColor(GRAY);
         }
 
@@ -94,11 +98,15 @@ int main()
         .transparentFB      = false
     };
 
+    m_Audio.Init();
+
     int ret = Gravy::Init(&confInit, &confWindow);
     if(ret == success)
     {
         Run();
     }
+
+    m_Audio.Shutdown();
 
     return 0;
 }

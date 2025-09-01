@@ -56,34 +56,25 @@ struct t_GlobalAudioState
     float volume = 1.0f;
 };
 
-namespace Gravy
+class Audio
 {
-    class Audio
-    {
-    private:
-        
-    public:
-        Audio() {}
-        ~Audio() {}
-
-        e_GrvReturnTypes Init();
-        void Shutdown();
-
-        void CreateBus(t_AudioBusInfo* audioBusInfo);
-
-        int LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo);
-        
-        void PlayAudioTrack(int id);
-        void PlayAudio(const char* filename, bool loop = false);
-        void Play3dAudio(const char* filename, bool loop = false);
-
-        void StopAllAudio();
-
-        void SetGlobalVolume(float volume);
-        float GetGlobalVolume();
-
-        t_GlobalAudioState m_GlobalAudioState;
-        std::vector<t_AudioTrack> m_AudioTracks;
-        std::vector<t_AudioBus> m_AudioBuses;
-    };
-}
+private:
+    
+public:
+    Audio() {}
+    ~Audio() {}
+    e_GrvReturnTypes Init();
+    void Shutdown();
+    void CreateBus(t_AudioBusInfo* audioBusInfo);
+    int LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo);
+    
+    void PlayAudioTrack(int id);
+    void PlayAudio(const char* filename, bool loop = false);
+    void Play3dAudio(const char* filename, bool loop = false);
+    void StopAllAudio();
+    void SetGlobalVolume(float volume);
+    float GetGlobalVolume();
+    t_GlobalAudioState m_GlobalAudioState;
+    std::vector<t_AudioTrack> m_AudioTracks;
+    std::vector<t_AudioBus> m_AudioBuses;
+};

@@ -5,7 +5,6 @@ namespace Gravy
     bool b_RendererInit = false;
     Window m_Window;
     GrvConfInit* m_pconfInit = nullptr;
-    Audio m_Audio;
 
     // Use this first to initialize the renderer with the structs GrvConfInit and GrvConfWindow. Return e_GrvReturnTypes : success or fail
     e_GrvReturnTypes Init(GrvConfInit* confInit, GrvConfWindow* confWindow)
@@ -14,7 +13,6 @@ namespace Gravy
         
         Logger::Init(confWindow->windowName);
         m_Window.Init(confInit);
-        m_Audio.Init();
 
         m_Window.Create(confWindow);
 
@@ -74,26 +72,6 @@ namespace Gravy
     bool IsRunning()
     {
         return !m_Window.GetWindowShouldClose();
-    }
-
-    int LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo)
-    {
-        return m_Audio.LoadAudioTrack(audioTrackInfo);
-    }
-
-    void PlayAudioTrack(int id)
-    {
-        m_Audio.PlayAudioTrack(id);
-    }
-
-    void PlayAudio(const char* filename, bool loop)
-    {
-        m_Audio.PlayAudio(filename, loop);
-    }
-
-    void StopAllAudio()
-    {
-        m_Audio.StopAllAudio();
     }
 
     // Use to set the clear color of the framebuffer.

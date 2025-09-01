@@ -3,8 +3,6 @@
 #include "Core/Logger.h"
 #include "Core/Time.h"
 
-#include "Audio/Audio.h"
-
 #include "Graphics/API/RendererAPI.h"
 #include "Graphics/Buffers.h"
 #include "Graphics/Camera.h"
@@ -31,11 +29,6 @@ namespace Gravy
     Window* GetWindowInst();
     void SwapScreenBuffer();
     bool IsRunning();
-
-    int LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo);
-    void PlayAudioTrack(int id);
-    void PlayAudio(const char* filename, bool loop = false);
-    void StopAllAudio();
 
     void SetClearColor(glm::vec4 color);
     void ClearBuffer();
