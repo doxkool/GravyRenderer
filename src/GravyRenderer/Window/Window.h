@@ -22,7 +22,7 @@ namespace Gravy
 
         bool GetWindowShouldClose();
 
-        glfw* GetNativeWindow() { return &m_glfw; }
+        glfw* GetGLFW() { return &m_glfw; }
 
         void ChangeResolution(glm::vec2 resolution);
         void ChangeWindowMode(e_WindowMode windowMode);

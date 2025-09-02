@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Core/Base.h"
-#include "Core/Logger.h"
-#include "Core/ConfigsDef.h"
+#include "Gravy.h"
 
 #include "soloud.h"
 #include "soloud_wav.h"

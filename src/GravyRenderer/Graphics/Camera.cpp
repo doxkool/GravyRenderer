@@ -39,7 +39,7 @@ namespace Gravy
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void Camera::Move(camera_Movement direction)
     {
-        float velocity = MovementSpeed * ::Time::GetDeltaTime();
+        float velocity = MovementSpeed * Time::GetDeltaTime();
         if (direction == FORWARD)
             Position += Front * velocity;
         if (direction == BACKWARD)

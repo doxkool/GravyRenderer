@@ -5,22 +5,16 @@ namespace Gravy
     class Time
     {
     private:
-        double d_mTime;
+        
     public:
-        Time(double time = 0.0);
-        ~Time();
+        Time() {}
+        ~Time() {}
 
-        double GetTime();
-        double Get_Seconds() const { return d_mTime; }
-		double Get_Milliseconds() const { return d_mTime * 1000; }
+        static double GetTime();
+        static double Get_Seconds();
+		static double Get_Milliseconds();
+
+        static float UpdateDeltaTime();
+        static float GetDeltaTime();
     };    
-}
-
-namespace Time
-{
-    float GetDeltaTime();
-
-    float UpdateDeltaTime();
-
-    double GetTime();
 }

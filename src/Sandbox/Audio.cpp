@@ -1,4 +1,4 @@
-#include "Audio/Audio.h"
+#include "Audio.h"
 
 SoLoud::Soloud m_soloud;
 SoLoud::Wav m_Wav;

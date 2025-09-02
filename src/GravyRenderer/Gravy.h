@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Core/Base.h"
 #include "Core/ConfigsDef.h"
 #include "Core/Logger.h"
@@ -18,9 +20,14 @@
 
 #include "Core/Input.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 namespace Gravy
 {
     e_GrvReturnTypes Init(GrvConfInit* confInit, GrvConfWindow* confWindow);
+    void CloseWindow();
     void Shutdown();
 
     void NewFrame();
@@ -33,5 +40,5 @@ namespace Gravy
     void SetClearColor(glm::vec4 color);
     void ClearBuffer();
 
-    float GetDeltaTime() { return ::Time::GetDeltaTime(); }
+    float GetDeltaTime();
 }

@@ -2,29 +2,28 @@
 
 #include "Window/GLFW/glfw.h"
 
+double d_mTime;
+float deltaTime = 0.0f; // time between current frame and last frame
+float lastFrame = 0.0f;
+
 namespace Gravy
 {
-    Time::Time(double time)
-        : d_mTime(time)
-    {
-    }
-    
-    Time::~Time()
-    {
-    }
-
     double Time::GetTime()
     { 
         return glfwGetTime();
     }
-}
 
-namespace Time
-{
-    float deltaTime = 0.0f; // time between current frame and last frame
-    float lastFrame = 0.0f;
+    double Time::Get_Seconds() 
+    {
+        return d_mTime;
+    }
 
-    float UpdateDeltaTime()
+	double Time::Get_Milliseconds()
+    {
+        return d_mTime * 1000;
+    }
+
+    float Time::UpdateDeltaTime()
     {
         float currentFrame = static_cast<float>(Gravy::glfw::GetTime());
         deltaTime = currentFrame - lastFrame;
@@ -33,12 +32,7 @@ namespace Time
         return deltaTime;
     }
 
-    double GetTime()
-    {
-        return Gravy::glfw::GetTime();
-    }
-
-    float GetDeltaTime()
+    float Time::GetDeltaTime()
     {
         return deltaTime;
     }

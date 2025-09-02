@@ -110,11 +110,11 @@ namespace Gravy
     {
         if(mode == grabed)
         {
-            p_window->GetNativeWindow()->GrabMouseInput(true);
+            p_window->GetGLFW()->GrabMouseInput(true);
             return;
         }else if(mode == released)
         {
-            p_window->GetNativeWindow()->GrabMouseInput(false);
+            p_window->GetGLFW()->GrabMouseInput(false);
         }
 
     }
