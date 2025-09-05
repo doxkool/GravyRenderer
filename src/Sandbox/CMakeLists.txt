@@ -3,13 +3,12 @@ cmake_minimum_required(VERSION 3.28)
 project(Sandbox CXX)
 
 if(WIN32)
-    SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-    SET(soloud_static ${CMAKE_BINARY_DIR}/src/GravyRenderer/Vendors/SoLoud/Debug/soloud.lib)
+    SET(soloud_static ${CMAKE_BINARY_DIR}/src/Sandbox/Vendors/SoLoud/Debug/soloud.lib)
     add_definitions (-DWITH_WASAPI)
 endif(WIN32)
 
 if(UNIX)
-    SET(soloud_static ${CMAKE_BINARY_DIR}/src/GravyRenderer/Vendors/SoLoud/libsoloud.a)
+    SET(soloud_static ${CMAKE_BINARY_DIR}/src/Sandbox/Vendors/SoLoud/libsoloud.a)
     add_definitions (-DWITH_MINIAUDIO)
 endif(UNIX)
 
@@ -22,7 +21,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/src/Sandbox
     ${CMAKE_SOURCE_DIR}/src/GravyRenderer
     ${CMAKE_SOURCE_DIR}/src/Sandbox/Vendors/SoLoud/include
-    #${CMAKE_BINARY_DIR}/vcpkg_installed/x64-windows/include
+    ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-windows/include
     )
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/Sandbox/Vendors/SoLoud)

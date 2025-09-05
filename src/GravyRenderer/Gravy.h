@@ -20,10 +20,6 @@
 
 #include "Core/Input.h"
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-
 namespace Gravy
 {
     e_GrvReturnTypes Init(GrvConfInit* confInit, GrvConfWindow* confWindow);

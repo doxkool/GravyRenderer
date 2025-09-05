@@ -1,8 +1,11 @@
 #include "Gravy.h"
 
+#include "ImGUI.h"
 #include "Audio.h"
 
 Audio m_Audio;
+ImGUI m_ImGUI;
+
 Gravy::Camera MainCam;
 int Audio1ID = -1;
 bool vsync = true;
@@ -103,6 +106,7 @@ void Run()
     
     while (Gravy::IsRunning())
     {
+        m_ImGUI.NewFrame();
         Gravy::NewFrame();
 
         CheckForInput();
@@ -117,6 +121,7 @@ void Run()
 
         cube0.Rotation.y = ( cube0.Rotation.y + 50 * Gravy::GetDeltaTime() );
 
+        m_ImGUI.EndFrame();
         Gravy::EndFrame();
     }
 }
@@ -139,16 +144,20 @@ int main()
         .windowResizable    = true,
         .transparentFB      = false
     };
+    
+    int ret_Gravy = Gravy::Init(&confInit, &confWindow);
 
     m_Audio.Init();
+    m_ImGUI.Init();
 
-    int ret = Gravy::Init(&confInit, &confWindow);
-    if(ret == success)
+    if(ret_Gravy == success)
     {
         Run();
     }
 
     Gravy::Shutdown();
+
+    m_ImGUI.Shutdown();
     m_Audio.Shutdown();
 
     return 0;

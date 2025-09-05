@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.28)
 
 project(GravyRenderer CXX)
 
+SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(GLEW REQUIRED)
