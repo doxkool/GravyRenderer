@@ -148,6 +148,8 @@ namespace Gravy
         glfwSetScrollCallback(window, mouse_scroll_callback);
         glfwSetMouseButtonCallback(window, mouse_button_callback);
 
+        Input::BindWindow(this);
+
         return 0;
     }
 
@@ -229,6 +231,11 @@ namespace Gravy
     void glfw::Update()
     {
         glfwPollEvents();
+    }
+
+    int glfw::PollKeyInput(int key)
+    {
+        return glfwGetKey(window, key);
     }
 
     double glfw::GetTime()

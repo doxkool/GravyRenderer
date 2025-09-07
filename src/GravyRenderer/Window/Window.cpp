@@ -50,6 +50,11 @@ namespace Gravy
         m_glfw.Update();
     }
 
+    int Window::PollKeyInput(int key)
+    {
+        return m_glfw.PollKeyInput(key);
+    }
+
     void Window::Quit()
     {
         m_glfw.SetShouldWindowClose();

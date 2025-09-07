@@ -2,8 +2,13 @@
 
 #include "Graphics/API/OpenGL/OpenGL.h"
 
+#include "Core/Input.h"
+
 namespace Gravy
 {
+    float lastX = 0;
+    float lastY = 0;
+
     Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
         : Front(glm::vec3(0.0f, 0.0f, 1.0f)), MovementSpeed(DEFAULT_SPEED), MouseSensitivity(DEFAULT_SENSITIVITY), FOV(DEFAULT_FOV)
     {
@@ -55,25 +60,45 @@ namespace Gravy
     }
 
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-    void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch)
+    void Camera::Update()
     {
-        xoffset *= MouseSensitivity;
-        yoffset *= MouseSensitivity;
+        glm::vec2 mousePos = Input::GetMouseCursorPosition();
 
-        Yaw   += xoffset;
-        Pitch += yoffset;
+        float xoffset = mousePos.x - lastX;
+        float yoffset = lastY - mousePos.y; // reversed since y-coordinates go from bottom to top
 
-        // make sure that when pitch is out of bounds, screen doesn't get flipped
-        if (constrainPitch)
+        lastX = mousePos.x;
+        lastY = mousePos.y;
+
+        if (b_MouseInput)
         {
-            if (Pitch > 89.0f)
-                Pitch = 89.0f;
-            if (Pitch < -89.0f)
-                Pitch = -89.0f;
+            xoffset *= MouseSensitivity;
+            yoffset *= MouseSensitivity;
+            
+            Yaw   += xoffset;
+            Pitch += yoffset;
+            
+            // make sure that when pitch is out of bounds, screen doesn't get flipped
+            if (b_ConstrainPitch)
+            {
+                if (Pitch > 89.0f)
+                    Pitch = 89.0f;
+                if (Pitch < -89.0f)
+                    Pitch = -89.0f;
+            }
+            // update Front, Right and Up Vectors using the updated Euler angles
+            UpdateCameraVectors();
         }
+    }
 
-        // update Front, Right and Up Vectors using the updated Euler angles
-        UpdateCameraVectors();
+    void Camera::ConstrainMousePitch (bool constrainPitch)
+    {
+        b_ConstrainPitch = constrainPitch;
+    }
+    
+    void Camera::EnableMouseInput(bool enable)
+    {
+        b_MouseInput = enable;
     }
 
     void Camera::UpdateCameraVectors()

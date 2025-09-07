@@ -31,7 +31,10 @@ namespace Gravy
     class Input
     {
     private:
+        
     public:
+        static void BindWindow(glfw* p_window);
+        
         static void RecieveKeyCallback(int key, int scancode, int action, int mods);
         static void RecieveMouseCallback(double xpos, double ypos);
         static void RecieveMouseButtonCallback(int button, int action, int mods);
@@ -44,8 +47,8 @@ namespace Gravy
         static bool IsMouseButtonPressed(int button);
         static bool IsMouseButtonJustPressed(int button);
 
-        static void SetCursorMode(Window *p_window, CursorMode mode);
-        static CursorMode GetCursorMode(Window *p_window);
+        static void SetCursorMode(CursorMode mode);
+        static CursorMode GetCursorMode();
 
         static glm::vec2 GetMouseCursorPosition();
         static void SetMouseCursorPosition();

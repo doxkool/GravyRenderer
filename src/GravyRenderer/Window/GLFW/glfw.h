@@ -45,6 +45,8 @@ namespace Gravy
 
         void Update();
 
+        int PollKeyInput(int key);
+
         static double GetTime();
 
         GLFWwindow* window;

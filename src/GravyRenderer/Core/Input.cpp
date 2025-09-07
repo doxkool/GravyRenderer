@@ -2,6 +2,8 @@
 
 namespace Gravy
 {
+    glfw* p_glfw;
+
     int keyBuffer;
     int scanCodeBuffer;
     int actionBuffer;
@@ -17,8 +19,14 @@ namespace Gravy
     double mousePosX;
     double mousePosy;
 
+    void Input::BindWindow(glfw* p_window)
+    {
+        p_glfw = p_window;
+    }
+
     void Input::RecieveKeyCallback(int key, int scancode, int action, int mods)
     {
+        //keysBuffer.push_back(key);
         keyBuffer = key;
         scanCodeBuffer = scancode;
         actionBuffer = action;
@@ -36,25 +44,31 @@ namespace Gravy
         mouse_button_buffer = button;
         mouse_action_buffer = action;
         mouse_mod_buffer = mods;
-        //LOG_TRACE("Mouse Button : {} Mouse Action : {} Mouse Mods : {}",mouse_button_buffer, mouse_action_buffer, mouse_mod_buffer);
+        
+        #ifdef TRACE_INPUT
+            LOG_TRACE("Mouse Button : {} Mouse Action : {} Mouse Mods : {}",mouse_button_buffer, mouse_action_buffer, mouse_mod_buffer);
+        #endif
     }
 
     void Input::RecieveMouseScrollCallback(double xoffset, double yoffset)
     {
         mouse_ScrollX_buffer = xoffset;
         mouse_ScrollY_buffer = yoffset;
-        //LOG_TRACE("Mouse Scroll X : {} Mouse Scroll Y : {}", mouse_ScrollX_buffer, mouse_ScrollY_buffer);
+
+        #ifdef TRACE_INPUT
+            LOG_TRACE("Mouse Scroll X : {} Mouse Scroll Y : {}", mouse_ScrollX_buffer, mouse_ScrollY_buffer);
+        #endif
     }
 
     bool Input::IsKeyPressed(int key)
     {
-        if (keyBuffer == key && (actionBuffer == key_pressed || actionBuffer == key_repeated))
-        {
-            //LOG_TRACE("Key {} pressed :: Action : {}",keyBuffer, actionBuffer);
-            return true;
-            ResetKeyBuffer();
-        }
+        auto action = p_glfw->PollKeyInput(key);
 
+        if (action == key_pressed || action == key_repeated)
+        {
+            return true;
+        }
+        
         return false;
     }
 
@@ -62,7 +76,6 @@ namespace Gravy
     {
         if (keyBuffer == key && actionBuffer == key_pressed)
         {
-            //LOG_TRACE("Key {} pressed :: Action : {}",keyBuffer, actionBuffer);
             ResetKeyBuffer();
             return true;
         }
@@ -86,7 +99,6 @@ namespace Gravy
 
         if (mouse_button_buffer == button && mouse_action_buffer == button_pressed)
         {
-            //LOG_TRACE("{} | {}", mouse_button_buffer, mouse_action_buffer);
             ResetMouseBuffer();
             return true;
         }
@@ -106,20 +118,20 @@ namespace Gravy
         return false;
     }
 
-    void Input::SetCursorMode(Window *p_window, CursorMode mode)
+    void Input::SetCursorMode(CursorMode mode)
     {
         if(mode == grabed)
         {
-            p_window->GetGLFW()->GrabMouseInput(true);
+            p_glfw->GrabMouseInput(true);
             return;
         }else if(mode == released)
         {
-            p_window->GetGLFW()->GrabMouseInput(false);
+            p_glfw->GrabMouseInput(false);
         }
 
     }
 
-    CursorMode Input::GetCursorMode(Window *p_window)
+    CursorMode Input::GetCursorMode()
     {
         return released;
     }

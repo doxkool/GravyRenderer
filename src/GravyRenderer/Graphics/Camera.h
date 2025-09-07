@@ -43,8 +43,13 @@ namespace Gravy
         // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
         void Move(camera_Movement direction);
 
+        void Update();
+
+        void ConstrainMousePitch (bool constrainPitch);
+        void EnableMouseInput(bool enable);
+        
         // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-        void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
+        
 
         void SetPosition(glm::vec3 position);
     
@@ -64,8 +69,10 @@ namespace Gravy
         float MovementSpeed;
         float MouseSensitivity;
         float FOV;
-        bool Primary            = false;
-        bool FixedAspectRatio   = false;
+        bool b_Primary          = false;
+        bool b_FixedAspectRatio = false;
+        bool b_ConstrainPitch   = true;
+        bool b_MouseInput       = false;
 
     private:
         // calculates the front vector from the Camera's (updated) Euler Angles

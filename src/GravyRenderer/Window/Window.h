@@ -35,6 +35,8 @@ namespace Gravy
 
         void Update();
 
+        int PollKeyInput(int key);
+
         void Quit();
     };
 }

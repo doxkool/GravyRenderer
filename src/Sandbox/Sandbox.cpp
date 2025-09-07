@@ -11,9 +11,6 @@ int Audio1ID = -1;
 bool vsync = true;
 bool b_mouseCaptured = false;
 
-float lastX = 0;
-float lastY = 0;
-
 void CheckForInput()
 {
     auto m_Window = Gravy::GetWindowInst();
@@ -28,12 +25,12 @@ void CheckForInput()
     {
         if (b_mouseCaptured)
         {
-            Gravy::Input::SetCursorMode(m_Window, released);
+            Gravy::Input::SetCursorMode(released);
             b_mouseCaptured = false;
         }
         else
         {
-            Gravy::Input::SetCursorMode(m_Window, grabed);
+            Gravy::Input::SetCursorMode(grabed);
             b_mouseCaptured = true;
         }
     }
@@ -55,18 +52,8 @@ void CheckForInput()
         m_Audio.StopAllAudio();
     }
 
-    glm::vec2 mousePos = Gravy::Input::GetMouseCursorPosition();
+    MainCam.EnableMouseInput(b_mouseCaptured);
 
-    float xoffset = mousePos.x - lastX;
-    float yoffset = lastY - mousePos.y; // reversed since y-coordinates go from bottom to top
-
-    lastX = mousePos.x;
-    lastY = mousePos.y;
-
-    if (b_mouseCaptured)
-    {
-        MainCam.ProcessMouseMovement(xoffset, yoffset, true);
-    }
 }
 
 void Run()
@@ -92,6 +79,8 @@ void Run()
     {
         m_ImGUI.NewFrame();
         Gravy::NewFrame();
+
+        MainCam.Update();
 
         CheckForInput();
 
