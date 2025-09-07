@@ -48,13 +48,11 @@ void CheckForInput()
     if(Gravy::Input::IsKeyJustPressed(KEY_1))
     {
         m_Audio.PlayAudioTrack(Audio1ID);
-        Gravy::SetClearColor(DARK_ORANGE);
     }
 
     if(Gravy::Input::IsKeyJustPressed(KEY_0))
     {
         m_Audio.StopAllAudio();
-        Gravy::SetClearColor(GRAY);
     }
 
     glm::vec2 mousePos = Gravy::Input::GetMouseCursorPosition();
@@ -81,20 +79,6 @@ void Run()
         .audioBus   = 0
     };
     Audio1ID = m_Audio.LoadAudioTrack(&audio1);
-
-    //t_AudioTrackInfo audio2 = {
-    //    .filePath   = "assets/musics/Go_On_Without_Me.mp3",
-    //    .loop       = false,
-    //    .audioBus   = 0
-    //};
-    //auto GoOnWithoutMe = m_Audio.LoadAudioTrack(&audio2);
-
-    //t_AudioTrackInfo audio3 = {
-    //    .filePath   = "assets/musics/Magic_in_the_Garden.mp3",
-    //    .loop       = true,
-    //    .audioBus   = 0
-    //};
-    //auto MagicInTheGarden = m_Audio.LoadAudioTrack(&audio3);
 
     Gravy::Model cube0;
     cube0.LoadPrimitive(Cube);
