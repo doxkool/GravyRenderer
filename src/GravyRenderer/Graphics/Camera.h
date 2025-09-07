@@ -6,18 +6,18 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
+enum camera_Movement {
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
 namespace Gravy
 {
-    // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-    enum camera_Movement {
-        FORWARD,
-        BACKWARD,
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN
-    };
-
     // Default camera values
     const float YAW                 =  90.0f;
     const float PITCH               =  0.0f;

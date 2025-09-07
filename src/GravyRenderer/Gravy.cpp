@@ -73,6 +73,16 @@ namespace Gravy
         m_Window.SwapScreenBuffer();
     }
 
+    void SetVsync(bool enable)
+    {
+        m_Window.GetGLFW()->EnableVsync(enable);
+    }
+
+    bool* GetVsync()
+    {
+        return m_Window.GetGLFW()->IsVsyncEnable();
+    }
+
     // Return true if the renderer is runing or false if not.
     bool IsRunning()
     {

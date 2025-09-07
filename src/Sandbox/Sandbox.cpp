@@ -8,8 +8,6 @@ ImGUI m_ImGUI;
 
 Gravy::Camera MainCam;
 int Audio1ID = -1;
-bool vsync = true;
-bool b_mouseCaptured = false;
 
 void CheckForInput()
 {
@@ -23,24 +21,22 @@ void CheckForInput()
 
     if (Gravy::Input::IsMouseButtonJustPressed(MOUSE_RIGHT_CLICK))
     {
-        if (b_mouseCaptured)
+        if (Gravy::Input::IsMouseGrabed())
         {
             Gravy::Input::SetCursorMode(released);
-            b_mouseCaptured = false;
         }
         else
         {
             Gravy::Input::SetCursorMode(grabed);
-            b_mouseCaptured = true;
         }
     }
 
-    if (Gravy::Input::IsKeyPressed(KEY_W))              { MainCam.Position += MainCam.Front * MainCam.MovementSpeed * Gravy::GetDeltaTime(); }
-    if (Gravy::Input::IsKeyPressed(KEY_S))              { MainCam.Position -= MainCam.Front * MainCam.MovementSpeed * Gravy::GetDeltaTime(); }
-    if (Gravy::Input::IsKeyPressed(KEY_A))              { MainCam.Position -= MainCam.Right * MainCam.MovementSpeed * Gravy::GetDeltaTime(); }
-    if (Gravy::Input::IsKeyPressed(KEY_D))              { MainCam.Position += MainCam.Right * MainCam.MovementSpeed * Gravy::GetDeltaTime(); }
-    if (Gravy::Input::IsKeyPressed(KEY_SPACE))          { MainCam.Position += MainCam.Up * MainCam.MovementSpeed * Gravy::GetDeltaTime(); }
-    if (Gravy::Input::IsKeyPressed(KEY_LEFT_CONTROL))   { MainCam.Position -= MainCam.Up * MainCam.MovementSpeed * Gravy::GetDeltaTime(); }
+    if (Gravy::Input::IsKeyPressed(KEY_W))              { MainCam.Move(FORWARD); }
+    if (Gravy::Input::IsKeyPressed(KEY_S))              { MainCam.Move(BACKWARD); }
+    if (Gravy::Input::IsKeyPressed(KEY_A))              { MainCam.Move(LEFT); }
+    if (Gravy::Input::IsKeyPressed(KEY_D))              { MainCam.Move(RIGHT); }
+    if (Gravy::Input::IsKeyPressed(KEY_SPACE))          { MainCam.Move(UP); }
+    if (Gravy::Input::IsKeyPressed(KEY_LEFT_CONTROL))   { MainCam.Move(DOWN); }
 
     if(Gravy::Input::IsKeyJustPressed(KEY_1))
     {
@@ -52,13 +48,15 @@ void CheckForInput()
         m_Audio.StopAllAudio();
     }
 
-    MainCam.EnableMouseInput(b_mouseCaptured);
+    MainCam.EnableMouseInput(Gravy::Input::IsMouseGrabed());
 
 }
 
 void Run()
 {
     Gravy::SetClearColor(GRAY);
+
+    bool vsync = Gravy::GetVsync();
 
     t_AudioTrackInfo audio1 = {
         .filePath   = "assets/musics/Ice_and_Snow.mp3",
@@ -87,7 +85,7 @@ void Run()
         ImGui::Begin("Perf Monitor");
         ImGui::Text("%.1f FPS | %.3f Miliseconds", ImGui::GetIO().Framerate, 1 / ImGui::GetIO().Framerate * 1000.0f);
         ImGui::SameLine();
-        if(ImGui::Checkbox("vSync", &vsync)) { Gravy::GetWindowInst()->GetGLFW()->EnableVsync(vsync); };
+        if(ImGui::Checkbox("vSync", &vsync)) { Gravy::SetVsync(vsync); };
         ImGui::End();
 
         cube0.Render(&cube0Shader, &MainCam);

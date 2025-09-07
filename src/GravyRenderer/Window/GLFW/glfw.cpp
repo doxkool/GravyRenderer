@@ -37,14 +37,6 @@ namespace Gravy
         Input::RecieveMouseButtonCallback(button, action, mods);
     }
 
-    glfw::glfw()
-    {
-    }
-
-    glfw::~glfw()
-    {
-    }
-
     int glfw::Init(GrvConfInit* confInit)
     {
         /* Initialize the library */
@@ -184,18 +176,28 @@ namespace Gravy
         }
     }
 
+    bool* glfw::IsVsyncEnable()
+    {
+        return &b_vsync;
+    }
+
     void glfw::GrabMouseInput(bool enable)
     {
         if (enable)
         {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            mouseCaptured = false;
+            mouseCaptured = true;
         }
         else
         {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            mouseCaptured = true;
+            mouseCaptured = false;
         }
+    }
+
+    bool glfw::IsMouseGrabed()
+    {
+        return mouseCaptured;
     }
 
     bool glfw::GetShouldWindowClose()

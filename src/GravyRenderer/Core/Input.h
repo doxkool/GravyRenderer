@@ -49,6 +49,7 @@ namespace Gravy
 
         static void SetCursorMode(CursorMode mode);
         static CursorMode GetCursorMode();
+        static bool IsMouseGrabed();
 
         static glm::vec2 GetMouseCursorPosition();
         static void SetMouseCursorPosition();

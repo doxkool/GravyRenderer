@@ -6,21 +6,21 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-void mouse_callback(GLFWwindow *window, double xpos, double ypos);
-void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-
 namespace Gravy
 {
+    void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+    void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+    void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+    void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
     class glfw
     {
     private:
 
     public:
-        glfw();
-        ~glfw();
+        glfw() {}
+        ~glfw() {}
 
         int Init(GrvConfInit* confInit);
         void Shutdown();
@@ -30,8 +30,10 @@ namespace Gravy
         void UpdateWindowName(std::string newTitle);
         void SwapBuffer();
         void EnableVsync(bool enabled);
+        bool* IsVsyncEnable();
 
         void GrabMouseInput(bool enable);
+        bool IsMouseGrabed();
 
         bool GetShouldWindowClose();
         void SetShouldWindowClose();
@@ -53,6 +55,7 @@ namespace Gravy
         int window_width, window_height;
 
         std::string m_windowName;
-        bool mouseCaptured;
+        bool mouseCaptured = false;
+        bool b_vsync = false;
     };
 }

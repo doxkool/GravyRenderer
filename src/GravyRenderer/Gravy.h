@@ -31,6 +31,8 @@ namespace Gravy
 
     Window* GetWindowInst();
     void SwapScreenBuffer();
+    void SetVsync(bool enable);
+    bool* GetVsync();
     bool IsRunning();
 
     void SetClearColor(glm::vec4 color);

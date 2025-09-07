@@ -124,16 +124,22 @@ namespace Gravy
         {
             p_glfw->GrabMouseInput(true);
             return;
-        }else if(mode == released)
+        }
+        
+        if(mode == released)
         {
             p_glfw->GrabMouseInput(false);
         }
-
     }
 
     CursorMode Input::GetCursorMode()
     {
         return released;
+    }
+
+    bool Input::IsMouseGrabed()
+    {
+        return p_glfw->IsMouseGrabed();
     }
 
     glm::vec2 Input::GetMouseCursorPosition()
