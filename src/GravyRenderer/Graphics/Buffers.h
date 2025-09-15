@@ -2,11 +2,11 @@
 
 #include "Core/Base.h"
 
-#include "Graphics/API/OpenGL/glvao.h"
-#include "Graphics/API/OpenGL/glvbo.h"
-#include "Graphics/API/OpenGL/glebo.h"
-#include "Graphics/API/OpenGL/glibo.h"
-#include "Graphics/API/OpenGL/glfbo.h"
+#include "Graphics/Renderer/OpenGL/glvao.h"
+#include "Graphics/Renderer/OpenGL/glvbo.h"
+#include "Graphics/Renderer/OpenGL/glebo.h"
+#include "Graphics/Renderer/OpenGL/glibo.h"
+#include "Graphics/Renderer/OpenGL/glfbo.h"
 
 namespace Gravy
 {

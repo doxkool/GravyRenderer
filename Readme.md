@@ -5,7 +5,7 @@ There is no documentation for this at the moment and this project is only for my
 
 # Setting-up the building environnement
 
-Please note that VSCode IDE is use to develop Poutine.
+Please note that VSCode IDE is use to develop this project.
 
 ## Requirements
 This project use `Cmake` to generate the project files.

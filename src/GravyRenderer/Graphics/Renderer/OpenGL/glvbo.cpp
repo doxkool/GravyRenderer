@@ -1,6 +1,6 @@
 #include "glvbo.h"
 
-#include "Graphics/API/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL/OpenGL.h"
 
 namespace Gravy
 {

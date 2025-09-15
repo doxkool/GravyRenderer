@@ -294,6 +294,32 @@ namespace Gravy
         Mat.Diffuse_Texture.LoadTexture(DEFAULT_TEX, ColorSpace::RGB);
 
         Mesh mesh;
+
+        if (primitive == Primitive::Quad)
+        {
+            mesh.Name = "Quad";
+            mesh.MaterialID = 0;
+            QuadPrimitive_t QuadPrimitive;
+
+            for(size_t i = 0; i < QuadPrimitive.vertices.size(); i += 8)
+            {
+                float vx = QuadPrimitive.vertices[i + 0];
+                float vy = QuadPrimitive.vertices[i + 1];
+                float vz = QuadPrimitive.vertices[i + 2];
+                float tx = QuadPrimitive.vertices[i + 3];
+                float ty = QuadPrimitive.vertices[i + 4];
+                float nx = QuadPrimitive.vertices[i + 5];
+                float ny = QuadPrimitive.vertices[i + 6];
+                float nz = QuadPrimitive.vertices[i + 7];
+
+                mesh.vertices.push_back(Vertex(vx, vy, vz, tx, ty, nx, ny, nz));
+            }
+
+            for(size_t i = 0; i < QuadPrimitive.indices.size(); i++)
+            {
+                mesh.indices.push_back(QuadPrimitive.indices[i]);
+            }
+        }
     
         if (primitive == Primitive::Cube)
         {
@@ -404,43 +430,48 @@ namespace Gravy
         Meshes[0].MaterialID = materialID;
     }
 
+    glm::mat4 Model::UpdateMatrix()
+    {
+        ModelMatrix = glm::mat4(1.0f);
+        ModelMatrix = glm::translate(ModelMatrix, Transform.Position);
+        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Transform.Rotation.x),glm::vec3(1,0,0)); //rotation x
+        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Transform.Rotation.y),glm::vec3(0,1,0)); //rotation y
+        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Transform.Rotation.z),glm::vec3(0,0,1)); //rotation z
+        ModelMatrix = glm::scale(ModelMatrix, Transform.Scale);
+
+        return ModelMatrix;
+    }
+
     void Model::Render(Shader* shader, Camera* camera)
     {
-        //glm::vec3 position  = {0.0f, 0.0f, 0.0f};
-        //glm::vec3 rotation  = {0.0f, 0.0f, 0.0f};
-        //glm::vec3 scale     = {1.0f, 1.0f, 1.0f};
-
-        shader->Bind();
-
-        // ---- MODEL ----
-        glm::mat4 ModelMatrix = glm::mat4(1.0f);
-        ModelMatrix = glm::translate(ModelMatrix, Position);
-        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Rotation.x),glm::vec3(1,0,0)); //rotation x
-        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Rotation.y),glm::vec3(0,1,0)); //rotation y
-        ModelMatrix = glm::rotate(ModelMatrix,glm::radians(Rotation.z),glm::vec3(0,0,1)); //rotation z
-        ModelMatrix = glm::scale(ModelMatrix, Scale);
-
-        // Update the shader with the camera's view and projection matrices
-        auto ViewMatrix = camera->GetViewMatrix();
-        auto ProjectionMatrix = camera->GetProjectionMatrix();
-        shader->SetMat4fv(ViewMatrix, "view");
-        shader->SetMat4fv(ProjectionMatrix, "projection");
-        shader->SetMat4fv(ModelMatrix, "model");
-
-        for (auto& mesh : Meshes)
+        if (shader->ID != -1)
         {
-            Materials[mesh.MaterialID].Diffuse_Texture.SetActiveTexture(GL_TEXTURE0);
-            Materials[mesh.MaterialID].Diffuse_Texture.Bind();
-            Materials[mesh.MaterialID].Specular_Texture.SetActiveTexture(GL_TEXTURE1);
-            Materials[mesh.MaterialID].Specular_Texture.Bind();
+            shader->Bind();            
 
-            mesh.Draw();
+            // Update the shader with the camera's view and projection matrices
+            auto ViewMatrix = camera->GetViewMatrix();
+            auto ProjectionMatrix = camera->GetProjectionMatrix();
+            shader->SetMat4fv(ViewMatrix, "view");
+            shader->SetMat4fv(ProjectionMatrix, "projection");
+            shader->SetMat4fv(ModelMatrix, "model");
 
-            Materials[mesh.MaterialID].Diffuse_Texture.UnBind();
-            Materials[mesh.MaterialID].Specular_Texture.UnBind();
+            for (auto& mesh : Meshes)
+            {
+                Materials[mesh.MaterialID].Diffuse_Texture.SetActiveTexture(GL_TEXTURE0);
+                Materials[mesh.MaterialID].Diffuse_Texture.Bind();
+                Materials[mesh.MaterialID].Specular_Texture.SetActiveTexture(GL_TEXTURE1);
+                Materials[mesh.MaterialID].Specular_Texture.Bind();
+
+                mesh.Draw();
+
+                Materials[mesh.MaterialID].Diffuse_Texture.UnBind();
+                Materials[mesh.MaterialID].Specular_Texture.UnBind();
+            }
+
+            shader->UnBind();
+        }else{
+            LOG_ERROR("Error! The model '{}' has no loaded shader!", Name);
         }
-
-        shader->UnBind();
     }
 
 }

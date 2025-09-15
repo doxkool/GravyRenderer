@@ -1,25 +1,29 @@
 #include "glfbo.h"
-#include "Graphics/API/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL/OpenGL.h"
 
 namespace Gravy
 {
 	GLuint glfbo::Create(float width, float height, bool shadowMap, ColorSpace colorSpace)
 	{
+		b_isShadowMap = shadowMap;
+		FBO_Res = {width, height};
+
 		if(shadowMap)
 		{
 			glGenFramebuffers(1, &FBO); GLCHECK
-			glBindFramebuffer(GL_FRAMEBUFFER, FBO); GLCHECK
+			//glBindFramebuffer(GL_FRAMEBUFFER, FBO); GLCHECK
 
 			glGenTextures(1, &texture_id); GLCHECK
 			glBindTexture(GL_TEXTURE_2D, texture_id); GLCHECK
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL); GLCHECK
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0); GLCHECK
+			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0); GLCHECK
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GLCHECK
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GLCHECK
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER); GLCHECK
-	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER); GLCHECK
-			float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-	    	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor); GLCHECK
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GLCHECK
+	    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GLCHECK
+			//float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+	    	//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor); GLCHECK
+
 	    	// attach depth texture as FBO's depth buffer
 	    	glBindFramebuffer(GL_FRAMEBUFFER, FBO); GLCHECK
 	    	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture_id, 0); GLCHECK

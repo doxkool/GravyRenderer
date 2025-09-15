@@ -5,11 +5,13 @@ namespace Gravy
     bool b_RendererInit = false;
     Window m_Window;
     GrvConfInit* m_pconfInit = nullptr;
+    GrvConfWindow* m_pconfWindow = nullptr;
 
     // Use this first to initialize the renderer with the structs GrvConfInit and GrvConfWindow. Return e_GrvReturnTypes : success or fail
     e_GrvReturnTypes Init(GrvConfInit* confInit, GrvConfWindow* confWindow)
     {
         m_pconfInit = confInit;
+        m_pconfWindow = confWindow;
         
         Logger::Init(confWindow->windowName);
         m_Window.Init(confInit);
@@ -30,6 +32,16 @@ namespace Gravy
         }
 
         return success;
+    }
+
+    GrvConfInit* GetInitConfig()
+    {
+        return m_pconfInit;
+    }
+
+    GrvConfWindow* GetWindowConfig()
+    {
+        return m_pconfWindow;
     }
 
     // Use to close the window.
@@ -81,6 +93,11 @@ namespace Gravy
     bool* GetVsync()
     {
         return m_Window.GetGLFW()->IsVsyncEnable();
+    }
+
+    glm::vec2 GetCurrentResolution()
+    {
+        return m_Window.GetGLFW()->GetCurrentResolution();
     }
 
     // Return true if the renderer is runing or false if not.

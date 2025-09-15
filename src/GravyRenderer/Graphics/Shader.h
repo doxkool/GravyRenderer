@@ -2,7 +2,7 @@
 
 #include "Core/Base.h"
 
-#include "Graphics/API/OpenGL/glshader.h"
+#include "Graphics/Renderer/OpenGL/glshader.h"
 
 namespace Gravy
 {

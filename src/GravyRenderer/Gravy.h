@@ -5,10 +5,10 @@
 #include "Core/Logger.h"
 #include "Core/Time.h"
 
-#include "Graphics/API/RendererAPI.h"
+#include "Graphics/Renderer/Renderer.h"
 #include "Graphics/Buffers.h"
 #include "Graphics/Camera.h"
-#include "Graphics/Lights.h"
+#include "Graphics/Light.h"
 #include "Graphics/Material.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Model.h"
@@ -23,6 +23,9 @@
 namespace Gravy
 {
     e_GrvReturnTypes Init(GrvConfInit* confInit, GrvConfWindow* confWindow);
+    GrvConfInit* GetInitConfig();
+    GrvConfWindow* GetWindowConfig();
+    
     void CloseWindow();
     void Shutdown();
 
@@ -33,6 +36,7 @@ namespace Gravy
     void SwapScreenBuffer();
     void SetVsync(bool enable);
     bool* GetVsync();
+    glm::vec2 GetCurrentResolution();
     bool IsRunning();
 
     void SetClearColor(glm::vec4 color);

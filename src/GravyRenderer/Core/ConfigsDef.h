@@ -47,6 +47,7 @@ struct GrvConfWindow
     int windowResX          = 1920;
     int windowResY          = 1080;
     e_WindowMode windowMode = windowed;
+    bool vsync              = true;
     const char* iconPath    = nullptr;
     bool windowResizable    = true;
     bool transparentFB      = false;

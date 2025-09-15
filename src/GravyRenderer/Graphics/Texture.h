@@ -2,7 +2,7 @@
 
 #include "Core/Base.h"
 
-#include "Graphics/API/OpenGL/gltexture.h"
+#include "Graphics/Renderer/OpenGL/gltexture.h"
 
 namespace Gravy
 {

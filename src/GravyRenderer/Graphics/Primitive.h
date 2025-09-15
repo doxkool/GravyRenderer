@@ -9,7 +9,7 @@ enum Primitive
     Pyramid
 };
 
-struct QuadPrimitive
+struct QuadPrimitive_t
 {
     std::vector<float> vertices = {
         // Position        | //TexCoords | //Normals           //Order

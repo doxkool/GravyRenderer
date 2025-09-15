@@ -1,4 +1,4 @@
-#include "Graphics/API/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL/OpenGL.h"
 #include "glfw.h"
 
 #include "Core/Input.h"
@@ -198,6 +198,11 @@ namespace Gravy
     bool glfw::IsMouseGrabed()
     {
         return mouseCaptured;
+    }
+
+    glm::vec2 glfw::GetCurrentResolution()
+    {
+        return OpenGL::GetFrameBufferRes();
     }
 
     bool glfw::GetShouldWindowClose()

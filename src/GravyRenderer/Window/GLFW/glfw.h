@@ -35,6 +35,8 @@ namespace Gravy
         void GrabMouseInput(bool enable);
         bool IsMouseGrabed();
 
+        glm::vec2 GetCurrentResolution();
+
         bool GetShouldWindowClose();
         void SetShouldWindowClose();
 

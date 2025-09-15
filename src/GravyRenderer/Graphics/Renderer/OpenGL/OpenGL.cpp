@@ -1,4 +1,4 @@
-#include "Graphics/API/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL/OpenGL.h"
 
 //#define GLMESSAGECALLBACK_ENABLED
 #define GLCHECKERROR_ENABLED

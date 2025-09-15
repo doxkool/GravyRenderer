@@ -1,20 +1,11 @@
-#include "Graphics/Lights.h"
+#include "Graphics/Light.h"
 
 namespace Gravy
 {
-    Lights::Lights()
+    void Light::CreateShadowMap()
     {
-        
-    }
-    
-    Lights::~Lights()
-    {
-    }
-
-    void Lights::CreateShadowMap()
-    {
-        glGenTextures(1, &m_DepthCubemap);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, m_DepthCubemap);
+        glGenTextures(1, &shadowMap);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, shadowMap);
 
         for (unsigned int i = 0; i < 6; ++i)
         {
@@ -24,7 +15,20 @@ namespace Gravy
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, shadowRes.x, shadowRes.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+        }
+    }
+
+    void Light::Render()
+    {
+        if (m_shader.ID != -1) {
+            m_shader.Bind();
+
+            if (shadowEnabled) {
+                
+            }
+
+            m_shader.UnBind();
         }
     }
 }

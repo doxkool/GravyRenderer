@@ -3,60 +3,75 @@
 #include "ImGUI.h"
 #include "Audio.h"
 
+using namespace Gravy;
+
+Window* m_window = nullptr;
+Camera MainCam;
+
 Audio m_Audio;
 ImGUI m_ImGUI;
-
-Gravy::Camera MainCam;
 int Audio1ID = -1;
 
 void CheckForInput()
 {
-    auto m_Window = Gravy::GetWindowInst();
+    auto m_Window = GetWindowInst();
 
-    if (Gravy::Input::IsKeyJustPressed(KEY_GRAVE_ACCENT))
+    if (Input::IsKeyJustPressed(KEY_GRAVE_ACCENT))
     {
         LOG_INFO("Escape key pressed, exiting Sandbox...");
-        Gravy::CloseWindow();
+        CloseWindow();
     }
 
-    if (Gravy::Input::IsMouseButtonJustPressed(MOUSE_RIGHT_CLICK))
+    if (Input::IsMouseButtonJustPressed(MOUSE_RIGHT_CLICK))
     {
-        if (Gravy::Input::IsMouseGrabed())
+        if (Input::IsMouseGrabed())
         {
-            Gravy::Input::SetCursorMode(released);
+            Input::SetCursorMode(released);
         }
         else
         {
-            Gravy::Input::SetCursorMode(grabed);
+            Input::SetCursorMode(grabed);
         }
     }
 
-    if (Gravy::Input::IsKeyPressed(KEY_W))              { MainCam.Move(FORWARD); }
-    if (Gravy::Input::IsKeyPressed(KEY_S))              { MainCam.Move(BACKWARD); }
-    if (Gravy::Input::IsKeyPressed(KEY_A))              { MainCam.Move(LEFT); }
-    if (Gravy::Input::IsKeyPressed(KEY_D))              { MainCam.Move(RIGHT); }
-    if (Gravy::Input::IsKeyPressed(KEY_SPACE))          { MainCam.Move(UP); }
-    if (Gravy::Input::IsKeyPressed(KEY_LEFT_CONTROL))   { MainCam.Move(DOWN); }
+    if (Input::IsKeyPressed(KEY_W))              { MainCam.Move(FORWARD); }
+    if (Input::IsKeyPressed(KEY_S))              { MainCam.Move(BACKWARD); }
+    if (Input::IsKeyPressed(KEY_A))              { MainCam.Move(LEFT); }
+    if (Input::IsKeyPressed(KEY_D))              { MainCam.Move(RIGHT); }
+    if (Input::IsKeyPressed(KEY_SPACE))          { MainCam.Move(UP); }
+    if (Input::IsKeyPressed(KEY_LEFT_CONTROL))   { MainCam.Move(DOWN); }
 
-    if(Gravy::Input::IsKeyJustPressed(KEY_1))
+    if(Input::IsKeyJustPressed(KEY_1))
     {
         m_Audio.PlayAudioTrack(Audio1ID);
     }
 
-    if(Gravy::Input::IsKeyJustPressed(KEY_0))
+    if(Input::IsKeyJustPressed(KEY_0))
     {
         m_Audio.StopAllAudio();
     }
 
-    MainCam.EnableMouseInput(Gravy::Input::IsMouseGrabed());
+    MainCam.EnableMouseInput(Input::IsMouseGrabed());
+}
 
+void RenderGUI()
+{
+    m_ImGUI.NewFrame();
+
+    ImGui::Begin("Perf Monitor");
+    ImGui::Text("%.1f FPS | %.3f Miliseconds", ImGui::GetIO().Framerate, 1 / ImGui::GetIO().Framerate * 1000.0f);
+    ImGui::SameLine();
+    if(ImGui::Checkbox("vSync", &GetWindowConfig()->vsync)) { SetVsync(GetWindowConfig()->vsync); };
+    ImGui::End();
+
+    m_ImGUI.EndFrame();
 }
 
 void Run()
 {
-    Gravy::SetClearColor(GRAY);
+    m_window = GetWindowInst();
 
-    bool vsync = Gravy::GetVsync();
+    SetClearColor(GRAY);
 
     t_AudioTrackInfo audio1 = {
         .filePath   = "assets/musics/Ice_and_Snow.mp3",
@@ -65,35 +80,41 @@ void Run()
     };
     Audio1ID = m_Audio.LoadAudioTrack(&audio1);
 
-    Gravy::Model cube0;
-    cube0.LoadPrimitive(Cube);
+    Model floor0(Quad);
+    Shader floor0Shader;
+    floor0Shader.loadShader(FLAT_VER_SHADER, FLAT_FRAG_SHADER);
+    floor0.SetTransform({0.f, -2.0f, 0.0f}, {90.f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f});
 
-    Gravy::Shader cube0Shader;
+    Model cube0(Cube);
+    Shader cube0Shader;
     cube0Shader.loadShader(FLAT_VER_SHADER, FLAT_FRAG_SHADER);
 
+    Light light0;
+    light0.CreateShadowMap();
+
     MainCam.SetPosition({0.0f, 0.0f, -4.0f});
+    MainCam.SetMovementSpeed(25);
     
-    while (Gravy::IsRunning())
+    while (IsRunning())
     {
-        m_ImGUI.NewFrame();
-        Gravy::NewFrame();
+        CheckForInput();
+
+        cube0.Rotate({0.0f, 50.0f, 0.0f});
+
+        // --- Render Scene
+        NewFrame();
 
         MainCam.Update();
 
-        CheckForInput();
-
-        ImGui::Begin("Perf Monitor");
-        ImGui::Text("%.1f FPS | %.3f Miliseconds", ImGui::GetIO().Framerate, 1 / ImGui::GetIO().Framerate * 1000.0f);
-        ImGui::SameLine();
-        if(ImGui::Checkbox("vSync", &vsync)) { Gravy::SetVsync(vsync); };
-        ImGui::End();
+        cube0.UpdateMatrix();
+        floor0.UpdateMatrix();
 
         cube0.Render(&cube0Shader, &MainCam);
+        floor0.Render(&floor0Shader, &MainCam);
 
-        cube0.Rotation.y = ( cube0.Rotation.y + 50 * Gravy::GetDeltaTime() );
+        RenderGUI();
 
-        m_ImGUI.EndFrame();
-        Gravy::EndFrame();
+        EndFrame();
     }
 }
 
@@ -112,11 +133,12 @@ int main()
         .windowResX         = 1920,
         .windowResY         = 1080,
         .windowMode         = windowed,
+        .vsync              = true,
         .windowResizable    = true,
         .transparentFB      = false
     };
     
-    int ret_Gravy = Gravy::Init(&confInit, &confWindow);
+    int ret_Gravy = Init(&confInit, &confWindow);
 
     m_Audio.Init();
     m_ImGUI.Init();
@@ -126,7 +148,7 @@ int main()
         Run();
     }
 
-    Gravy::Shutdown();
+    Shutdown();
 
     m_ImGUI.Shutdown();
     m_Audio.Shutdown();

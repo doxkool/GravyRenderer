@@ -35,7 +35,7 @@ namespace Gravy
 
 		int GetID() const;
 
-	    uint32_t ID;
+	    uint32_t ID = -1;
 
 		const char* vertexShaderFile;
 		const char* fragmentShaderFile;

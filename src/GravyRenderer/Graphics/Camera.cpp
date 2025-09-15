@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-#include "Graphics/API/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL/OpenGL.h"
 
 #include "Core/Input.h"
 
