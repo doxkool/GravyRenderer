@@ -2,14 +2,14 @@
 
 SoLoud::Soloud m_soloud;
 SoLoud::Wav m_Wav;
-e_ReturnTypes Audio::Init()
+int Audio::Init()
 {
     auto result = m_soloud.init();
     if(result != 0)
     {
-        return fail;
+        return 1;
     }
-    return success;
+    return 0;
 }
 void Audio::Shutdown()
 {

@@ -22,7 +22,7 @@
 
 namespace Renderer
 {
-    e_ReturnTypes Init(RendererSpec* rendererSpec);
+    int Init(RendererSpec* rendererSpec);
     RendererSpec* GetInitConfig();
     WindowSpec* GetWindowConfig();
     

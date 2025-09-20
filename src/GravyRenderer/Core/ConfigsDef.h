@@ -2,12 +2,6 @@
 
 #pragma region Setting Enums
 
-enum e_ReturnTypes
-{
-    success,
-    fail
-};
-
 enum e_RendererApi
 {
     Opengl,

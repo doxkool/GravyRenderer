@@ -132,7 +132,7 @@ int main()
     m_Audio.Init();
     m_ImGUI.Init();
 
-    if(ret_Gravy == success)
+    if(ret_Gravy == 0)
     {
         Run();
     }

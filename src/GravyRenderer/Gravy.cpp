@@ -9,7 +9,7 @@ namespace Renderer
     Camera* camera = nullptr;
 
     // Use this first to initialize the renderer with the structs RendererSpec and WindowSpec. Return e_GrvReturnTypes : success or fail
-    e_ReturnTypes Init(RendererSpec* rendererSpec)
+    int Init(RendererSpec* rendererSpec)
     {
         pRendererSpec = rendererSpec;
         pWindowSpec = &rendererSpec->windowSpec;
@@ -29,10 +29,10 @@ namespace Renderer
         if(pRendererSpec->renderingAPI == Vulkan)
         {
             LOG_CRITICAL("Vulkan is not implemented yet!");
-            return fail;
+            return 1;
         }
 
-        return success;
+        return 0;
     }
 
     RendererSpec* GetInitConfig()
