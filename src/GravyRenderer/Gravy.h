@@ -20,7 +20,7 @@
 
 #include "Core/Input.h"
 
-namespace Gravy
+namespace Renderer
 {
     e_ReturnTypes Init(RendererSpec* rendererSpec);
     RendererSpec* GetInitConfig();

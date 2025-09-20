@@ -1,6 +1,6 @@
 #include "Graphics/Light.h"
 
-namespace Gravy
+namespace Renderer
 {
     void Light::CreateShadowMap()
     {

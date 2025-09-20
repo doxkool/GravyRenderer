@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-namespace Gravy
+namespace Renderer
 {
     void Shader::Create(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
     {

@@ -4,7 +4,7 @@
 
 #include <GL/glew.h>
 
-namespace Gravy
+namespace Renderer
 {
 	class glibo
 	{

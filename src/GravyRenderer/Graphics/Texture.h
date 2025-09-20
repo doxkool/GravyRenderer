@@ -4,7 +4,7 @@
 
 #include "Graphics/Renderer/OpenGL/gltexture.h"
 
-namespace Gravy
+namespace Renderer
 {
     class Texture : public OpenGLTexture
     {

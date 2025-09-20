@@ -26,7 +26,7 @@ enum CursorMode {
     released
 };
 
-namespace Gravy
+namespace Renderer
 {
     class Input
     {

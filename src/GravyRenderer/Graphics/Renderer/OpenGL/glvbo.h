@@ -39,7 +39,7 @@ struct Vertex
 	}
 };
 
-namespace Gravy
+namespace Renderer
 {
 	class glvbo
 	{

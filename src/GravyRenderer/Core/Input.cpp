@@ -1,6 +1,6 @@
 #include "Input.h"
 
-namespace Gravy
+namespace Renderer
 {
     glfw* p_glfw;
 

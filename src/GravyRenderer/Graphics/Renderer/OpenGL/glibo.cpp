@@ -1,7 +1,7 @@
 #include "glibo.h"
 #include "Graphics/Renderer/OpenGL/OpenGL.h"
 
-namespace Gravy
+namespace Renderer
 {
 	GLuint glibo::Create(uint32_t* indices, uint32_t count)
 	{

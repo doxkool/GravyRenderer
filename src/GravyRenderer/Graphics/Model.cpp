@@ -8,7 +8,7 @@
 #include "tiny_obj_loader.h"
 #include "tiny_gltf.h"
 
-namespace Gravy
+namespace Renderer
 {
     Model::Model(std::string filename)
     {

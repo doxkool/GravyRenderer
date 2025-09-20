@@ -9,7 +9,7 @@
 #include "Texture.h"
 #include "Graphics/Renderer/OpenGL/OpenGL.h"
 
-namespace Gravy
+namespace Renderer
 {
     class Mesh
     {
@@ -27,9 +27,9 @@ namespace Gravy
         const char* Name;
         int MaterialID;
 
-        Gravy::VertexArray VAO;
-        Gravy::VertexBuffer VBO;
-        Gravy::ElementBuffer EBO;
+        VertexArray VAO;
+        VertexBuffer VBO;
+        ElementBuffer EBO;
 
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;

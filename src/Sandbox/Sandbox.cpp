@@ -3,7 +3,7 @@
 #include "ImGUI.h"
 #include "Audio.h"
 
-using namespace Gravy;
+using namespace Renderer;
 
 Window* m_window = nullptr;
 Camera MainCam;
@@ -108,7 +108,7 @@ void Run()
 
 int main()
 {
-    WindowSpec confWindow = {
+    WindowSpec windowSpec = {
         .windowName         = "Sandbox",
         .windowResX         = 1920,
         .windowResY         = 1080,
@@ -119,7 +119,7 @@ int main()
     };
 
     RendererSpec rendererSpec = {
-        .windowSpec = confWindow,
+        .windowSpec = windowSpec,
         .renderingAPI = Opengl,
         .apiVersionMajor = 4,
         .apiVersionMinor = 6,

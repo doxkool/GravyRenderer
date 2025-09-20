@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Gravy
+namespace Renderer
 {
     class Time
     {

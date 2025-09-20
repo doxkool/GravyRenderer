@@ -5,7 +5,7 @@
 
 #include "Core/Tracing.h"
 
-namespace Gravy
+namespace Renderer
 {
 	//Ref<OpenGLShader> OpenGLShader::Create(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile)
 	//{

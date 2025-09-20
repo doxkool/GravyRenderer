@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-namespace Gravy
+namespace Renderer
 {
     //void Texture::Create(const std::string& Texture_Path, ColorSpace colorSpace)
     //{

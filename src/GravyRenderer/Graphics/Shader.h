@@ -4,7 +4,7 @@
 
 #include "Graphics/Renderer/OpenGL/glshader.h"
 
-namespace Gravy
+namespace Renderer
 {
     class Shader : public OpenGLShader
     {

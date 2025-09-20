@@ -1,6 +1,6 @@
 #include "Graphics/Renderer/Renderer.h"
 
-namespace Gravy
+namespace Renderer
 {
     void Renderer::Render()
     {

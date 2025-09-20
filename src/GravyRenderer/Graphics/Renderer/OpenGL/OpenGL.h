@@ -30,7 +30,7 @@
 
 void GlCheckError(const char *function, const char *file, int line);
 
-namespace Gravy
+namespace Renderer
 {
     class OpenGL
     {

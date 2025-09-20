@@ -2,7 +2,7 @@
 
 #include "Texture.h"
 
-namespace Gravy
+namespace Renderer
 {
     class Material : public OpenGLTexture
     {

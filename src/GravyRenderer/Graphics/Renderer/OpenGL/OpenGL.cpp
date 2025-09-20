@@ -86,7 +86,7 @@ void GlCheckError(const char *function, const char *file, int line)
     #endif
 }
 
-namespace Gravy
+namespace Renderer
 {
     int OpenGL::Init(RendererSpec* confInit)
     {

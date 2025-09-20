@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-namespace Gravy
+namespace Renderer
 {
     void Mesh::Create(std::vector<Vertex> _vertices, std::vector<uint32_t> _indices)
     {

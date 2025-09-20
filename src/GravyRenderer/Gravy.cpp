@@ -1,6 +1,6 @@
 #include "Gravy.h"
 
-namespace Gravy
+namespace Renderer
 {
     bool b_RendererInit = false;
     Window m_Window;

@@ -1,6 +1,6 @@
 #include "Window.h"
 
-namespace Gravy
+namespace Renderer
 {
     WindowSpec sWindowSettings;
 

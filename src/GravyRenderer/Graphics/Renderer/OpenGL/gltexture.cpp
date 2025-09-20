@@ -4,7 +4,7 @@
 
 #include <stb_image.h>
 
-namespace Gravy
+namespace Renderer
 {
 	Ref<OpenGLTexture> OpenGLTexture::Create(const std::string &texPath, ColorSpace colorSpace)
 	{

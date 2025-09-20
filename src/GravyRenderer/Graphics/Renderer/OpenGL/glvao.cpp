@@ -1,7 +1,7 @@
 #include "glvao.h"
 #include "Graphics/Renderer/OpenGL/OpenGL.h"
 
-namespace Gravy
+namespace Renderer
 {
 	GLuint glvao::Create()
 	{

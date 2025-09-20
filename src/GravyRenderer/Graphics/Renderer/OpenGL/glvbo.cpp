@@ -2,7 +2,7 @@
 
 #include "Graphics/Renderer/OpenGL/OpenGL.h"
 
-namespace Gravy
+namespace Renderer
 {
 	GLuint glvbo::Create(uint32_t bufferSize)
 	{

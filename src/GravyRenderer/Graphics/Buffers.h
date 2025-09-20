@@ -8,7 +8,7 @@
 #include "Graphics/Renderer/OpenGL/glibo.h"
 #include "Graphics/Renderer/OpenGL/glfbo.h"
 
-namespace Gravy
+namespace Renderer
 {
     class VertexArray : public glvao
     {

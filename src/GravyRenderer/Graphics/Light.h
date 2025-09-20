@@ -10,7 +10,7 @@
 #include "Graphics/Primitive.h"
 #include "Graphics/Shader.h"
 
-namespace Gravy
+namespace Renderer
 {
     class Light
     {

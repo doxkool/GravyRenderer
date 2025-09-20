@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-namespace Gravy
+namespace Renderer
 {
 	class OpenGLShader
 	{

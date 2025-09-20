@@ -1,6 +1,6 @@
 #include "Buffers.h"
 
-namespace Gravy
+namespace Renderer
 {/*
     uint VertexArray::Create()
     {

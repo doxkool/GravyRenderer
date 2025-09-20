@@ -5,7 +5,7 @@
 
 #include <stb_image.h>
 
-namespace Gravy
+namespace Renderer
 {
     void error_callback(int error_code, const char* description)
     {

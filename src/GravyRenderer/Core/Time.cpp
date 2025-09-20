@@ -6,7 +6,7 @@ double d_mTime;
 float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
 
-namespace Gravy
+namespace Renderer
 {
     double Time::GetTime()
     { 
@@ -25,7 +25,7 @@ namespace Gravy
 
     float Time::UpdateDeltaTime()
     {
-        float currentFrame = static_cast<float>(Gravy::glfw::GetTime());
+        float currentFrame = static_cast<float>(Renderer::glfw::GetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 

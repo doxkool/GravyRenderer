@@ -4,7 +4,7 @@
 
 #include "Core/Input.h"
 
-namespace Gravy
+namespace Renderer
 {
     float lastX = 0;
     float lastY = 0;

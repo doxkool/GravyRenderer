@@ -1,7 +1,7 @@
 #include "glfbo.h"
 #include "Graphics/Renderer/OpenGL/OpenGL.h"
 
-namespace Gravy
+namespace Renderer
 {
 	GLuint glfbo::Create(float width, float height, bool shadowMap, ColorSpace colorSpace)
 	{
