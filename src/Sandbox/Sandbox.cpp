@@ -51,20 +51,7 @@ void CheckForInput()
         m_Audio.StopAllAudio();
     }
 
-    MainCam.EnableMouseInput(Input::IsMouseGrabed());
-}
-
-void RenderGUI()
-{
-    m_ImGUI.NewFrame();
-
-    ImGui::Begin("Perf Monitor");
-    ImGui::Text("%.1f FPS | %.3f Miliseconds", ImGui::GetIO().Framerate, 1 / ImGui::GetIO().Framerate * 1000.0f);
-    ImGui::SameLine();
-    if(ImGui::Checkbox("vSync", &GetWindowConfig()->vsync)) { SetVsync(GetWindowConfig()->vsync); };
-    ImGui::End();
-
-    m_ImGUI.EndFrame();
+    MainCam.b_MouseInput = Input::IsMouseGrabed();
 }
 
 void Run()
@@ -92,8 +79,9 @@ void Run()
     Light light0;
     light0.CreateShadowMap();
 
-    MainCam.SetPosition({0.0f, 0.0f, -4.0f});
-    MainCam.SetMovementSpeed(25);
+    MainCam.Position = {0.0f, 0.0f, -4.0f};
+    MainCam.MovementSpeed = 25.0f;
+    SetMainCamera(&MainCam);
     
     while (IsRunning())
     {
@@ -112,7 +100,7 @@ void Run()
         cube0.Render(&cube0Shader, &MainCam);
         floor0.Render(&floor0Shader, &MainCam);
 
-        RenderGUI();
+        m_ImGUI.RenderGUI();
 
         EndFrame();
     }
@@ -120,15 +108,7 @@ void Run()
 
 int main()
 {
-    GrvConfInit confInit = {
-        .renderingAPI = Opengl,
-        .apiVersionMajor = 4,
-        .apiVersionMinor = 6,
-        .apiEnableMessageCallBack = true,
-        .apiLoggingLevel = trace
-    };
-
-    GrvConfWindow confWindow = {
+    WindowSpec confWindow = {
         .windowName         = "Sandbox",
         .windowResX         = 1920,
         .windowResY         = 1080,
@@ -137,8 +117,17 @@ int main()
         .windowResizable    = true,
         .transparentFB      = false
     };
+
+    RendererSpec rendererSpec = {
+        .windowSpec = confWindow,
+        .renderingAPI = Opengl,
+        .apiVersionMajor = 4,
+        .apiVersionMinor = 6,
+        .apiEnableMessageCallBack = true,
+        .apiLoggingLevel = trace
+    };
     
-    int ret_Gravy = Init(&confInit, &confWindow);
+    int ret_Gravy = Init(&rendererSpec);
 
     m_Audio.Init();
     m_ImGUI.Init();

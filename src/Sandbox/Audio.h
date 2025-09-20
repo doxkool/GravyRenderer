@@ -61,7 +61,7 @@ private:
 public:
     Audio() {}
     ~Audio() {}
-    e_GrvReturnTypes Init();
+    e_ReturnTypes Init();
     void Shutdown();
     void CreateBus(t_AudioBusInfo* audioBusInfo);
     int LoadAudioTrack(t_AudioTrackInfo* audioTrackInfo);

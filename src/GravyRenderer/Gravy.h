@@ -22,9 +22,9 @@
 
 namespace Gravy
 {
-    e_GrvReturnTypes Init(GrvConfInit* confInit, GrvConfWindow* confWindow);
-    GrvConfInit* GetInitConfig();
-    GrvConfWindow* GetWindowConfig();
+    e_ReturnTypes Init(RendererSpec* rendererSpec);
+    RendererSpec* GetInitConfig();
+    WindowSpec* GetWindowConfig();
     
     void CloseWindow();
     void Shutdown();
@@ -43,4 +43,7 @@ namespace Gravy
     void ClearBuffer();
 
     float GetDeltaTime();
+
+    void SetMainCamera(Camera* cam);
+    Camera* GetMainCamera();
 }

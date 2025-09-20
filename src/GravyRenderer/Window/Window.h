@@ -19,9 +19,9 @@ namespace Gravy
         Window() {}
         ~Window() {}
 
-        int Init(GrvConfInit* confInit);
+        int Init(RendererSpec* confInit);
 
-        void Create(GrvConfWindow* confWindow);
+        void Create(WindowSpec* confWindow);
         void SwapScreenBuffer();
 
         bool GetWindowShouldClose();
@@ -31,7 +31,7 @@ namespace Gravy
         void ChangeResolution(glm::vec2 resolution);
         void ChangeWindowMode(e_WindowMode windowMode);
 
-        static GrvConfWindow* GetWindowSettings();
+        static WindowSpec* GetWindowSettings();
 
         void Update();
 

@@ -9,21 +9,24 @@ namespace Gravy
     float lastX = 0;
     float lastY = 0;
 
+    Camera::Camera()
+    {
+        UpdateCameraVectors();
+    }
+
     Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, 1.0f)), MovementSpeed(DEFAULT_SPEED), MouseSensitivity(DEFAULT_SENSITIVITY), FOV(DEFAULT_FOV)
     {
         Position = position;
-        WorldUp = up;
+        Up = up;
         Yaw = yaw;
         Pitch = pitch;
         UpdateCameraVectors();
     }
     // constructor with scalar values
     Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, 1.0f)), MovementSpeed(DEFAULT_SPEED), MouseSensitivity(DEFAULT_SENSITIVITY), FOV(DEFAULT_FOV)
     {
         Position = glm::vec3(posX, posY, posZ);
-        WorldUp = glm::vec3(upX, upY, upZ);
+        Up = glm::vec3(upX, upY, upZ);
         Yaw = yaw;
         Pitch = pitch;
         UpdateCameraVectors();
@@ -91,15 +94,15 @@ namespace Gravy
         }
     }
 
-    void Camera::ConstrainMousePitch (bool constrainPitch)
-    {
-        b_ConstrainPitch = constrainPitch;
-    }
+    //void Camera::ConstrainMousePitch (bool constrainPitch)
+    //{
+    //    b_ConstrainPitch = constrainPitch;
+    //}
     
-    void Camera::EnableMouseInput(bool enable)
-    {
-        b_MouseInput = enable;
-    }
+    //void Camera::EnableMouseInput(bool enable)
+    //{
+    //    b_MouseInput = enable;
+    //}
 
     void Camera::UpdateCameraVectors()
     {
@@ -116,8 +119,8 @@ namespace Gravy
         //std::cout << "X :" << front.x << " | Y :" << front.y << " | Z :" << front.z << std::endl;
     }
 
-    void Camera::SetPosition(glm::vec3 position)
-    {
-        Position = position;
-    }
+    //void Camera::SetPosition(glm::vec3 position)
+    //{
+    //    Position = position;
+    //}
 }

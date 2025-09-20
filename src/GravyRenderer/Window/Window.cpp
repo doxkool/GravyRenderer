@@ -2,15 +2,15 @@
 
 namespace Gravy
 {
-    GrvConfWindow sWindowSettings;
+    WindowSpec sWindowSettings;
 
-    int Window::Init(GrvConfInit* confInit)
+    int Window::Init(RendererSpec* confInit)
     {
         m_glfw.Init(confInit);
         return 0;
     }
 
-    void Window::Create(GrvConfWindow* confWindow)
+    void Window::Create(WindowSpec* confWindow)
     {
         m_glfw.Create(confWindow);
 
@@ -40,7 +40,7 @@ namespace Gravy
         LOG_WARN("Function 'window::changeWindowMode' not implemented yet...");
     }
 
-    GrvConfWindow* Window::GetWindowSettings()
+    WindowSpec* Window::GetWindowSettings()
     {
         return &sWindowSettings;
     }

@@ -16,22 +16,25 @@ enum camera_Movement {
     DOWN
 };
 
+//struct CameraSetings
+//{
+//    float movementSpeed     = 25.0f;
+//    float fov               = 65.0f;
+//    float nearPlane         = 0.1f;
+//    float farPlane          = 1000.0f;
+//    bool fixedAspectRatio   = false;
+//    bool constrainPitch     = true;
+//};
+
+
 namespace Gravy
 {
-    // Default camera values
-    const float YAW                 =  90.0f;
-    const float PITCH               =  0.0f;
-    const float DEFAULT_SPEED       =  50.0f;
-    const float DEFAULT_SENSITIVITY =  0.1f;
-    const float DEFAULT_FOV         =  65.0f;
-
-
     // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
     class Camera
     {
     public:
-        //Camera() {}
-        Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+        Camera();
+        Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch);
         Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
         virtual ~Camera() = default;
 
@@ -42,34 +45,30 @@ namespace Gravy
 
         // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
         void Move(camera_Movement direction);
-        void SetMovementSpeed(float speed) { MovementSpeed = speed; }
 
         void Update();
 
-        void ConstrainMousePitch (bool constrainPitch);
-        void EnableMouseInput(bool enable);
-        
-        // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-        
-
-        void SetPosition(glm::vec3 position);
+        //void ConstrainMousePitch (bool constrainPitch);
+        //void EnableMouseInput(bool enable);        
+        //void SetPosition(glm::vec3 position);
+        //void SetMovementSpeed(float speed) { MovementSpeed = speed; }
     
     public:
         // camera Attributes
-        glm::vec3 Position;
+        glm::vec3 Position      = {0.0f, 0.0f, 0.0f};
         glm::vec3 Front;
-        glm::vec3 Up;
+        glm::vec3 Up            = {0.0f, 1.0f, 0.0f};
         glm::vec3 Right;
-        glm::vec3 WorldUp;
+        glm::vec3 WorldUp       = {0.0f, 1.0f, 0.0f};
 
         // euler Angles
-        float Yaw;
-        float Pitch;
+        float Yaw               = 90.0f;
+        float Pitch             = 0.0f;
 
         // camera options
-        float MovementSpeed;
-        float MouseSensitivity;
-        float FOV;
+        float MovementSpeed     = 50.0f;
+        float MouseSensitivity  = 0.1f;
+        float FOV               = 65.0f;
         bool b_Primary          = false;
         bool b_FixedAspectRatio = false;
         bool b_ConstrainPitch   = true;

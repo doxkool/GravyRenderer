@@ -88,7 +88,7 @@ void GlCheckError(const char *function, const char *file, int line)
 
 namespace Gravy
 {
-    int OpenGL::Init(GrvConfInit* confInit)
+    int OpenGL::Init(RendererSpec* confInit)
     {
         glewExperimental = GL_TRUE;
 

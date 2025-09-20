@@ -37,7 +37,7 @@ namespace Gravy
         Input::RecieveMouseButtonCallback(button, action, mods);
     }
 
-    int glfw::Init(GrvConfInit* confInit)
+    int glfw::Init(RendererSpec* confInit)
     {
         /* Initialize the library */
         if (!glfwInit())
@@ -64,7 +64,7 @@ namespace Gravy
         glfwTerminate();
     }
 
-    int glfw::Create(GrvConfWindow* confWindow)
+    int glfw::Create(WindowSpec* confWindow)
     {
         GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
         if (!primaryMonitor) {

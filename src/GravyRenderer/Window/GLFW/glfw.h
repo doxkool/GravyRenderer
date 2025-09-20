@@ -22,10 +22,10 @@ namespace Gravy
         glfw() {}
         ~glfw() {}
 
-        int Init(GrvConfInit* confInit);
+        int Init(RendererSpec* confInit);
         void Shutdown();
 
-        int Create(GrvConfWindow* confWindow);
+        int Create(WindowSpec* confWindow);
         void SetWindowIcon(const std::string &IconPath);
         void UpdateWindowName(std::string newTitle);
         void SwapBuffer();

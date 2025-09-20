@@ -2,7 +2,7 @@
 
 SoLoud::Soloud m_soloud;
 SoLoud::Wav m_Wav;
-e_GrvReturnTypes Audio::Init()
+e_ReturnTypes Audio::Init()
 {
     auto result = m_soloud.init();
     if(result != 0)

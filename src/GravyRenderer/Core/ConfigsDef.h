@@ -2,13 +2,13 @@
 
 #pragma region Setting Enums
 
-enum e_GrvReturnTypes
+enum e_ReturnTypes
 {
     success,
     fail
 };
 
-enum e_GrvApi
+enum e_RendererApi
 {
     Opengl,
     Vulkan
@@ -32,16 +32,7 @@ enum e_ApiLoggingLevel
 // ---------------------------------------------------------------------------
 #pragma region Settings Structs
 
-struct GrvConfInit
-{
-    e_GrvApi renderingAPI = Opengl;
-    int apiVersionMajor = 0;
-    int apiVersionMinor = 0;
-    bool apiEnableMessageCallBack = false;
-    e_ApiLoggingLevel apiLoggingLevel = info;
-};
-
-struct GrvConfWindow
+struct WindowSpec
 {
     const char* windowName  = "Gravy";
     int windowResX          = 1920;
@@ -51,6 +42,16 @@ struct GrvConfWindow
     const char* iconPath    = nullptr;
     bool windowResizable    = true;
     bool transparentFB      = false;
+};
+
+struct RendererSpec
+{
+    WindowSpec windowSpec;
+    e_RendererApi renderingAPI = Opengl;
+    int apiVersionMajor = 0;
+    int apiVersionMinor = 0;
+    bool apiEnableMessageCallBack = false;
+    e_ApiLoggingLevel apiLoggingLevel = info;
 };
 
 #pragma endregion Settings Structs

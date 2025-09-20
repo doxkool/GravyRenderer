@@ -40,7 +40,7 @@ namespace Gravy
         OpenGL() {}
         ~OpenGL() {}
 
-        static int Init(GrvConfInit* confInit);
+        static int Init(RendererSpec* confInit);
 
         static void SetClearColor(glm::vec4 color);
 

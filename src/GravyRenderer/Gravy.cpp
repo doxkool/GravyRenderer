@@ -4,28 +4,29 @@ namespace Gravy
 {
     bool b_RendererInit = false;
     Window m_Window;
-    GrvConfInit* m_pconfInit = nullptr;
-    GrvConfWindow* m_pconfWindow = nullptr;
+    RendererSpec* pRendererSpec = nullptr;
+    WindowSpec* pWindowSpec = nullptr;
+    Camera* camera = nullptr;
 
-    // Use this first to initialize the renderer with the structs GrvConfInit and GrvConfWindow. Return e_GrvReturnTypes : success or fail
-    e_GrvReturnTypes Init(GrvConfInit* confInit, GrvConfWindow* confWindow)
+    // Use this first to initialize the renderer with the structs RendererSpec and WindowSpec. Return e_GrvReturnTypes : success or fail
+    e_ReturnTypes Init(RendererSpec* rendererSpec)
     {
-        m_pconfInit = confInit;
-        m_pconfWindow = confWindow;
+        pRendererSpec = rendererSpec;
+        pWindowSpec = &rendererSpec->windowSpec;
         
-        Logger::Init(confWindow->windowName);
-        m_Window.Init(confInit);
+        Logger::Init(pWindowSpec->windowName);
+        m_Window.Init(rendererSpec);
 
-        m_Window.Create(confWindow);
+        m_Window.Create(pWindowSpec);
 
-        if(m_pconfInit->renderingAPI == Opengl)
+        if(pRendererSpec->renderingAPI == Opengl)
         {
             LOG_INFO("Initating OpenGL renderer...");
-            OpenGL::Init(m_pconfInit);
-            OpenGL::SetFrameBufferRes(confWindow->windowResX, confWindow->windowResY);
+            OpenGL::Init(pRendererSpec);
+            OpenGL::SetFrameBufferRes(pWindowSpec->windowResX, pWindowSpec->windowResY);
         }
 
-        if(m_pconfInit->renderingAPI == Vulkan)
+        if(pRendererSpec->renderingAPI == Vulkan)
         {
             LOG_CRITICAL("Vulkan is not implemented yet!");
             return fail;
@@ -34,14 +35,14 @@ namespace Gravy
         return success;
     }
 
-    GrvConfInit* GetInitConfig()
+    RendererSpec* GetInitConfig()
     {
-        return m_pconfInit;
+        return pRendererSpec;
     }
 
-    GrvConfWindow* GetWindowConfig()
+    WindowSpec* GetWindowConfig()
     {
-        return m_pconfWindow;
+        return pWindowSpec;
     }
 
     // Use to close the window.
@@ -121,5 +122,15 @@ namespace Gravy
     float GetDeltaTime()
     {
         return Time::GetDeltaTime();
+    }
+
+    void SetMainCamera(Camera* cam)
+    {
+        camera = cam;
+    }
+
+    Camera* GetMainCamera()
+    {
+        return camera;
     }
 }

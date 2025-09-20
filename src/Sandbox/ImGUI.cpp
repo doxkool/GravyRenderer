@@ -1,5 +1,7 @@
 #include "ImGUI.h"
 
+using namespace Gravy;
+
 void ImGUI::Init()
 {
     // Setup Dear ImGui context
@@ -34,4 +36,31 @@ void ImGUI::EndFrame()
 {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void ImGUI::RenderGUI()
+{
+    NewFrame();
+
+    {
+        ImGui::SetNextWindowSize(ImVec2(300.f, 55.f), ImGuiCond_FirstUseEver);
+        ImGui::Begin("Perf Monitor");
+        ImGui::Text("%.1f FPS | %.3f Miliseconds", ImGui::GetIO().Framerate, 1 / ImGui::GetIO().Framerate * 1000.0f);
+        ImGui::SameLine();
+        if(ImGui::Checkbox("vSync", &GetWindowConfig()->vsync)) { SetVsync(GetWindowConfig()->vsync); };
+        ImGui::End();
+    }
+    {
+        auto camera = GetMainCamera();
+        ImGui::SetNextWindowSize(ImVec2(300.f, 155.f), ImGuiCond_FirstUseEver);
+        ImGui::Begin("Camera Options");
+        ImGui::Text("Position Vector :\n    %.1f X | %.1f Y | %.1f Z", camera->Position.x, camera->Position.y, camera->Position.z);
+        ImGui::Text("Front Vector :\n    %.1f X | %.1f Y | %.1f Z", camera->Front.x, camera->Front.y, camera->Front.z);
+        ImGui::Separator();
+        ImGui::Text("FOV : %.1f", camera->FOV);
+        ImGui::Text("Speed : %.1f", camera->MovementSpeed);
+        ImGui::Text("Sensitivity : %.1f", camera->MouseSensitivity);
+        ImGui::End();
+    }
+    EndFrame();
 }

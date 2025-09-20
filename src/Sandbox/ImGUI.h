@@ -13,4 +13,5 @@ public:
     void Shutdown();
     void NewFrame();
     void EndFrame();
+    void RenderGUI();
 };
