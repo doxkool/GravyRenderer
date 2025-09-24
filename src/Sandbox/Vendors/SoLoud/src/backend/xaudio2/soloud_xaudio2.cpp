@@ -35,8 +35,9 @@ namespace SoLoud
 	}
 };
 
-#else
+#endif
 
+#ifdef WIN32
 #include <windows.h>
 
 #ifdef _MSC_VER

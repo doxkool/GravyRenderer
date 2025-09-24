@@ -11,7 +11,7 @@ namespace Renderer
 	class OpenGLShader
 	{
 	private:
-	    std::string ReadShaderFile(const char* ShaderFile);
+	    std::string ReadShaderFile(std::string ShaderFile);
 	public:
 		//static Ref<OpenGLShader> Create(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile = nullptr);
 
@@ -19,7 +19,7 @@ namespace Renderer
 		OpenGLShader() {}
 	    ~OpenGLShader();
 
-		void loadShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile = nullptr);
+		void LoadShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile = nullptr);
 
 	    void Set1i(GLint value, std::string name);
 		void Set1f(GLfloat value, std::string name);
@@ -33,10 +33,13 @@ namespace Renderer
 		void UnBind();
 		void Delete();
 
+		void LoadFromDisk(std::string ShaderPath);
+		void SaveToDisk(std::string path);
+
 		int GetID() const;
 
 	    uint32_t ID = -1;
-
+		std::string fileName;
 		const char* vertexShaderFile;
 		const char* fragmentShaderFile;
 		const char* geometryShaderFile;

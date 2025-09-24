@@ -4,7 +4,7 @@ namespace Renderer
 {
     void Shader::Create(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
     {
-        loadShader(_vertexShaderFile, _fragmentShaderFile, _geometryShaderFile);
+        LoadShader(_vertexShaderFile, _fragmentShaderFile, _geometryShaderFile);
     
         //vertexShaderFile = _vertexShaderFile;
         //fragmentShaderFile = _fragmentShaderFile;

@@ -14,10 +14,10 @@ namespace Renderer
 
 	OpenGLShader::OpenGLShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
 	{
-		loadShader(_vertexShaderFile, _fragmentShaderFile, _geometryShaderFile);
+		LoadShader(_vertexShaderFile, _fragmentShaderFile, _geometryShaderFile);
 	}
 
-	void OpenGLShader::loadShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
+	void OpenGLShader::LoadShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
 	{
 		ZoneScoped;
 
@@ -128,8 +128,11 @@ namespace Renderer
 		//deleteShaderProgram();
 	}
 
-	std::string OpenGLShader::ReadShaderFile(const char* ShaderFile)
+	std::string OpenGLShader::ReadShaderFile(std::string ShaderFile)
 	{
+		std::string fileNameExt = ShaderFile.substr(ShaderFile.find_last_of("/") + 1);
+		fileName = fileNameExt.substr(0, fileNameExt.find_last_of("."));
+
 		// 1. retrieve the vertex/fragment source code from filePath
 	    std::string shaderCode;
 	    std::ifstream vShaderFile;
@@ -203,6 +206,41 @@ namespace Renderer
 	void OpenGLShader::SetMat4fv(glm::mat4 value, std::string name, GLboolean transpose)
 	{
 		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, transpose, glm::value_ptr(value)); GLCHECK
+	}
+
+	void OpenGLShader::LoadFromDisk(std::string ShaderPath)
+	{
+		
+	}
+
+	void OpenGLShader::SaveToDisk(std::string path)
+	{
+		GLint formats = 0;
+		glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &formats);
+		if (formats < 1) {
+			LOG_ERROR("The graphics driver does not support any binary formats for saving shader to disk.");
+			return;
+		}
+
+		GLint length;
+        glGetProgramiv(ID, GL_PROGRAM_BINARY_LENGTH, &length);
+
+        if (length > 0) {
+            std::vector<GLubyte> binary(length);
+            GLenum format;
+            glGetProgramBinary(ID, length, nullptr, &format, binary.data());
+
+			std::string outputPath = path + fileName + ".bin";
+
+            std::ofstream outFile(outputPath, std::ios::binary);
+            if (outFile.is_open()) {
+                outFile.write(reinterpret_cast<char*>(binary.data()), length);
+                outFile.close();
+                LOG_TRACE("Program binary saved to: {}", outputPath);
+            } else {
+                LOG_ERROR("Error: Could not open file for writing: {}", outputPath);
+            }
+        }
 	}
 
 	int OpenGLShader::GetID() const

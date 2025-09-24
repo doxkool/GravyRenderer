@@ -69,12 +69,13 @@ void Run()
 
     Model floor0(Quad);
     Shader floor0Shader;
-    floor0Shader.loadShader(FLAT_VER_SHADER, FLAT_FRAG_SHADER);
+    floor0Shader.LoadShader(FLAT_VER_SHADER, FLAT_FRAG_SHADER);
+    floor0Shader.SaveToDisk("assets/shaders/compiled/");
     floor0.SetTransform({0.f, -2.0f, 0.0f}, {90.f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f});
 
     Model cube0(Cube);
     Shader cube0Shader;
-    cube0Shader.loadShader(FLAT_VER_SHADER, FLAT_FRAG_SHADER);
+    cube0Shader.LoadShader(FLAT_VER_SHADER, FLAT_FRAG_SHADER);
 
     Light light0;
     light0.CreateShadowMap();
