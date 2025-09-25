@@ -13,7 +13,7 @@ namespace Renderer
 	private:
 	    std::string ReadShaderFile(std::string ShaderFile);
 	public:
-		//static Ref<OpenGLShader> Create(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile = nullptr);
+		static Ref<OpenGLShader> Create(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile = nullptr);
 
 	    OpenGLShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile = nullptr);
 		OpenGLShader() {}

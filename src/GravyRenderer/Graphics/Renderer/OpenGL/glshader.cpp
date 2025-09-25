@@ -7,10 +7,10 @@
 
 namespace Renderer
 {
-	//Ref<OpenGLShader> OpenGLShader::Create(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile)
-	//{
-	//		return CreateRef<OpenGLShader>(vertexShaderFile, fragmentShaderFile,geometryShaderFile);
-	//}
+	Ref<OpenGLShader> OpenGLShader::Create(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile)
+	{
+			return CreateRef<OpenGLShader>(vertexShaderFile, fragmentShaderFile,geometryShaderFile);
+	}
 
 	OpenGLShader::OpenGLShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
 	{

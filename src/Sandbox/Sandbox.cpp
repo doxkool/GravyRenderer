@@ -70,7 +70,7 @@ void Run()
     Model floor0(Quad);
     Shader floor0Shader;
     floor0Shader.LoadShader(FLAT_VER_SHADER, FLAT_FRAG_SHADER);
-    floor0Shader.SaveToDisk("assets/shaders/compiled/");
+    floor0Shader.SaveBinaryToDisk("assets/shaders/compiled");
     floor0.SetTransform({0.f, -2.0f, 0.0f}, {90.f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f});
 
     Model cube0(Cube);
