@@ -18,8 +18,9 @@ file(GLOB_RECURSE RENDERER_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}
 add_library(GravyRenderer SHARED ${RENDERER_SOURCES})
 
 include_directories(
+    ${CMAKE_SOURCE_DIR}/src/CoreUtils
     ${CMAKE_SOURCE_DIR}/src/GravyRenderer
     ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-windows/include
     )
 
-target_link_libraries(GravyRenderer PUBLIC OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
+target_link_libraries(GravyRenderer PUBLIC CoreUtils OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)

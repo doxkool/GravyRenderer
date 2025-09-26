@@ -20,6 +20,7 @@ namespace Renderer
 	    ~OpenGLShader();
 
 		void LoadShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile = nullptr);
+		void LoadShader(std::vector<char> binaryShader, GLenum binaryFormat);
 
 	    void Set1i(GLint value, std::string name);
 		void Set1f(GLfloat value, std::string name);
@@ -33,13 +34,14 @@ namespace Renderer
 		void UnBind();
 		void Delete();
 
-		void LoadFromDisk(std::string ShaderPath);
+		std::vector<GLubyte> GetShaderBinary();
 		void SaveToDisk(std::string path);
 
 		int GetID() const;
 
 	    uint32_t ID = -1;
 		std::string fileName;
+		std::vector<GLubyte> binary;
 		const char* vertexShaderFile;
 		const char* fragmentShaderFile;
 		const char* geometryShaderFile;

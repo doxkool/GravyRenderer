@@ -17,6 +17,11 @@ namespace Renderer
 		LoadShader(_vertexShaderFile, _fragmentShaderFile, _geometryShaderFile);
 	}
 
+	OpenGLShader::~OpenGLShader()
+	{
+		//deleteShaderProgram();
+	}
+
 	void OpenGLShader::LoadShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
 	{
 		ZoneScoped;
@@ -123,9 +128,22 @@ namespace Renderer
 		}	
 	}
 
-	OpenGLShader::~OpenGLShader()
+	void OpenGLShader::LoadShader(std::vector<char> binaryShader, GLenum binaryFormat)
 	{
-		//deleteShaderProgram();
+		int success;
+		char infoLog[512];
+		
+		ID = glCreateProgram(); GLCHECK
+
+    	glProgramBinary(ID, binaryFormat, binaryShader.data(), binaryShader.size()); GLCHECK
+
+    	// Check for linking errors after loading
+    	glGetProgramiv(ID, GL_LINK_STATUS, &success); GLCHECK
+		if (!success)
+		{
+			glGetProgramInfoLog(ID, 512, NULL, infoLog); GLCHECK
+			LOG_ERROR("ERROR::SHADER::PROGRAM::LINKING_FAILED\n {}", infoLog);
+		}
 	}
 
 	std::string OpenGLShader::ReadShaderFile(std::string ShaderFile)
@@ -208,33 +226,50 @@ namespace Renderer
 		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, transpose, glm::value_ptr(value)); GLCHECK
 	}
 
-	void OpenGLShader::LoadFromDisk(std::string ShaderPath)
+	std::vector<GLubyte> OpenGLShader::GetShaderBinary()
 	{
-		
+		GLint formats = 0;
+		glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &formats); GLCHECK
+		if (formats < 1) {
+			LOG_ERROR("The graphics driver does not support any binary formats for saving shader to disk.");
+			return binary;
+		}
+
+		GLint length;
+        glGetProgramiv(ID, GL_PROGRAM_BINARY_LENGTH, &length); GLCHECK
+
+		binary.resize(length);
+
+		if (length > 0) {
+			GLenum format;
+            glGetProgramBinary(ID, length, nullptr, &format, binary.data()); GLCHECK
+		}
+
+		return binary;
 	}
 
 	void OpenGLShader::SaveToDisk(std::string path)
 	{
 		GLint formats = 0;
-		glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &formats);
+		glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &formats); GLCHECK
 		if (formats < 1) {
 			LOG_ERROR("The graphics driver does not support any binary formats for saving shader to disk.");
 			return;
 		}
 
 		GLint length;
-        glGetProgramiv(ID, GL_PROGRAM_BINARY_LENGTH, &length);
+        glGetProgramiv(ID, GL_PROGRAM_BINARY_LENGTH, &length); GLCHECK
 
         if (length > 0) {
-            std::vector<GLubyte> binary(length);
+            std::vector<char> binary(length);
             GLenum format;
-            glGetProgramBinary(ID, length, nullptr, &format, binary.data());
+            glGetProgramBinary(ID, length, nullptr, &format, binary.data()); GLCHECK
 
 			std::string outputPath = path + fileName + ".bin";
 
             std::ofstream outFile(outputPath, std::ios::binary);
             if (outFile.is_open()) {
-                outFile.write(reinterpret_cast<char*>(binary.data()), length);
+                outFile.write(binary.data(), length);
                 outFile.close();
                 LOG_TRACE("Program binary saved to: {}", outputPath);
             } else {

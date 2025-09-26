@@ -1,26 +1,29 @@
 #include "Shader.h"
 
+#include "CoreUtils.h"
+
 namespace Renderer
 {
     void Shader::LoadBinaryFromDisk(std::string ShaderPath)
     {
-        bool folderExist = Utils::CheckIfFolderExist(ShaderPath);
+        bool folderExist = CoreUtils::CheckIfFolderExist(ShaderPath);
 
-        
+        auto data = CoreUtils::ReadBinaryFromDisk(ShaderPath);
+        LoadShader(data, 0);
     }
 	
     void Shader::SaveBinaryToDisk(std::string path)
     {
-        bool folderExist = Utils::CheckIfFolderExist(path);
-
-        if (!Utils::CheckIfPathEndsWithSeparator(path)) {
+        if (!CoreUtils::CheckIfPathEndsWithSeparator(path)) {
             path = path + "/";
         }
 
-        if (!folderExist) {
-            if(Utils::CreateFolder(path)) {
-                SaveToDisk(path);
-            }
+        auto binary = GetShaderBinary();
+
+        if (!CoreUtils::CheckIfFolderExist(path)) {
+            CoreUtils::CreateFolder(path);
+            //CoreUtils::SaveBinaryToDisk(reinterpret_cast<char*>(binary.data()),);
+            SaveToDisk(path);
         }else{
             SaveToDisk(path);
         }

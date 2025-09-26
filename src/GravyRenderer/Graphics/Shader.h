@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Base.h"
-#include "Core/Utils.h"
 
 #include "Graphics/Renderer/OpenGL/glshader.h"
 
