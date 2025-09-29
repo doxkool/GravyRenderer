@@ -120,7 +120,7 @@ namespace Renderer
 
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            ClearBuffer();
 
             std::string gl_vendor = std::string((const char *)glGetString(GL_VENDOR));
             std::string gl_renderer = std::string((const char *)glGetString(GL_RENDERER));
@@ -136,9 +136,12 @@ namespace Renderer
         glClearColor(color.r, color.g, color.b, color.a); GLCHECK
     }
 
-    void OpenGL::ClearBuffer()
+    void OpenGL::ClearBuffer(std::vector<int> buffers)
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); GLCHECK
+        for (auto buffer : buffers)
+        {
+            glClear(buffer); GLCHECK
+        }
     }
 
     void OpenGL::SetFrameBufferRes(glm::vec2 resolution)

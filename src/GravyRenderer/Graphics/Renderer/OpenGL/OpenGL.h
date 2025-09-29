@@ -44,7 +44,7 @@ namespace Renderer
 
         static void SetClearColor(glm::vec4 color);
 
-        static void ClearBuffer();
+        static void ClearBuffer(std::vector<int> buffers = {GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GL_STENCIL_BUFFER_BIT});
 
         static void WireframeRendering(bool enable);
         static void WireframeRendering(bool enable, float wireWidth);
