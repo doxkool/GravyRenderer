@@ -200,31 +200,36 @@ void RunShadowTest()
 
     // load textures
     // -------------
-    Texture woodTexture;
-    woodTexture.LoadTexture(DEFAULT_TEX);
+    Texture texture;
+    texture.LoadTexture(DEFAULT_TEX);
 
     // configure depth map FBO
     // -----------------------
-    const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-    unsigned int depthMapFBO;
-    glGenFramebuffers(1, &depthMapFBO);
-    // create depth texture
-    unsigned int depthMap;
-    glGenTextures(1, &depthMap);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-    // attach depth texture as FBO's depth buffer
-    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    int SHADOW_WIDTH = 1024; 
+    int SHADOW_HEIGHT = 1024;
+    FrameBuffer DepthFBO;
+    DepthFBO.Create(SHADOW_WIDTH, SHADOW_HEIGHT, true);
+
+    //const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+    //unsigned int depthMapFBO;
+    //glGenFramebuffers(1, &depthMapFBO);
+    //// create depth texture
+    //unsigned int depthMap;
+    //glGenTextures(1, &depthMap);
+    //glBindTexture(GL_TEXTURE_2D, depthMap);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    //float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+    //glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    //// attach depth texture as FBO's depth buffer
+    //glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    //glDrawBuffer(GL_NONE);
+    //glReadBuffer(GL_NONE);
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
     // shader configuration
@@ -257,14 +262,16 @@ void RunShadowTest()
         simpleDepthShader.Bind();
         simpleDepthShader.SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
 
-        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-            glClear(GL_DEPTH_BUFFER_BIT);
-            glActiveTexture(GL_TEXTURE0);
-            //glBindTexture(GL_TEXTURE_2D, woodTexture);
-            woodTexture.Bind();
-            renderScene(simpleDepthShader);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        OpenGL::SetFrameBufferRes(SHADOW_WIDTH, SHADOW_HEIGHT);
+        DepthFBO.Bind();
+        //glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+        //    glClear(GL_DEPTH_BUFFER_BIT);
+        //    glActiveTexture(GL_TEXTURE0);
+
+        texture.Bind();
+        renderScene(simpleDepthShader);
+        DepthFBO.UnBind();
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         // reset viewport
         OpenGL::SetFrameBufferRes(GetCurrentResolution());
@@ -282,9 +289,10 @@ void RunShadowTest()
         shader.SetVec3f(lightPos, "lightPos");
         shader.SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
         glActiveTexture(GL_TEXTURE0);
-        //glBindTexture(GL_TEXTURE_2D, woodTexture);
-        woodTexture.Bind();
+        //glBindTexture(GL_TEXTURE_2D, texture);
+        texture.Bind();
         glActiveTexture(GL_TEXTURE1);
+        auto depthMap = DepthFBO.GetTexture();
         glBindTexture(GL_TEXTURE_2D, depthMap);
         renderScene(shader);
 
