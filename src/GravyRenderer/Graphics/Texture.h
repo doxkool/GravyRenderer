@@ -13,12 +13,5 @@ namespace Renderer
     public:
         Texture() {}
         ~Texture() {}
-        
-        // Create a texture
-        //virtual void Create(const std::string& Texture_Path, ColorSpace colorSpace = ColorSpace::RGB);
-        //virtual void SetActiveTexture(int GlTexture);
-        //virtual void BindToSlot(uint32_t slot);
-        //virtual void Bind();
-        //virtual void UnBind();
     };    
 }

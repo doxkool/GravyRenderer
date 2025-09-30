@@ -52,6 +52,9 @@ namespace Renderer
         static void DrawArray(GLsizei count);
         static void DrawElements(GLsizei count);
 
+        static void SetViewportRes(glm::vec2 resolution);
+        static void SetViewportRes(int width, int height);
+
         static void SetFrameBufferRes(glm::vec2 resolution);
         static void SetFrameBufferRes(int width, int height);
         

@@ -288,11 +288,6 @@ namespace Renderer
 
     void Model::LoadPrimitive(Primitive primitive)
     {
-        Materials.resize(Materials.size() + 1);
-        auto &Mat = Materials[0];
-
-        Mat.Diffuse_Texture.LoadTexture(DEFAULT_TEX, ColorSpace::RGB);
-
         Mesh mesh;
 
         if (primitive == Primitive::Quad)
@@ -380,8 +375,8 @@ namespace Renderer
         mesh.VBO.Bind();
         
         mesh.VAO.LinkAttribF(0, 3, sizeof(Vertex), (void *)offsetof(Vertex, posX));
-        mesh.VAO.LinkAttribF(1, 2, sizeof(Vertex), (void *)offsetof(Vertex, texCoordX));
-        mesh.VAO.LinkAttribF(2, 3, sizeof(Vertex), (void *)offsetof(Vertex, normalX));
+        mesh.VAO.LinkAttribF(1, 3, sizeof(Vertex), (void *)offsetof(Vertex, normalX));
+        mesh.VAO.LinkAttribF(2, 2, sizeof(Vertex), (void *)offsetof(Vertex, texCoordX));
         
         mesh.VAO.UnBind();
         mesh.VBO.UnBind();
@@ -389,45 +384,6 @@ namespace Renderer
         mesh.MaterialID = 0; // Default material ID for primitive
         
         Meshes.push_back(mesh);
-    }
-
-    std::vector<Material>& Model::GetMaterials()
-    {
-        return Materials;
-    }
-
-    void Model::AddMaterial(unsigned int materialID, Material& material)
-    {
-        if (materialID == 0)
-        {
-            LOG_ERROR("ERROR! You can't set the material ID #0, this ID is reserved for the default materail.");
-            return;
-        }
-
-        if (Materials.size() <= materialID)
-        {
-            Materials.push_back(material);
-        }
-    }
-
-    void Model::RemoveMaterial(unsigned int materialID)
-    {
-        for (auto& mesh : Meshes)
-        {
-            if (mesh.MaterialID == materialID) // Check if a mesh is using this MaterialID.
-            {
-                mesh.MaterialID = 0; // Set the MaterialID to the default texture.
-                Materials.erase(Materials.begin() + materialID);
-                LOG_DEBUG("Material ID #{} has been removed.", materialID);
-            }else{
-                LOG_ERROR("Cannot remove material ID #{}, material not found!", materialID);
-            }
-        }
-    }
-
-    void Model::SetActiveMaterial(unsigned int materialID)
-    {
-        Meshes[0].MaterialID = materialID;
     }
 
     glm::mat4 Model::UpdateMatrix()
@@ -442,36 +398,11 @@ namespace Renderer
         return ModelMatrix;
     }
 
-    void Model::Render(Shader* shader, Camera* camera)
+    void Model::Render()
     {
-        if (shader->ID != -1)
+        for (auto& mesh : Meshes)
         {
-            shader->Bind();            
-
-            // Update the shader with the camera's view and projection matrices
-            auto ViewMatrix = camera->GetViewMatrix();
-            auto ProjectionMatrix = camera->GetProjectionMatrix();
-            shader->SetMat4fv(ViewMatrix, "view");
-            shader->SetMat4fv(ProjectionMatrix, "projection");
-            shader->SetMat4fv(ModelMatrix, "model");
-
-            for (auto& mesh : Meshes)
-            {
-                Materials[mesh.MaterialID].Diffuse_Texture.SetActiveTexture(GL_TEXTURE0);
-                Materials[mesh.MaterialID].Diffuse_Texture.Bind();
-                Materials[mesh.MaterialID].Specular_Texture.SetActiveTexture(GL_TEXTURE1);
-                Materials[mesh.MaterialID].Specular_Texture.Bind();
-
-                mesh.Draw();
-
-                Materials[mesh.MaterialID].Diffuse_Texture.UnBind();
-                Materials[mesh.MaterialID].Specular_Texture.UnBind();
-            }
-
-            shader->UnBind();
-        }else{
-            LOG_ERROR("Error! The model '{}' has no loaded shader!", Name);
+            mesh.Draw();
         }
     }
-
 }

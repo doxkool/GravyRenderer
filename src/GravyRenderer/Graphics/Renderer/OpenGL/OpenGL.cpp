@@ -149,9 +149,18 @@ namespace Renderer
         SetFrameBufferRes(resolution.x, resolution.y);
     }
 
-    void OpenGL::SetFrameBufferRes(int width, int height)
+    void OpenGL::SetViewportRes(glm::vec2 resolution)
+    {
+        SetViewportRes(resolution.x, resolution.y);
+    }
+
+    void OpenGL::SetViewportRes(int width, int height)
     {
         glViewport(0, 0, width, height); GLCHECK
+    }
+
+    void OpenGL::SetFrameBufferRes(int width, int height)
+    {
         FrameBuffer_Height = height;
         FrameBuffer_Width = width;
     }
