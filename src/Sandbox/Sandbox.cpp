@@ -64,6 +64,7 @@ Model floor0;
 Model cube0;
 Model cube1;
 Model cube2;
+Light light0;
 
 void renderScene(Shader &shader)
 {
@@ -118,19 +119,19 @@ void Run()
     Shader debugDepthQuad;
     debugDepthQuad.LoadShader("assets/shaders/vert_debug_quad.glsl", "assets/shaders/frag_debug_quad_depth.glsl");
 
+    light0.Transform.Position = {-2.0f, 4.0f, -1.0f};
+
     floor0.LoadPrimitive(Quad);
     floor0.SetTransform({0.0f, -1.0f, 0.0}, {90.0f, 0.0f, 0.0}, {20.0, 20.0, 20.0});
 
     cube0.LoadPrimitive(Cube);
-    cube0.SetTransform({-2.5f, 1.0f, 6.0}, {-50.0f, 0.0f, 20.0}, {1.0, 1.0, 1.0});
+    cube0.SetTransform({-3.0f, 1.0f, 6.0}, {-50.0f, 0.0f, 20.0}, {1.0, 1.0, 1.0});
 
     cube1.LoadPrimitive(Cube);
     cube1.SetTransform({0.0f, 1.5f, 3.0}, {0.0f, 0.0f, 0.0}, {0.5, 0.5, 0.5});
 
     cube2.LoadPrimitive(Cube);
     cube2.SetTransform({2.0f, 0.0f, 4.0}, {0.0f, 0.0f, .0}, {0.5, 0.5, 0.5});
-
-    Light light0;
 
     // load textures
     // -------------
@@ -153,10 +154,6 @@ void Run()
     debugDepthQuad.Bind();
     debugDepthQuad.Set1i(0, "depthMap");
 
-    // lighting info
-    // -------------
-    glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
-
     while (IsRunning())
     {
         CheckForInput();
@@ -164,16 +161,11 @@ void Run()
         Time::UpdateDeltaTime();
         OpenGL::ClearBuffer();
 
-        glm::mat4 lightProjection, lightView;
-        glm::mat4 lightSpaceMatrix;
-        float near_plane = 1.0f, far_plane = 10.0f;
-        //lightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene
-        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-        lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-        lightSpaceMatrix = lightProjection * lightView;
         // render scene from light's point of view
+        light0.UpdateMatrices();
+
         simpleDepthShader.Bind();
-        simpleDepthShader.SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+        simpleDepthShader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");
 
         OpenGL::SetViewportRes(SHADOW_WIDTH, SHADOW_HEIGHT);
         depthMapFBO.Bind();
@@ -197,8 +189,8 @@ void Run()
         shader.SetMat4fv(view, "view");
         // set light uniforms
         shader.SetVec3f(MainCam.Position, "viewPos");
-        shader.SetVec3f(lightPos, "lightPos");
-        shader.SetMat4fv(lightSpaceMatrix, "lightSpaceMatrix");
+        shader.SetVec3f(light0.Transform.Position, "lightPos");
+        shader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");
         Texture.SetActiveTexture(GL_TEXTURE0);
         Texture.Bind();
         auto depthMap = depthMapFBO.GetTexture();
@@ -209,8 +201,8 @@ void Run()
         // render Depth map to quad for visual debugging
         // ---------------------------------------------
         debugDepthQuad.Bind();
-        debugDepthQuad.Set1f(near_plane, "near_plane");
-        debugDepthQuad.Set1f(far_plane, "far_plane");
+        debugDepthQuad.Set1f(light0.nearPlane, "near_plane");
+        debugDepthQuad.Set1f(light0.farPlane, "far_plane");
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, depthMap);
 
