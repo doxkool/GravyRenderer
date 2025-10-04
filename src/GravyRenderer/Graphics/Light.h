@@ -12,34 +12,45 @@
 
 namespace Renderer
 {
+    enum e_LightType {
+        Directional,
+        Point,
+        Spot
+    };
+
     class Light
     {
     private:
-        glm::mat4 lightProjection, lightView;
-        glm::mat4 lightSpaceMatrix;
+        glm::mat4 m_LightProjection, m_LightView;
+        glm::mat4 m_LightSpaceMatrix;
 
     public:
-        Light() {}
+        Light(e_LightType type);
         ~Light() {}
 
-        virtual void CreateShadowMap();
+        virtual void CreateShadowMap(glm::vec2 shadowResolution = {2048, 2048});
 
         virtual void UpdateMatrices();
-        virtual glm::mat4 GetLightSpaceMatrix() { return lightSpaceMatrix; }
+        virtual glm::mat4 GetLightSpaceMatrix() { return m_LightSpaceMatrix; }
 
         virtual void Render();
 
     public:
         Transform_t Transform;
+        e_LightType LightType;
 
-        float nearPlane = 1.0f, farPlane = 10.0f;
+        float nearPlane = 0.1f, farPlane = 200.0f;
 
-        unsigned int shadowMap = -1;
-        glm::vec2 shadowRes = {1024, 1024};
-        bool shadowEnabled = false;
+        unsigned int m_ShadowMap = -1;
+        glm::vec2 m_ShadowRes;
+
+        bool b_ShadowEnabled = false;
+
+        Shader m_DepthShader;
+        FrameBuffer m_DepthMapFBO;
+        Texture m_DepthMapTexture;
 
         //Mesh m_Mesh;
         //Material m_Material;
-        //Shader m_shader;
     };
 }

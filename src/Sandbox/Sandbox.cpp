@@ -27,10 +27,12 @@ void CheckForInput()
         if (Input::IsMouseGrabed())
         {
             Input::SetCursorMode(released);
+            MainCam.b_MouseInput = false;
         }
         else
         {
             Input::SetCursorMode(grabed);
+            MainCam.b_MouseInput = true;
         }
     }
 
@@ -50,49 +52,29 @@ void CheckForInput()
     {
         m_Audio.StopAllAudio();
     }
-
-    MainCam.b_MouseInput = Input::IsMouseGrabed();
 }
 
-// meshes
-unsigned int planeVAO = 0;
-unsigned int planeVBO = 0;
-unsigned int cubeVAO = 0;
-unsigned int cubeVBO = 0;
-
-Model floor0;
+Model sponza;
 Model cube0;
 Model cube1;
 Model cube2;
-Light light0;
+Light light0(Directional);
 
-void renderScene(Shader &shader)
+void RenderScene(Shader &shader)
 {
-    // floor
     glm::mat4 model = glm::mat4(1.0f);
-    model = floor0.GetModelMatrix();
-    shader.SetMat4fv(model, "model");
-    floor0.Render();
 
     // cubes
-    model = glm::mat4(1.0f);
     model = cube0.GetModelMatrix();
     shader.SetMat4fv(model, "model");
     cube0.Render();
 
-    model = glm::mat4(1.0f);
-    model = cube1.GetModelMatrix();
+    // sponza
+    model = sponza.GetModelMatrix();
     shader.SetMat4fv(model, "model");
-    cube1.Render();
-
-    model = glm::mat4(1.0f);
-    model = cube2.GetModelMatrix();
-    shader.SetMat4fv(model, "model");
-    cube2.Render();
+    sponza.Render();
 
     cube0.Rotate({10.0, 10.0, 10.0});
-    cube1.Rotate({15.0, 15.0, 15.0});
-    cube2.Rotate({20.0, 20.0, 20.0});
 }
 
 void Run()
@@ -110,49 +92,34 @@ void Run()
     };
     Audio1ID = m_Audio.LoadAudioTrack(&audio1);
 
-    // build and compile shaders
-    // -------------------------
     Shader shader;
-    shader.LoadShader("assets/shaders/vert_shadow_mapping.glsl", "assets/shaders/frag_shadow_mapping.glsl");
-    Shader simpleDepthShader;
-    simpleDepthShader.LoadShader("assets/shaders/vert_shadow_mapping_depth.glsl", "assets/shaders/frag_shadow_mapping_depth.glsl");
-    Shader debugDepthQuad;
-    debugDepthQuad.LoadShader("assets/shaders/vert_debug_quad.glsl", "assets/shaders/frag_debug_quad_depth.glsl");
+    shader.LoadShader(DEFAULT_VER_SHADER, DEFAULT_FRAG_SHADER);
+    //shader.LoadShader("assets/shaders/vert_shadow_mapping.glsl", "assets/shaders/frag_shadow_mapping.glsl");
 
-    light0.Transform.Position = {-2.0f, 4.0f, -1.0f};
+    light0.Transform.Position = {10.0f, 160.0f, -10.0f};
+    light0.m_DepthShader.LoadShader("assets/shaders/vert_shadow_mapping_depth.glsl", "assets/shaders/frag_shadow_mapping_depth.glsl");
 
-    floor0.LoadPrimitive(Quad);
-    floor0.SetTransform({0.0f, -1.0f, 0.0}, {90.0f, 0.0f, 0.0}, {20.0, 20.0, 20.0});
+    sponza.LoadModel("assets/models/sponza/sponza.obj");
+    sponza.SetTransform({0.0f, -1.0f, 0.0}, {0.0f, 90.0f, 0.0}, {0.1, 0.1, 0.1});
 
     cube0.LoadPrimitive(Cube);
-    cube0.SetTransform({-3.0f, 1.0f, 6.0}, {-50.0f, 0.0f, 20.0}, {1.0, 1.0, 1.0});
-
-    cube1.LoadPrimitive(Cube);
-    cube1.SetTransform({0.0f, 1.5f, 3.0}, {0.0f, 0.0f, 0.0}, {0.5, 0.5, 0.5});
-
-    cube2.LoadPrimitive(Cube);
-    cube2.SetTransform({2.0f, 0.0f, 4.0}, {0.0f, 0.0f, .0}, {0.5, 0.5, 0.5});
+    cube0.SetTransform({0.0f, 8.0f, 20.0}, {-50.0f, 0.0f, 20.0}, {5.0, 5.0, 5.0});
 
     // load textures
     // -------------
-    Texture Texture;
-    Texture.LoadTexture(DEFAULT_TEX);
-
-    // configure depth map FBO
+    Texture texture;
+    texture.LoadTexture(DEFAULT_TEX);
+ 
+    // configure light Shadow Map
     // -----------------------
-    const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
-
-    FrameBuffer depthMapFBO;
-    depthMapFBO.Create(SHADOW_WIDTH, SHADOW_HEIGHT, true);
-
+    light0.CreateShadowMap({2048, 2048});
 
     // shader configuration
     // --------------------
     shader.Bind();
-    shader.Set1i(0, "diffuseTexture");
-    shader.Set1i(1, "shadowMap");
-    debugDepthQuad.Bind();
-    debugDepthQuad.Set1i(0, "depthMap");
+    shader.Set1i(0, "material.diffuse");
+    //shader.Set1i(1, "material.specular");
+    shader.Set1i(2, "material.shadowMap");
 
     while (IsRunning())
     {
@@ -161,20 +128,23 @@ void Run()
         Time::UpdateDeltaTime();
         OpenGL::ClearBuffer();
 
+        MainCam.Update();
+
         // render scene from light's point of view
+
         light0.UpdateMatrices();
 
-        simpleDepthShader.Bind();
-        simpleDepthShader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");
+        light0.m_DepthShader.Bind();
+        light0.m_DepthShader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");
 
-        OpenGL::SetViewportRes(SHADOW_WIDTH, SHADOW_HEIGHT);
-        depthMapFBO.Bind();
+        OpenGL::SetViewportRes(light0.m_ShadowRes);
+        light0.m_DepthMapFBO.Bind();
         OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
-        Texture.SetActiveTexture(GL_TEXTURE0);
-        Texture.Bind();
-        renderScene(simpleDepthShader);
-        Texture.UnBind();
-        depthMapFBO.UnBind();
+        light0.m_DepthMapTexture.SetActiveTexture(GL_TEXTURE0);
+        light0.m_DepthMapTexture.Bind();
+        RenderScene(light0.m_DepthShader);
+        light0.m_DepthMapTexture.UnBind();
+        light0.m_DepthMapFBO.UnBind();
 
         // reset viewport
         OpenGL::SetViewportRes(GetCurrentResolution());
@@ -183,28 +153,28 @@ void Run()
         // 2. render scene as normal using the generated depth/shadow map  
         // --------------------------------------------------------------
         shader.Bind();
-        glm::mat4 projection = MainCam.GetProjectionMatrix();
-        glm::mat4 view = MainCam.GetViewMatrix();
-        shader.SetMat4fv(projection, "projection");
-        shader.SetMat4fv(view, "view");
+        shader.SetMat4fv(MainCam.GetProjectionMatrix(), "projection");
+        shader.SetMat4fv(MainCam.GetViewMatrix(), "view");
+
         // set light uniforms
         shader.SetVec3f(MainCam.Position, "viewPos");
-        shader.SetVec3f(light0.Transform.Position, "lightPos");
-        shader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");
-        Texture.SetActiveTexture(GL_TEXTURE0);
-        Texture.Bind();
-        auto depthMap = depthMapFBO.GetTexture();
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, depthMap);
-        renderScene(shader);
+        //shader.SetVec3f(light0.Transform.Position, "lightPos");
+        //shader.SetVec3f(glm::vec3(0.8), "lightColor");
+        //shader.SetVec3f(glm::vec3(0.5), "lightAmbient");
 
-        // render Depth map to quad for visual debugging
-        // ---------------------------------------------
-        debugDepthQuad.Bind();
-        debugDepthQuad.Set1f(light0.nearPlane, "near_plane");
-        debugDepthQuad.Set1f(light0.farPlane, "far_plane");
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, depthMap);
+        shader.SetVec3f(glm::vec3(-0.1, -1.0, -0.2), "dirLight.direction");
+        shader.SetVec3f(glm::vec3(0.8), "dirLight.diffuse");
+        shader.SetVec3f(glm::vec3(0.8), "dirLight.specular");
+        shader.SetVec3f(glm::vec3(0.2), "dirLight.ambient");
+
+
+        shader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");
+        texture.SetActiveTexture(GL_TEXTURE0);
+        texture.Bind();
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, light0.m_DepthMapFBO.GetTexture());
+        RenderScene(shader);
+        texture.UnBind();
 
         m_window->SwapScreenBuffer();
         m_window->Update();

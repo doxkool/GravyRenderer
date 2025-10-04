@@ -1,11 +1,10 @@
-
-
 #version 330 core
 out vec4 FragColor;
 
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
+    sampler2D shadowMap;
     float shininess;
 }; 
 
@@ -47,6 +46,7 @@ struct SpotLight {
 in vec3 FragPos;
 in vec3 Normal;
 in vec2 TexCoords;
+in vec4 FragPosLightSpace;
 
 uniform int nbOfPointLight;
 uniform int nbOfSpotLight;
@@ -57,7 +57,7 @@ uniform PointLight pointLights[10];
 uniform SpotLight spotLights[10];
 uniform Material material;
 
-uniform bool blinn = false;
+uniform bool blinn = true;
 
 float near = 0.1; 
 float far  = 50.0;
@@ -66,6 +66,42 @@ float far  = 50.0;
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(material.shadowMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // calculate bias (based on depth map resolution and slope)
+    vec3 normal = normalize(Normal);
+    vec3 lightDir = normalize(dirLight.direction - FragPos);
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+    // check whether current frag pos is in shadow
+    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+    // PCF
+    //float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(material.shadowMap, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(material.shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+    
+    // keep the shadow at 0.0 when outside the far_plane region of the light's frustum.
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
+        
+    return shadow;
+}
 
 float LinearizeDepth(float depth) 
 {
@@ -103,6 +139,8 @@ void main()
     float fogDepth = LinearizeDepth(gl_FragCoord.z) / far;
 
     vec3 fog = applyFog(vec3(0.0, 0.0, 0.0), fogDepth);
+
+    float shadow = ShadowCalculation(FragPosLightSpace);
     
     FragColor = vec4(result + fog, texColor.a);
 }
@@ -120,7 +158,8 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
     vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
-    return (ambient + diffuse + specular);
+    float shadow = ShadowCalculation(FragPosLightSpace);
+    return (ambient + (diffuse + specular * (1.0 - shadow)));
 }
 
 // calculates the color when using a point light.

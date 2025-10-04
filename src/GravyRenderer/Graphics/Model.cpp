@@ -124,8 +124,8 @@ namespace Renderer
             mesh.VBO.Bind();
 
             mesh.VAO.LinkAttribF(0, 3, sizeof(Vertex), (void *)offsetof(Vertex, posX));
-            mesh.VAO.LinkAttribF(1, 2, sizeof(Vertex), (void *)offsetof(Vertex, texCoordX));
-            mesh.VAO.LinkAttribF(2, 3, sizeof(Vertex), (void *)offsetof(Vertex, normalX));
+            mesh.VAO.LinkAttribF(1, 3, sizeof(Vertex), (void *)offsetof(Vertex, normalX));
+            mesh.VAO.LinkAttribF(2, 2, sizeof(Vertex), (void *)offsetof(Vertex, texCoordX));
 
             mesh.VAO.UnBind();
             mesh.VBO.UnBind();
@@ -402,7 +402,19 @@ namespace Renderer
     {
         for (auto& mesh : Meshes)
         {
+            if (Materials.size() >= 1) {
+                Materials[mesh.MaterialID].Diffuse_Texture.SetActiveTexture(GL_TEXTURE0);
+                Materials[mesh.MaterialID].Diffuse_Texture.Bind();
+                Materials[mesh.MaterialID].Specular_Texture.SetActiveTexture(GL_TEXTURE1);
+                Materials[mesh.MaterialID].Specular_Texture.Bind();
+            }
+
             mesh.Draw();
+
+            if (Materials.size() >= 1) {
+                Materials[mesh.MaterialID].Diffuse_Texture.UnBind();
+                Materials[mesh.MaterialID].Specular_Texture.UnBind();
+            }
         }
     }
 }
