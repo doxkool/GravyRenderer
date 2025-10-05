@@ -142,7 +142,7 @@ void main()
 
     float shadow = ShadowCalculation(FragPosLightSpace);
     
-    FragColor = vec4(result + fog, texColor.a);
+    FragColor = vec4(result, texColor.a);
 }
 
 // calculates the color when using a directional light.
@@ -214,6 +214,9 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
-    return (ambient + diffuse + specular);
+
+    float shadow = ShadowCalculation(FragPosLightSpace);
+
+    return (ambient + (diffuse + specular * (1.0 - shadow)));
 }
 

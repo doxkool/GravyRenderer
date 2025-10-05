@@ -84,6 +84,7 @@ void Run()
     SetClearColor(GRAY);
 
     MainCam.Position = {0.0, 0.5, 0.0};
+    SetMainCamera(&MainCam);
 
     t_AudioTrackInfo audio1 = {
         .filePath   = "assets/musics/Ice_and_Snow.mp3",
@@ -112,7 +113,7 @@ void Run()
  
     // configure light Shadow Map
     // -----------------------
-    light0.CreateShadowMap({2048, 2048});
+    light0.CreateShadowMap({4096, 4096});
 
     // shader configuration
     // --------------------
@@ -175,6 +176,8 @@ void Run()
         glBindTexture(GL_TEXTURE_2D, light0.m_DepthMapFBO.GetTexture());
         RenderScene(shader);
         texture.UnBind();
+
+        m_ImGUI.RenderGUI();
 
         m_window->SwapScreenBuffer();
         m_window->Update();

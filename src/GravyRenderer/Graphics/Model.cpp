@@ -405,15 +405,15 @@ namespace Renderer
             if (Materials.size() >= 1) {
                 Materials[mesh.MaterialID].Diffuse_Texture.SetActiveTexture(GL_TEXTURE0);
                 Materials[mesh.MaterialID].Diffuse_Texture.Bind();
-                Materials[mesh.MaterialID].Specular_Texture.SetActiveTexture(GL_TEXTURE1);
-                Materials[mesh.MaterialID].Specular_Texture.Bind();
+                //Materials[mesh.MaterialID].Specular_Texture.SetActiveTexture(GL_TEXTURE1);
+                //Materials[mesh.MaterialID].Specular_Texture.Bind();
             }
 
             mesh.Draw();
 
             if (Materials.size() >= 1) {
                 Materials[mesh.MaterialID].Diffuse_Texture.UnBind();
-                Materials[mesh.MaterialID].Specular_Texture.UnBind();
+                //Materials[mesh.MaterialID].Specular_Texture.UnBind();
             }
         }
     }

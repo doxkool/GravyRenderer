@@ -23,7 +23,7 @@ namespace Renderer
             }
 
             if (LightType == Directional) {
-                m_LightProjection = glm::ortho(-200.0f, 200.0f, -200.0f, 200.0f, nearPlane, farPlane);
+                m_LightProjection = glm::ortho(-250.0f, 250.0f, -250.0f, 250.0f, nearPlane, farPlane);
             }
 
             m_LightView = glm::lookAt(Transform.Position, glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0));
