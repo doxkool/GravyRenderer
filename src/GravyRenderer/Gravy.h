@@ -8,7 +8,6 @@
 #include "Graphics/Renderer/Renderer.h"
 #include "Graphics/Buffers.h"
 #include "Graphics/Camera.h"
-#include "Graphics/Light.h"
 #include "Graphics/Material.h"
 #include "Graphics/Mesh.h"
 #include "Graphics/Model.h"

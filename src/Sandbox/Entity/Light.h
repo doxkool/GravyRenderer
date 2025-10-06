@@ -1,14 +1,6 @@
 #pragma once
 
-#include "Core/Base.h"
-
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
-
-#include "Graphics/Mesh.h"
-#include "Graphics/Camera.h"
-#include "Graphics/Material.h"
-#include "Graphics/Primitive.h"
-#include "Graphics/Shader.h"
+#include "Gravy.h"
 
 namespace Renderer
 {

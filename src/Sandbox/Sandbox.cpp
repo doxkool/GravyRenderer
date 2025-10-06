@@ -1,7 +1,10 @@
 #include "Gravy.h"
 
-#include "ImGUI.h"
-#include "Audio.h"
+#include "Core/Layer.h"
+#include "Core/ImGUI.h"
+#include "Core/Audio.h"
+
+#include "Entity/Light.h"
 
 using namespace Renderer;
 
@@ -56,8 +59,6 @@ void CheckForInput()
 
 Model sponza;
 Model cube0;
-Model cube1;
-Model cube2;
 Light light0(Directional);
 
 void RenderScene(Shader &shader)

@@ -1,4 +1,4 @@
-#include "Graphics/Light.h"
+#include "Entity/Light.h"
 
 namespace Renderer
 {
