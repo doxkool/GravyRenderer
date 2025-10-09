@@ -1,5 +1,7 @@
 #include "Gravy.h"
 
+#include "Defines.h"
+
 #include "Core/Layer.h"
 #include "Core/ImGUI.h"
 #include "Core/Audio.h"
@@ -84,7 +86,7 @@ void Run()
 
     SetClearColor(GRAY);
 
-    MainCam.Position = {0.0, 0.5, 0.0};
+    MainCam.Position = {0.0, 15.0, -5.0};
     SetMainCamera(&MainCam);
 
     t_AudioTrackInfo audio1 = {
@@ -120,7 +122,7 @@ void Run()
     // --------------------
     shader.Bind();
     shader.Set1i(0, "material.diffuse");
-    //shader.Set1i(1, "material.specular");
+    shader.Set1i(1, "material.specular");
     shader.Set1i(2, "material.shadowMap");
 
     while (IsRunning())

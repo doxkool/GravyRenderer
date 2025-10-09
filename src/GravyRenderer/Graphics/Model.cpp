@@ -152,8 +152,9 @@ namespace Renderer
                 Mat.Emission = glm::vec3(_materials.at(i).emission[0], _materials.at(i).emission[1], _materials.at(i).emission[2]);
                 Mat.Shininess = _materials.at(i).shininess;
             }else{
-                LOG_WARN("Texture not found or not specified for {} in .mtl file! Loading default texture instead...", Mat.Name);
-                Mat.Diffuse_Texture.Create(DEFAULT_TEX);
+                LOG_WARN("Texture not found or not specified for {} in .mtl file!", Mat.Name);
+                uint32_t grayTex = 0xffffff;
+                Mat.Diffuse_Texture.SetData(&grayTex, sizeof(uint32_t));
             }
 
             if (!_materials.at(i).specular_texname.empty())
@@ -405,15 +406,15 @@ namespace Renderer
             if (Materials.size() >= 1) {
                 Materials[mesh.MaterialID].Diffuse_Texture.SetActiveTexture(GL_TEXTURE0);
                 Materials[mesh.MaterialID].Diffuse_Texture.Bind();
-                //Materials[mesh.MaterialID].Specular_Texture.SetActiveTexture(GL_TEXTURE1);
-                //Materials[mesh.MaterialID].Specular_Texture.Bind();
+                Materials[mesh.MaterialID].Specular_Texture.SetActiveTexture(GL_TEXTURE1);
+                Materials[mesh.MaterialID].Specular_Texture.Bind();
             }
 
             mesh.Draw();
 
             if (Materials.size() >= 1) {
                 Materials[mesh.MaterialID].Diffuse_Texture.UnBind();
-                //Materials[mesh.MaterialID].Specular_Texture.UnBind();
+                Materials[mesh.MaterialID].Specular_Texture.UnBind();
             }
         }
     }

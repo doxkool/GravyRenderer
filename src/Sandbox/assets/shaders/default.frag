@@ -139,10 +139,8 @@ void main()
     float fogDepth = LinearizeDepth(gl_FragCoord.z) / far;
 
     vec3 fog = applyFog(vec3(0.0, 0.0, 0.0), fogDepth);
-
-    float shadow = ShadowCalculation(FragPosLightSpace);
     
-    FragColor = vec4(result, texColor.a);
+    FragColor = vec4(result + fog, texColor.a);
 }
 
 // calculates the color when using a directional light.
@@ -159,7 +157,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
     float shadow = ShadowCalculation(FragPosLightSpace);
-    return (ambient + (diffuse + specular * (1.0 - shadow)));
+    return (ambient + diffuse + specular * (1.0 - shadow));
 }
 
 // calculates the color when using a point light.

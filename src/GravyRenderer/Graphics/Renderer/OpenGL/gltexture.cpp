@@ -6,35 +6,60 @@
 
 namespace Renderer
 {
+	Ref<OpenGLTexture> OpenGLTexture::Create(uint32_t width, uint32_t height)
+	{
+		return CreateRef<OpenGLTexture>(width, height);
+	}
+
+	Ref<OpenGLTexture> OpenGLTexture::Create(void* data, uint32_t size, ColorSpace colorSpace)
+	{
+		return CreateRef<OpenGLTexture>(data, size, colorSpace);
+	}
+
 	Ref<OpenGLTexture> OpenGLTexture::Create(const std::string &texPath, ColorSpace colorSpace)
 	{
 		return CreateRef<OpenGLTexture>(texPath, colorSpace);
 	}
 
-	OpenGLTexture::OpenGLTexture()
+	OpenGLTexture::OpenGLTexture(uint32_t width, uint32_t height)
+		: m_Width(width), m_Height(height)
 	{
+		m_InternalFormat = GL_RGBA8;
+		m_DataFormat = GL_RGBA;
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &ID);
+		glTextureStorage2D(ID, 1, m_InternalFormat, m_Width, m_Height);
+
+		glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 
 	OpenGLTexture::OpenGLTexture(void* data, uint32_t size, ColorSpace colorSpace)
 	{
 		TextureColorSpace = colorSpace;
+		m_InternalFormat = GL_RGBA8;
+		m_DataFormat = GL_RGBA;
+		m_Width = 1;
+		m_Height = 1;
 
-		glGenTextures(1, &ID); GLCHECK
-		glBindTexture(GL_TEXTURE_2D, ID); GLCHECK
+		glCreateTextures(GL_TEXTURE_2D, 1, &ID); GLCHECK
+		glTextureStorage2D(ID, 1, m_InternalFormat, m_Width, m_Height); GLCHECK
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLCHECK
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLCHECK
+		glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLCHECK
+		glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLCHECK
 
-		glTextureSubImage2D(ID, 0, 0, 0, 1024, 1024, GL_RGBA, GL_UNSIGNED_BYTE, data); GLCHECK
+		glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_REPEAT); GLCHECK
+		glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_REPEAT); GLCHECK
+
+		glTextureSubImage2D(ID, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_UNSIGNED_BYTE, data); GLCHECK
 	}
 
 	OpenGLTexture::OpenGLTexture(const std::string &texPath, ColorSpace colorSpace)
 	{
 		LoadTexture(texPath, TextureColorSpace);
-	}
-
-	OpenGLTexture::~OpenGLTexture()
-	{
 	}
 
 	uint32_t OpenGLTexture::LoadTexture(const std::string &texPath, ColorSpace colorSpace)
@@ -122,10 +147,7 @@ namespace Renderer
 			{
 				LOG_ERROR("Failed to load texture : {}", texPath);
 
-				stbi_image_free(data);
-				unsigned char *data = stbi_load(DEFAULT_TEX, &width, &height, &nrChannels, 0);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data); GLCHECK
-				glGenerateMipmap(GL_TEXTURE_2D);
+				return -1;
 			}
 			stbi_image_free(data);
 		}
@@ -135,47 +157,21 @@ namespace Renderer
 
 	uint32_t OpenGLTexture::SetData(void* data, uint32_t size)
 	{
-		glGenTextures(1, &ID); GLCHECK
-		glBindTexture(GL_TEXTURE_2D, ID); GLCHECK
+		m_InternalFormat = GL_RGBA8;
+		m_DataFormat = GL_RGBA;
+		m_Width = 1;
+		m_Height = 1;
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLCHECK
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLCHECK
+		glCreateTextures(GL_TEXTURE_2D, 1, &ID); GLCHECK
+		glTextureStorage2D(ID, 1, m_InternalFormat, m_Width, m_Height); GLCHECK
 
-		glTextureSubImage2D(ID, 0, 0, 0, 1024, 1024, GL_RGB, GL_UNSIGNED_BYTE, data); GLCHECK
+		glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLCHECK
+		glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLCHECK
 
-		return ID;
-	}
+		glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_REPEAT); GLCHECK
+		glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_REPEAT); GLCHECK
 
-	uint32_t OpenGLTexture::LoadSkyBox(std::vector<std::string> faces)
-	{
-	    glGenTextures(1, &ID); GLCHECK
-	    glBindTexture(GL_TEXTURE_CUBE_MAP, ID); GLCHECK
-
-	    int width, height, nrChannels;
-	    for (unsigned int i = 0; i < faces.size(); i++)
-	    {
-	        unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-	        if (data)
-	        {
-	            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
-	                         0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
-	            ); GLCHECK
-	            stbi_image_free(data);
-				LOG_TRACE("Texture loaded : {}", faces[i]);
-	        }
-	        else
-	        {
-	            LOG_ERROR("Cubemap tex failed to load at path: {}", faces[i]);
-	            stbi_image_free(data);
-	        }
-	    }
-	    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLCHECK
-	    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLCHECK
-	    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); GLCHECK
-	    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); GLCHECK
-	    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE); GLCHECK
-
-		b_IsSkyBox = true;
+		glTextureSubImage2D(ID, 0, 0, 0, m_Width, m_Height, GL_RGBA, GL_UNSIGNED_BYTE, data); GLCHECK
 
 		return ID;
 	}
@@ -187,22 +183,12 @@ namespace Renderer
 
 	void OpenGLTexture::Bind()
 	{	
-		if(b_IsSkyBox)
-		{
-			glBindTexture(GL_TEXTURE_CUBE_MAP, ID); GLCHECK
-		}else{
-			glBindTexture(GL_TEXTURE_2D, ID); GLCHECK
-		}
+		glBindTexture(GL_TEXTURE_2D, ID); GLCHECK
 	}
 
 	void OpenGLTexture::UnBind()
 	{	
-		if(b_IsSkyBox)
-		{
-			glBindTexture(GL_TEXTURE_CUBE_MAP, 0); GLCHECK
-		}else{
-			glBindTexture(GL_TEXTURE_2D, 0); GLCHECK
-		}
+		glBindTexture(GL_TEXTURE_2D, 0); GLCHECK
 	}
 
 	void OpenGLTexture::BindTextureSlot(uint32_t slot)

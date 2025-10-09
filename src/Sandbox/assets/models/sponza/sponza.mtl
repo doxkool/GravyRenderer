@@ -92,7 +92,6 @@ newmtl bricks
 	Ke 0.0000 0.0000 0.0000
 	map_Ka spnza_bricks_a_diff.tga
 	map_Kd spnza_bricks_a_diff.tga
-	map_Ks spnza_bricks_a_spec.tga
 	map_Kn spnza_bricks_a_ddn.tga
 
 newmtl arch
