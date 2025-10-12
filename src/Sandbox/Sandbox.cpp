@@ -61,7 +61,8 @@ void CheckForInput()
 
 Model sponza;
 Model cube0;
-Light light0(Directional);
+//Light light0(DirectionalLight);
+Light light0(SpotLight);
 
 void RenderScene(Shader &shader)
 {
@@ -100,7 +101,8 @@ void Run()
     shader.LoadShader(DEFAULT_VER_SHADER, DEFAULT_FRAG_SHADER);
     //shader.LoadShader("assets/shaders/vert_shadow_mapping.glsl", "assets/shaders/frag_shadow_mapping.glsl");
 
-    light0.Transform.Position = {10.0f, 160.0f, -10.0f};
+    //light0.Transform.Position = {10.0f, 160.0f, -10.0f};
+    light0.Transform.Position = {-1.0f, 30.0f, 15.0f};
     light0.m_DepthShader.LoadShader("assets/shaders/vert_shadow_mapping_depth.glsl", "assets/shaders/frag_shadow_mapping_depth.glsl");
 
     sponza.LoadModel("assets/models/sponza/sponza.obj");
@@ -122,7 +124,7 @@ void Run()
     // --------------------
     shader.Bind();
     shader.Set1i(0, "material.diffuse");
-    shader.Set1i(1, "material.specular");
+    //shader.Set1i(1, "material.specular");
     shader.Set1i(2, "material.shadowMap");
 
     while (IsRunning())
@@ -166,10 +168,23 @@ void Run()
         //shader.SetVec3f(glm::vec3(0.8), "lightColor");
         //shader.SetVec3f(glm::vec3(0.5), "lightAmbient");
 
-        shader.SetVec3f(glm::vec3(-0.1, -1.0, -0.2), "dirLight.direction");
-        shader.SetVec3f(glm::vec3(0.8), "dirLight.diffuse");
-        shader.SetVec3f(glm::vec3(0.8), "dirLight.specular");
-        shader.SetVec3f(glm::vec3(0.2), "dirLight.ambient");
+        //shader.Set1i(1, "nbOfSpotLight");
+        //shader.SetVec3f(glm::vec3(-0.1, -1.0, -0.2), "dirLight.direction");
+        //shader.SetVec3f(glm::vec3(0.8), "dirLight.diffuse");
+        //shader.SetVec3f(glm::vec3(0.8), "dirLight.specular");
+        //shader.SetVec3f(glm::vec3(0.2), "dirLight.ambient");
+
+        shader.Set1i(1, "nbOfSpotLight");
+        shader.SetVec3f(light0.Transform.Position,  "spotLights[0].position");
+        shader.SetVec3f({0.1, 1.0, 0.2},            "spotLights[0].direction");
+        shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].ambient");
+        shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].diffuse");
+        shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].specular");
+        shader.Set1f(0.0f,                          "spotLights[0].constant");
+        shader.Set1f(0.05f,                         "spotLights[0].linear");
+        shader.Set1f(0.005f,                        "spotLights[0].quadratic");
+        shader.Set1f(35.0f,                         "spotLights[0].cutOff");
+        shader.Set1f(55.0f,                         "spotLights[0].outerCutOff");
 
 
         shader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");

@@ -5,9 +5,9 @@
 namespace Renderer
 {
     enum e_LightType {
-        Directional,
-        Point,
-        Spot
+        DirectionalLight,
+        PointLight,
+        SpotLight
     };
 
     class Light

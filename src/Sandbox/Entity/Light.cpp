@@ -18,11 +18,12 @@ namespace Renderer
     void Light::UpdateMatrices()
     {
         if (b_ShadowEnabled) {
-            if (LightType == Point || LightType == Spot) {
-                m_LightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)m_ShadowRes.x / (GLfloat)m_ShadowRes.y, nearPlane, farPlane);
+            if (LightType == PointLight || LightType == SpotLight) {
+                //m_LightProjection = glm::perspective(glm::radians(45.0f), m_ShadowRes.x / m_ShadowRes.y, nearPlane, farPlane);
+                m_LightProjection = glm::perspective<float>(glm::radians(45.0f), 1, nearPlane, farPlane);
             }
 
-            if (LightType == Directional) {
+            if (LightType == DirectionalLight) {
                 m_LightProjection = glm::ortho(-250.0f, 250.0f, -250.0f, 250.0f, nearPlane, farPlane);
             }
 
