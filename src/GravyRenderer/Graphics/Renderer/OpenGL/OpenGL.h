@@ -2,11 +2,12 @@
 
 #define GLEW_NO_GLU
 
+#include "Logger.h"
+
 #include <GL/glew.h>
 
 #include "Core/Time.h"
 #include "Core/Base.h"
-#include "Core/Logger.h"
 #include "Core/ConfigsDef.h"
 
 #include "glshader.h"

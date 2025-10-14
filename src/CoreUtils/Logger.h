@@ -12,7 +12,7 @@ class Logger
 private:
     
 public:
-    static int Init(std::string app_name = "Gravy");
+    static int Init(std::string app_name = "App");
     static void Set_LogLevel(int log_level);
     static std::shared_ptr<spdlog::logger>& GetLogger();
 };

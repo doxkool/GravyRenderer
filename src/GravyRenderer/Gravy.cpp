@@ -14,7 +14,7 @@ namespace Renderer
         pRendererSpec = rendererSpec;
         pWindowSpec = &rendererSpec->windowSpec;
         
-        Logger::Init(pWindowSpec->windowName);
+        Logger::Init("Renderer");
         m_Window.Init(rendererSpec);
 
         m_Window.Create(pWindowSpec);

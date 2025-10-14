@@ -2,7 +2,6 @@
 
 #include "Core/Base.h"
 #include "Core/ConfigsDef.h"
-#include "Core/Logger.h"
 #include "Core/Time.h"
 
 #include "Graphics/Renderer/Renderer.h"

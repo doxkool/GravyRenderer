@@ -225,6 +225,8 @@ int main()
     
     int ret_Gravy = Init(&rendererSpec);
 
+    Logger::Init("Sandbox");
+
     m_Audio.Init();
     m_ImGUI.Init();
 

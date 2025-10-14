@@ -20,6 +20,7 @@ add_executable(Sandbox ${SANDBOX_SOURCES})
 include_directories(
     ${CMAKE_SOURCE_DIR}/src/Sandbox
     ${CMAKE_SOURCE_DIR}/src/GravyRenderer
+    ${CMAKE_SOURCE_DIR}/src/CoreUtils
     ${CMAKE_SOURCE_DIR}/src/Sandbox/Vendors/SoLoud/include
     ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-windows/include
     )

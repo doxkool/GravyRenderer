@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Core/Logger.h"
+#include "Logger.h"
+
 #include "Core/Defines.h"
 
 #include "Window/GLFW/glfw.h"
