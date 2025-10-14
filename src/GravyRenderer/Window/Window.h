@@ -26,6 +26,7 @@ namespace Renderer
         void SwapScreenBuffer();
 
         bool GetWindowShouldClose();
+        bool IsWindowminimized();
 
         glfw* GetGLFW() { return &m_glfw; }
 

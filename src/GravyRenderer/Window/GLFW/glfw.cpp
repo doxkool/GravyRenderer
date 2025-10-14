@@ -37,6 +37,12 @@ namespace Renderer
         Input::RecieveMouseButtonCallback(button, action, mods);
     }
 
+    void WindowSizeCallback(GLFWwindow* window, int width, int height)
+    {
+        glfwSetWindowSize(window, width, height);
+        OpenGL::SetFrameBufferRes(width, height);
+    }
+
     int glfw::Init(RendererSpec* confInit)
     {
         /* Initialize the library */
@@ -139,6 +145,7 @@ namespace Renderer
         glfwSetCursorPosCallback(window, mouse_callback);
         glfwSetScrollCallback(window, mouse_scroll_callback);
         glfwSetMouseButtonCallback(window, mouse_button_callback);
+        glfwSetWindowSizeCallback(window, WindowSizeCallback);
 
         Input::BindWindow(this);
 

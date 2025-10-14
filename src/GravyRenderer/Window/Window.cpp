@@ -30,6 +30,11 @@ namespace Renderer
         return m_glfw.GetShouldWindowClose();
     }
 
+    bool Window::IsWindowminimized()
+    {
+        return false;
+    }
+
     void Window::ChangeResolution(glm::vec2 resolution)
     {
         m_glfw.SetWindowResolution(resolution);

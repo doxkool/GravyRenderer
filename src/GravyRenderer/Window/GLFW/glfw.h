@@ -14,6 +14,8 @@ namespace Renderer
     void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
     void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
+    void WindowSizeCallback(GLFWwindow* window, int width, int height);
+
     class glfw
     {
     private:
