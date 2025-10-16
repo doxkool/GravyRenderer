@@ -117,17 +117,19 @@ void RenderShadowMap(Renderer::Light light)
 {
     light.UpdateMatrices();
 
+    auto lightFBO = &light.m_DepthMapFBO;
+
     light.m_DepthShader.Bind();
     light.m_DepthShader.SetMat4fv(light.GetLightSpaceMatrix(), "lightSpaceMatrix");
 
     OpenGL::SetViewportRes(light.m_ShadowRes);
-    light.m_DepthMapFBO.Bind();
+    lightFBO->Bind();
     OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
     light.m_DepthMapTexture.SetActiveTexture(GL_TEXTURE0);
     light.m_DepthMapTexture.Bind();
     RenderScene(light.m_DepthShader);
     light.m_DepthMapTexture.UnBind();
-    light.m_DepthMapFBO.UnBind();
+    lightFBO->UnBind();
 
     // reset viewport
     OpenGL::SetViewportRes(GetCurrentResolution());

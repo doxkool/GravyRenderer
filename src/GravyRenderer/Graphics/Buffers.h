@@ -89,7 +89,7 @@ namespace Renderer
     public:
 
         FrameBuffer();
-        ~FrameBuffer();
+        ~FrameBuffer() {}
 
         // Create a Frame Buffer Object
         virtual unsigned int Create(float width, float height, bool shadowMap = false);

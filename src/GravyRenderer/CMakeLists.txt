@@ -4,6 +4,8 @@ project(GravyRenderer CXX)
 
 SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+SET(CoreUtils_static ${CMAKE_BINARY_DIR}/src/CoreUtils/libCoreUtils.a)
+
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(GLEW REQUIRED)
@@ -23,4 +25,4 @@ include_directories(
     ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-windows/include
     )
 
-target_link_libraries(GravyRenderer PUBLIC CoreUtils OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
+target_link_libraries(GravyRenderer PUBLIC ${CoreUtils_static} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)

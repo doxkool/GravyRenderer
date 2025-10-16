@@ -120,11 +120,6 @@ uint ElementBuffer::Create(std::vector<unsigned int> *indices)
         FBO = new glfbo;
     }
 
-    FrameBuffer::~FrameBuffer()
-    {
-        delete FBO;
-    }
-
     unsigned int FrameBuffer::Create(float width, float height, bool shadowMap)
     {
         return FBO->Create(width, height, shadowMap);
@@ -144,6 +139,7 @@ uint ElementBuffer::Create(std::vector<unsigned int> *indices)
     void FrameBuffer::Delete()
     {
         FBO->Delete();
+        delete FBO;
     }
 
     void FrameBuffer::Rescale(float width, float height)
