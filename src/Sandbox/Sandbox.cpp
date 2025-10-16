@@ -17,6 +17,13 @@ Audio m_Audio;
 ImGUI m_ImGUI;
 int Audio1ID = -1;
 
+std::vector<Light> Lights;
+
+Model sponza;
+Model cube0;
+Light dirLight(DirectionalLight);
+Light spotLight0(SpotLight);
+
 void CheckForInput()
 {
     auto m_Window = GetWindowInst();
@@ -59,13 +66,38 @@ void CheckForInput()
     }
 }
 
-Model sponza;
-Model cube0;
-//Light light0(DirectionalLight);
-Light light0(SpotLight);
-
 void RenderScene(Shader &shader)
 {
+    shader.Set1i(true, "blinn");
+    shader.Set1i(false, "fogEnabled");
+    shader.SetMat4fv(MainCam.GetProjectionMatrix(), "projection");
+    shader.SetMat4fv(MainCam.GetViewMatrix(), "view");
+
+    // set lights uniforms
+    shader.SetVec3f(MainCam.Position, "viewPos");
+    //shader.SetVec3f(light0.Transform.Position, "lightPos");
+    //shader.SetVec3f(glm::vec3(0.8), "lightColor");
+    //shader.SetVec3f(glm::vec3(0.5), "lightAmbient");
+
+    shader.Set1i(1, "nbOfDirLight");
+    shader.SetVec3f(glm::vec3(-0.1, -1.0, -0.2), "dirLight.direction");
+    shader.SetVec3f(glm::vec3(0.6), "dirLight.diffuse");
+    shader.SetVec3f(glm::vec3(0.6), "dirLight.specular");
+    shader.SetVec3f(glm::vec3(0.2), "dirLight.ambient");
+
+    //shader.Set1i(1, "nbOfSpotLight");
+    //shader.SetVec3f(light0.Transform.Position,  "spotLights[0].position");
+    //shader.SetVec3f({0.1, 1.0, 0.2},            "spotLights[0].direction");
+    //shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].ambient");
+    //shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].diffuse");
+    //shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].specular");
+    //shader.Set1f(0.0f,                          "spotLights[0].constant");
+    //shader.Set1f(0.05f,                         "spotLights[0].linear");
+    //shader.Set1f(0.005f,                        "spotLights[0].quadratic");
+    //shader.Set1f(35.0f,                         "spotLights[0].cutOff");
+    //shader.Set1f(55.0f,                         "spotLights[0].outerCutOff");
+
+
     glm::mat4 model = glm::mat4(1.0f);
 
     // cubes
@@ -79,6 +111,27 @@ void RenderScene(Shader &shader)
     sponza.Render();
 
     cube0.Rotate({10.0, 10.0, 10.0});
+}
+
+void RenderShadowMap(Renderer::Light light)
+{
+    light.UpdateMatrices();
+
+    light.m_DepthShader.Bind();
+    light.m_DepthShader.SetMat4fv(light.GetLightSpaceMatrix(), "lightSpaceMatrix");
+
+    OpenGL::SetViewportRes(light.m_ShadowRes);
+    light.m_DepthMapFBO.Bind();
+    OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
+    light.m_DepthMapTexture.SetActiveTexture(GL_TEXTURE0);
+    light.m_DepthMapTexture.Bind();
+    RenderScene(light.m_DepthShader);
+    light.m_DepthMapTexture.UnBind();
+    light.m_DepthMapFBO.UnBind();
+
+    // reset viewport
+    OpenGL::SetViewportRes(GetCurrentResolution());
+    OpenGL::ClearBuffer({GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT});
 }
 
 void Run()
@@ -99,11 +152,6 @@ void Run()
 
     Shader shader;
     shader.LoadShader(DEFAULT_VER_SHADER, DEFAULT_FRAG_SHADER);
-    //shader.LoadShader("assets/shaders/vert_shadow_mapping.glsl", "assets/shaders/frag_shadow_mapping.glsl");
-
-    //light0.Transform.Position = {10.0f, 160.0f, -10.0f};
-    light0.Transform.Position = {-1.0f, 30.0f, 15.0f};
-    light0.m_DepthShader.LoadShader("assets/shaders/vert_shadow_mapping_depth.glsl", "assets/shaders/frag_shadow_mapping_depth.glsl");
 
     sponza.LoadModel("assets/models/sponza/sponza.obj");
     sponza.SetTransform({0.0f, -1.0f, 0.0}, {0.0f, 90.0f, 0.0}, {0.1, 0.1, 0.1});
@@ -116,9 +164,17 @@ void Run()
     Texture texture;
     texture.LoadTexture(DEFAULT_TEX);
  
-    // configure light Shadow Map
+    // configure lights
     // -----------------------
-    light0.CreateShadowMap({4096, 4096});
+    dirLight.Transform.Position = {10.0f, 160.0f, -10.0f};
+    dirLight.m_DepthShader.LoadShader("assets/shaders/vert_shadow_mapping_depth.glsl", "assets/shaders/frag_shadow_mapping_depth.glsl");
+    dirLight.CreateShadowMap({4096, 4096});
+    Lights.push_back(dirLight);
+
+    spotLight0.Transform.Position = {-1.0f, 30.0f, 15.0f};
+    spotLight0.m_DepthShader.LoadShader("assets/shaders/vert_shadow_mapping_depth.glsl", "assets/shaders/frag_shadow_mapping_depth.glsl");
+    spotLight0.CreateShadowMap({4096, 4096});
+    Lights.push_back(spotLight0);
 
     // shader configuration
     // --------------------
@@ -137,61 +193,20 @@ void Run()
         MainCam.Update();
 
         // render scene from light's point of view
-
-        light0.UpdateMatrices();
-
-        light0.m_DepthShader.Bind();
-        light0.m_DepthShader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");
-
-        OpenGL::SetViewportRes(light0.m_ShadowRes);
-        light0.m_DepthMapFBO.Bind();
-        OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
-        light0.m_DepthMapTexture.SetActiveTexture(GL_TEXTURE0);
-        light0.m_DepthMapTexture.Bind();
-        RenderScene(light0.m_DepthShader);
-        light0.m_DepthMapTexture.UnBind();
-        light0.m_DepthMapFBO.UnBind();
-
-        // reset viewport
-        OpenGL::SetViewportRes(GetCurrentResolution());
-        OpenGL::ClearBuffer({GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT});
+        for (auto light : Lights)
+        {
+            RenderShadowMap(light);
+        }
 
         // 2. render scene as normal using the generated depth/shadow map  
         // --------------------------------------------------------------
         shader.Bind();
-        shader.SetMat4fv(MainCam.GetProjectionMatrix(), "projection");
-        shader.SetMat4fv(MainCam.GetViewMatrix(), "view");
 
-        // set light uniforms
-        shader.SetVec3f(MainCam.Position, "viewPos");
-        //shader.SetVec3f(light0.Transform.Position, "lightPos");
-        //shader.SetVec3f(glm::vec3(0.8), "lightColor");
-        //shader.SetVec3f(glm::vec3(0.5), "lightAmbient");
-
-        //shader.Set1i(1, "nbOfSpotLight");
-        //shader.SetVec3f(glm::vec3(-0.1, -1.0, -0.2), "dirLight.direction");
-        //shader.SetVec3f(glm::vec3(0.8), "dirLight.diffuse");
-        //shader.SetVec3f(glm::vec3(0.8), "dirLight.specular");
-        //shader.SetVec3f(glm::vec3(0.2), "dirLight.ambient");
-
-        shader.Set1i(1, "nbOfSpotLight");
-        shader.SetVec3f(light0.Transform.Position,  "spotLights[0].position");
-        shader.SetVec3f({0.1, 1.0, 0.2},            "spotLights[0].direction");
-        shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].ambient");
-        shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].diffuse");
-        shader.SetVec3f({1.0f, 1.0f, 1.0f},         "spotLights[0].specular");
-        shader.Set1f(0.0f,                          "spotLights[0].constant");
-        shader.Set1f(0.05f,                         "spotLights[0].linear");
-        shader.Set1f(0.005f,                        "spotLights[0].quadratic");
-        shader.Set1f(35.0f,                         "spotLights[0].cutOff");
-        shader.Set1f(55.0f,                         "spotLights[0].outerCutOff");
-
-
-        shader.SetMat4fv(light0.GetLightSpaceMatrix(), "lightSpaceMatrix");
+        shader.SetMat4fv(dirLight.GetLightSpaceMatrix(), "lightSpaceMatrix");
         texture.SetActiveTexture(GL_TEXTURE0);
         texture.Bind();
         glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, light0.m_DepthMapFBO.GetTexture());
+        glBindTexture(GL_TEXTURE_2D, dirLight.m_DepthMapFBO.GetTexture());
         RenderScene(shader);
         texture.UnBind();
 
@@ -224,8 +239,6 @@ int main()
     };
     
     int ret_Gravy = Init(&rendererSpec);
-
-    Logger::Init("Sandbox");
 
     m_Audio.Init();
     m_ImGUI.Init();

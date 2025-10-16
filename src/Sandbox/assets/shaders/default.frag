@@ -59,6 +59,7 @@ uniform SpotLight spotLights[10];
 uniform Material material;
 
 uniform bool blinn = true;
+uniform bool fogEnabled = false;
 
 uniform float nearPlane = 0.1; 
 uniform float farPlane  = 50.0;
@@ -131,22 +132,25 @@ void main()
     vec3 result;
     
     // phase 1: directional lighting
-    //for(int i = 0; i < nbOfDirLight; i++)
-    //    result = CalcDirLight(dirLight, norm, viewDir);
+    for(int i = 0; i < nbOfDirLight; i++)
+        result = CalcDirLight(dirLight, norm, viewDir);
     
     // phase 2: point lights
-    //for(int i = 0; i < nbOfPointLight; i++)
-    //    result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    for(int i = 0; i < nbOfPointLight; i++)
+        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     
     // phase 3: spot light
-    //for(int i = 0; i < nbOfSpotLight; i++)
-    result += CalcSpotLight(spotLights[0], norm, FragPos, viewDir);
+    for(int i = 0; i < nbOfSpotLight; i++)
+        result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
 
     float fogDepth = LinearizeDepth(gl_FragCoord.z) / farPlane;
+    vec3 fog;
 
-    vec3 fog = applyFog(vec3(0.0, 0.0, 0.0), fogDepth);
-    
-    FragColor = vec4(result + fog, texColor.a);
+    if(fogEnabled)
+        fog = applyFog(vec3(0.0, 0.0, 0.0), fogDepth);
+        result + fog;
+
+    FragColor = vec4(result, texColor.a);
 }
 
 // calculates the color when using a directional light.
@@ -165,7 +169,9 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
     vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+
     float shadow = ShadowCalculation(FragPosLightSpace);
+    
     return (ambient + diffuse + specular * (1.0 - shadow));
 }
 
@@ -234,8 +240,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
 
-    //float shadow = ShadowCalculation(FragPosLightSpace);
+    float shadow = ShadowCalculation(FragPosLightSpace);
 
-    return (ambient + diffuse + specular);// * (1.0 - shadow));
+    return (ambient + diffuse + specular * (1.0 - shadow));
 }
 
