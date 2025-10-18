@@ -44,18 +44,24 @@ namespace Renderer
 	class glvbo
 	{
 	private:
-		GLuint VBO;
+		uint32_t BufferSize;
 	public:
-		GLuint Create(uint32_t size);
-		GLuint Create(std::vector<float> *vertices);
-		GLuint Create(float *vertices, uint32_t size);
-		GLuint Create(std::vector<Vertex> *vertices);
+		glvbo();
+        ~glvbo() {}
+
+		GLuint Create(uint32_t bufferSize, GLenum usage = GL_STATIC_DRAW);
+		GLuint Create(std::vector<float> *vertices, GLenum usage = GL_STATIC_DRAW);
+		GLuint Create(float *vertices, uint32_t bufferSize, GLenum usage = GL_STATIC_DRAW);
+		GLuint Create(std::vector<Vertex> *vertices, GLenum usage = GL_STATIC_DRAW);
 
 		void Bind();
 		void UnBind();
 
-		void Delete(uint32_t bufferSize);
+		void Delete();
 
-		void SendData(const void *data, uint32_t size);
+		void SendData(const void *data, uint32_t bufferSize);
+	
+	public:
+		GLuint VBO;
 	};
 }

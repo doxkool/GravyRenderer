@@ -25,4 +25,4 @@ include_directories(
     ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-windows/include
     )
 
-target_link_libraries(GravyRenderer PUBLIC ${CoreUtils_static} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
+target_link_libraries(GravyRenderer PUBLIC ${CoreUtils_static} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader Tracy::TracyClient)

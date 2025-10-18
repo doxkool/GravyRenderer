@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/Base.h"
-
 #include "Graphics/Renderer/OpenGL/gltexture.h"
 
 namespace Renderer
@@ -11,7 +9,5 @@ namespace Renderer
     private:
         
     public:
-        Texture() {}
-        ~Texture() {}
     };    
 }

@@ -27,6 +27,7 @@ void ImGUI::Shutdown()
 
 void ImGUI::NewFrame()
 {
+    ZoneScopedN("ImGUI New Frame");
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -34,14 +35,16 @@ void ImGUI::NewFrame()
 
 void ImGUI::EndFrame()
 {
+    ZoneScopedN("ImGUI End Frame");
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void ImGUI::RenderGUI()
-{
+{    
     NewFrame();
 
+    ZoneScopedN("Render ImGUI");
     {
         ImGui::SetNextWindowSize(ImVec2(300.f, 55.f), ImGuiCond_FirstUseEver);
         ImGui::Begin("Perf Monitor");

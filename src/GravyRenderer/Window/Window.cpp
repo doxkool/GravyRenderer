@@ -1,5 +1,7 @@
 #include "Window.h"
 
+#include <tracy/Tracy.hpp>
+
 namespace Renderer
 {
     WindowSpec sWindowSettings;
@@ -52,6 +54,8 @@ namespace Renderer
 
     void Window::Update()
     {
+        ZoneScopedN("Window Update");
+
         m_glfw.Update();
     }
 

@@ -12,6 +12,8 @@ if(UNIX)
     add_definitions (-DWITH_MINIAUDIO)
 endif(UNIX)
 
+#find_package(Tracy REQUIRED)
+
 file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 ## Create main executable

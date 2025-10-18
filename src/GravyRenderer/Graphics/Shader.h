@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/Base.h"
-
 #include "Graphics/Renderer/OpenGL/glshader.h"
 
 namespace Renderer
@@ -11,10 +9,5 @@ namespace Renderer
     private:
         
     public:
-        Shader() {}
-        ~Shader() {}
-        
-        void LoadBinaryFromDisk(std::string ShaderPath);
-		void SaveBinaryToDisk(std::string path);
     };   
 }

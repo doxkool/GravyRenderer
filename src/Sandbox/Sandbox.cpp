@@ -26,6 +26,8 @@ Light spotLight0(SpotLight);
 
 void CheckForInput()
 {
+    ZoneScopedN("Input");
+
     auto m_Window = GetWindowInst();
 
     if (Input::IsKeyJustPressed(KEY_GRAVE_ACCENT))
@@ -115,21 +117,20 @@ void RenderScene(Shader &shader)
 
 void RenderShadowMap(Renderer::Light light)
 {
+    ZoneScopedN("Render ShadowMap");
     light.UpdateMatrices();
-
-    auto lightFBO = &light.m_DepthMapFBO;
 
     light.m_DepthShader.Bind();
     light.m_DepthShader.SetMat4fv(light.GetLightSpaceMatrix(), "lightSpaceMatrix");
 
     OpenGL::SetViewportRes(light.m_ShadowRes);
-    lightFBO->Bind();
+    light.m_DepthMapFBO.Bind();
     OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
     light.m_DepthMapTexture.SetActiveTexture(GL_TEXTURE0);
     light.m_DepthMapTexture.Bind();
     RenderScene(light.m_DepthShader);
     light.m_DepthMapTexture.UnBind();
-    lightFBO->UnBind();
+    light.m_DepthMapFBO.UnBind();
 
     // reset viewport
     OpenGL::SetViewportRes(GetCurrentResolution());
@@ -187,6 +188,8 @@ void Run()
 
     while (IsRunning())
     {
+        FrameMarkStart("Main Loop");
+
         CheckForInput();
 
         Time::UpdateDeltaTime();
@@ -202,20 +205,33 @@ void Run()
 
         // 2. render scene as normal using the generated depth/shadow map  
         // --------------------------------------------------------------
+        //ZoneScopedN("Bind Shader");
         shader.Bind();
-
         shader.SetMat4fv(dirLight.GetLightSpaceMatrix(), "lightSpaceMatrix");
-        texture.SetActiveTexture(GL_TEXTURE0);
-        texture.Bind();
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, dirLight.m_DepthMapFBO.GetTexture());
-        RenderScene(shader);
+
+        {
+            ZoneScopedN("Set Textures");
+            texture.SetActiveTexture(GL_TEXTURE0);
+            texture.Bind();
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, dirLight.m_DepthMapFBO.GetTexture());
+        }
+        
+        {
+            ZoneScopedN("Render Scene");
+            RenderScene(shader);
+        }
+
         texture.UnBind();
 
+        //ZoneScopedN("Render ImGUI");
         m_ImGUI.RenderGUI();
 
+        //ZoneScopedN("Window stuff");
         m_window->SwapScreenBuffer();
         m_window->Update();
+
+        FrameMarkEnd("Main Loop");
     }    
 }
 

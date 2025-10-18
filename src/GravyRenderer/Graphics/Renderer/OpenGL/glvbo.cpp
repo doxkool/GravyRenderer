@@ -4,41 +4,50 @@
 
 namespace Renderer
 {
-	GLuint glvbo::Create(uint32_t bufferSize)
+	glvbo::glvbo()
 	{
 		glGenBuffers(1, &VBO); GLCHECK
+	}
+
+	GLuint glvbo::Create(uint32_t bufferSize, GLenum usage)
+	{
+		BufferSize = bufferSize;
+
 		glBindBuffer(GL_ARRAY_BUFFER, VBO); GLCHECK
-		glBufferData(GL_ARRAY_BUFFER, bufferSize, NULL, GL_STATIC_DRAW); GLCHECK
+		glBufferData(GL_ARRAY_BUFFER, bufferSize, NULL, usage); GLCHECK
 		glBindBuffer(GL_ARRAY_BUFFER, 0); GLCHECK
 
 		return VBO;
 	}
 
-	GLuint glvbo::Create(std::vector<float> *vertices)
+	GLuint glvbo::Create(std::vector<float> *vertices, GLenum usage)
 	{
-		glGenBuffers(1, &VBO); GLCHECK
+		BufferSize = vertices->size() * sizeof(float);
+
 		glBindBuffer(GL_ARRAY_BUFFER, VBO); GLCHECK
-		glBufferData(GL_ARRAY_BUFFER, vertices->size() * sizeof(float), &vertices->front(), GL_STATIC_DRAW); GLCHECK
+		glBufferData(GL_ARRAY_BUFFER, BufferSize, &vertices->front(), usage); GLCHECK
 		glBindBuffer(GL_ARRAY_BUFFER, 0); GLCHECK
 
 		return VBO;
 	}
 
-	GLuint glvbo::Create(std::vector<Vertex> *vertices)
+	GLuint glvbo::Create(std::vector<Vertex> *vertices, GLenum usage)
 	{
-		glGenBuffers(1, &VBO); GLCHECK
+		BufferSize = vertices->size() * sizeof(Vertex);
+
 		glBindBuffer(GL_ARRAY_BUFFER, VBO); GLCHECK
-		glBufferData(GL_ARRAY_BUFFER, vertices->size() * sizeof(Vertex), &vertices->front(), GL_STATIC_DRAW); GLCHECK
+		glBufferData(GL_ARRAY_BUFFER, BufferSize, &vertices->front(), usage); GLCHECK
 		glBindBuffer(GL_ARRAY_BUFFER, 0); GLCHECK
 
 		return VBO;
 	}
 
-	GLuint glvbo::Create(float *vertices, uint32_t bufferSize)
+	GLuint glvbo::Create(float *vertices, uint32_t bufferSize, GLenum usage)
 	{
-		glGenBuffers(1, &VBO); GLCHECK
+		BufferSize = bufferSize;
+
 		glBindBuffer(GL_ARRAY_BUFFER, VBO); GLCHECK
-		glBufferData(GL_ARRAY_BUFFER, bufferSize, vertices, GL_STATIC_DRAW); GLCHECK
+		glBufferData(GL_ARRAY_BUFFER, bufferSize, vertices, usage); GLCHECK
 		glBindBuffer(GL_ARRAY_BUFFER, 0); GLCHECK
 
 		return VBO;
@@ -54,9 +63,9 @@ namespace Renderer
 		glBindBuffer(GL_ARRAY_BUFFER, 0); GLCHECK
 	}
 
-	void glvbo::Delete(uint32_t bufferSize)
+	void glvbo::Delete()
 	{
-		glDeleteBuffers(bufferSize, &VBO); GLCHECK
+		glDeleteBuffers(BufferSize, &VBO); GLCHECK
 	}
 
 	void glvbo::SendData(const void *data, uint32_t bufferSize)

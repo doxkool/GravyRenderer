@@ -18,6 +18,9 @@
 
 #include "Core/Input.h"
 
+#include <tracy/Tracy.hpp>
+#include <tracy/TracyOpenGL.hpp>
+
 namespace Renderer
 {
     int Init(RendererSpec* rendererSpec);

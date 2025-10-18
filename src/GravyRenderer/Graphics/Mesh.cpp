@@ -4,7 +4,6 @@ namespace Renderer
 {
     void Mesh::Create(std::vector<Vertex> _vertices, std::vector<uint32_t> _indices)
     {
-        VAO.Create();
         VBO.Create(&_vertices);
         EBO.Create(&_indices);
 
@@ -20,7 +19,7 @@ namespace Renderer
 
         VAO.UnBind();
         VBO.UnBind();
-        EBO.UnBind();
+        //EBO.UnBind();
     }
 
     void Mesh::PushVertex(Vertex vertex)
@@ -37,11 +36,13 @@ namespace Renderer
     {        
         VAO.Bind();
         VBO.Bind();
+        EBO.Bind();
         
         // ---- RENDERING ----
         OpenGL::DrawArray(indices.size());
         
         VAO.UnBind();
         VBO.UnBind();
+        EBO.UnBind();
     }
 }

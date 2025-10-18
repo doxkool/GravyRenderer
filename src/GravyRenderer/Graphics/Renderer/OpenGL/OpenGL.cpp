@@ -1,5 +1,7 @@
 #include "Graphics/Renderer/OpenGL/OpenGL.h"
 
+#include <tracy/Tracy.hpp>
+
 //#define GLMESSAGECALLBACK_ENABLED
 #define GLCHECKERROR_ENABLED
 
@@ -138,6 +140,8 @@ namespace Renderer
 
     void OpenGL::ClearBuffer(std::vector<int> buffers)
     {
+        ZoneScopedN("Clear Buffer");
+
         for (auto buffer : buffers)
         {
             glClear(buffer); GLCHECK

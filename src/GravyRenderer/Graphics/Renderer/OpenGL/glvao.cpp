@@ -3,12 +3,17 @@
 
 namespace Renderer
 {
-	GLuint glvao::Create()
+
+	glvao::glvao()
 	{
-		//glCreateVertexArrays(1, &VAO); GLCHECK
 		glGenVertexArrays(1, &VAO); GLCHECK
-		return VAO;
 	}
+
+	//GLuint glvao::Create()
+	//{
+	//	glGenVertexArrays(1, &VAO); GLCHECK
+	//	return VAO;
+	//}
 
 	void glvao::LinkAttribF(GLuint layout, GLuint numComponents, GLsizei stride, void* offset)
 	{

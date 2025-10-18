@@ -11,9 +11,12 @@ namespace Renderer
     class glvao
     {
     private:
-        GLuint VAO;
+        
     public:
-        GLuint Create();
+        glvao();
+        ~glvao() {}
+
+        //GLuint Create();
 
         void LinkAttribF(GLuint layout, GLuint numComponents, GLsizei stride, void* offset);
 
@@ -21,5 +24,8 @@ namespace Renderer
         void UnBind();
 
         void Delete(uint32_t bufferSize);
+
+    public:
+        GLuint VAO;
     };
 }

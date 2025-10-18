@@ -27,9 +27,9 @@ namespace Renderer
         const char* Name;
         int MaterialID;
 
-        VertexArray VAO;
-        VertexBuffer VBO;
-        ElementBuffer EBO;
+        glvao VAO;
+        glvbo VBO;
+        glebo EBO;
 
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;

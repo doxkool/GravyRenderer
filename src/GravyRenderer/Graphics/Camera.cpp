@@ -4,6 +4,9 @@
 
 #include "Core/Input.h"
 
+#include <tracy/Tracy.hpp>
+#include <tracy/TracyOpenGL.hpp>
+
 namespace Renderer
 {
     float lastX = 0;
@@ -65,6 +68,8 @@ namespace Renderer
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
     void Camera::Update()
     {
+        ZoneScopedN("Camera Update");
+
         glm::vec2 mousePos = Input::GetMouseCursorPosition();
 
         float xoffset = mousePos.x - lastX;
@@ -106,6 +111,8 @@ namespace Renderer
 
     void Camera::UpdateCameraVectors()
     {
+        ZoneScopedN("Camera Update Vectors");
+
         // calculate the new Front vector
         glm::vec3 front;
         front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
