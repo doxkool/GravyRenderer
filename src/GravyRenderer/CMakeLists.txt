@@ -4,7 +4,13 @@ project(GravyRenderer CXX)
 
 SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-SET(CoreUtils_static ${CMAKE_BINARY_DIR}/src/CoreUtils/libCoreUtils.a)
+if (WIN32)
+    SET(CoreUtils_static ${CMAKE_BINARY_DIR}/src/CoreUtils/Debug/CoreUtils.lib)
+endif(WIN32)
+
+if (UNIX)
+    SET(CoreUtils_static ${CMAKE_BINARY_DIR}/src/CoreUtils/libCoreUtils.a)
+endif(UNIX)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)

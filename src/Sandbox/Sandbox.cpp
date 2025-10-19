@@ -115,7 +115,7 @@ void RenderScene(Shader &shader)
     cube0.Rotate({10.0, 10.0, 10.0});
 }
 
-void RenderShadowMap(Renderer::Light light)
+void RenderShadowMap(Light light)
 {
     ZoneScopedN("Render ShadowMap");
     light.UpdateMatrices();
@@ -257,6 +257,8 @@ int main()
     };
     
     int ret_Gravy = Init(&rendererSpec);
+
+    Logger::Init(windowSpec.windowName);
 
     m_Audio.Init();
     m_ImGUI.Init();
