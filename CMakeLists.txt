@@ -20,6 +20,6 @@ endif()
 
 project("Gravy")
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/CoreUtils)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/GravyRenderer)
-add_subdirectory(${CMAKE_SOURCE_DIR}/src/Sandbox)
+add_subdirectory(${CMAKE_SOURCE_DIR}/Projects/CoreUtils)
+add_subdirectory(${CMAKE_SOURCE_DIR}/Projects/GravyRenderer)
+add_subdirectory(${CMAKE_SOURCE_DIR}/Projects/Sandbox)

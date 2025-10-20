@@ -59,11 +59,6 @@
       "default-features": true
     },
     {
-      "name": "tracy",
-      "platform": "windows",
-      "default-features": true
-    },
-    {
       "name": "entt",
       "platform": "windows",
       "default-features": true
@@ -120,11 +115,6 @@
     },
     {
       "name": "nlohmann-json",
-      "platform": "linux",
-      "default-features": true
-    },
-    {
-      "name": "tracy",
       "platform": "linux",
       "default-features": true
     },
