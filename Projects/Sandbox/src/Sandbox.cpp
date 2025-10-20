@@ -170,12 +170,12 @@ void Run()
     // configure lights
     // -----------------------
     dirLight.Transform.Position = {10.0f, 160.0f, -10.0f};
-    dirLight.m_DepthShader.LoadShader("assets/shaders/vert_shadow_mapping_depth.glsl", "assets/shaders/frag_shadow_mapping_depth.glsl");
+    dirLight.m_DepthShader.LoadShader("assets/shaders/shadow_mapping_depth.vert", "assets/shaders/shadow_mapping_depth.frag");
     dirLight.CreateShadowMap({4096, 4096});
     Lights.push_back(dirLight);
 
     spotLight0.Transform.Position = {-1.0f, 30.0f, 15.0f};
-    spotLight0.m_DepthShader.LoadShader("assets/shaders/vert_shadow_mapping_depth.glsl", "assets/shaders/frag_shadow_mapping_depth.glsl");
+    spotLight0.m_DepthShader.LoadShader("assets/shaders/shadow_mapping_depth.vert", "assets/shaders/shadow_mapping_depth.frag");
     spotLight0.CreateShadowMap({4096, 4096});
     Lights.push_back(spotLight0);
 
