@@ -10,8 +10,24 @@
         "win32-binding",
         "docking-experimental",
         "glfw-binding",
-        "opengl3-binding"
+        "opengl3-binding",
+        "vulkan-binding"
       ]
+    },
+    {
+      "name": "vulkan",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "spirv-tools",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "glslang",
+      "platform": "windows",
+      "default-features": true
     },
     {
       "name": "opengl",
@@ -70,8 +86,24 @@
       "features": [
         "docking-experimental",
         "glfw-binding",
-        "opengl3-binding"
+        "opengl3-binding",
+        "vulkan-binding"
       ]
+    },
+    {
+      "name": "vulkan",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "spirv-tools",
+      "platform": "windows",
+      "default-features": true
+    },
+    {
+      "name": "glslang",
+      "platform": "windows",
+      "default-features": true
     },
     {
       "name": "opengl",

@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <stdio.h>
+#include <assert.h>
 
 namespace CoreUtils
 {
@@ -15,6 +16,7 @@ namespace CoreUtils
 
    bool CheckIfPathEndsWithSeparator(const std::string& path_str);
 
-   int SaveBinaryToDisk(std::vector<char> binaryData, int length, std::string outputPath);
-   std::vector<char> ReadBinaryFromDisk(std::string filePath);
+   bool ReadFile(const char* pFileName, std::string &outFile);
+   char* ReadBinaryFile(const char* pFilename, int& size);
+   void WriteBinaryFile(const char *pFilename, const void* pData, int size);
 }

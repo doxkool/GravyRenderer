@@ -45,41 +45,87 @@ namespace CoreUtils
         return false;
     }
 
-    int SaveBinaryToDisk(std::vector<char> binaryData, int length, std::string outputPath)
-    {
-        std::ofstream outFile(outputPath, std::ios::binary);
-        if (outFile.is_open()) {
-            outFile.write(reinterpret_cast<char*>(binaryData.data()), length);
-            outFile.close();
-            return 0;
-        } else {
-            return 1;
-        }
-    }
+    bool ReadFile(const char* pFileName, std::string &outFile)
+	{
+		std::ifstream f(pFileName);
 
-    std::vector<char> ReadBinaryFromDisk(std::string filePath)
-    {
-        std::vector<char> buffer;
+		bool ret = false;
 
-        std::ifstream inputFile(filePath, std::ios::binary | std::ios::ate); 
+		if (f.is_open())
+		{
+			std::string line;
+			while (getline(f, line))
+			{
+				outFile.append(line);
+				outFile.append("\n");
+			}
+			f.close();
 
-        if (inputFile.is_open()) {
-            // Get the size of the file
-            std::streampos fileSize = inputFile.tellg();
-            inputFile.seekg(0, std::ios::beg); // Seek back to the beginning of the file
+			ret = true;
+		}
+		else
+		{
+			printf("CANNOT_READ_FILE: {}", pFileName);
+		}
 
-            // Create a buffer (e.g., a vector of chars) to store the data
-            buffer.resize(fileSize);
+		return ret;
+	}
 
-            // Read the entire file into the buffer
-            inputFile.read(buffer.data(), fileSize);
+    char* ReadBinaryFile(const char* pFilename, int& size)
+	{
+		FILE *f = fopen(pFilename, "rb");
 
-            // Close the file
-            inputFile.close();
+		if (!f)
+		{
+			printf("Error opening '%s': %s\n", pFilename, strerror(errno));
+			exit(0);
+		}
 
-            return buffer;
-        }
+		struct stat stat_buf;
+		int error = stat(pFilename, &stat_buf);
 
-        return buffer;
-    }
+		if (error)
+		{
+			printf("Error getting file stats: %s\n", strerror(errno));
+			return NULL;
+		}
+
+		size = stat_buf.st_size;
+
+		char *p = (char *)malloc(size);
+		assert(p);
+
+		size_t bytes_read = fread(p, 1, size, f);
+
+		if (bytes_read != size)
+		{
+			printf("Read file error file: %s\n", strerror(errno));
+			exit(0);
+		}
+
+		fclose(f);
+
+		return p;
+	}
+
+	void WriteBinaryFile(const char *pFilename, const void* pData, int size)
+	{
+		FILE *f = fopen(pFilename, "wb");
+
+		if (!f)
+		{
+			printf("Error opening '%s': %s\n", pFilename, strerror(errno));
+			exit(0);
+		}
+
+		int bytes_written = fwrite(pData, 1, size, f);
+
+		if (bytes_written != size)
+		{
+			printf("Error write file: %s\n", strerror(errno));
+			exit(0);
+		}
+
+		fclose(f);
+	}
 }

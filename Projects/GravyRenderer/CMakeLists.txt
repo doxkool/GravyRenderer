@@ -6,7 +6,7 @@ SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 if (WIN32)
     SET(CoreUtils_static ${CMAKE_BINARY_DIR}/Projects/CoreUtils/Debug/CoreUtils.lib)
-    SET(Tracy_static ${CMAKE_BINARY_DIR}/Projects/GravyRenderer/Vendors/Tracy/Debug/libTracyClient.lib)
+    SET(Tracy_static ${CMAKE_BINARY_DIR}/Projects/GravyRenderer/Vendors/Tracy/Debug/TracyClient.lib)
 endif(WIN32)
 
 if (UNIX)
@@ -15,6 +15,9 @@ if (UNIX)
 endif(UNIX)
 
 find_package(OpenGL REQUIRED)
+find_package(Vulkan REQUIRED)
+find_package(SPIRV-Tools REQUIRED)
+find_package(glslang REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glm REQUIRED)
@@ -36,4 +39,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-linux/include
     )
 
-target_link_libraries(GravyRenderer PUBLIC ${CoreUtils_static} ${Tracy_static} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
+SET(Vulkan_Dep Vulkan::Vulkan SPIRV-Tools-static glslang::glslang-default-resource-limits glslang::glslang)
+
+target_link_libraries(GravyRenderer PUBLIC ${CoreUtils_static} ${Tracy_static} ${Vulkan_Dep} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
