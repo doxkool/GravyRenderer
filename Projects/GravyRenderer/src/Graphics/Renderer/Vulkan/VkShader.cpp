@@ -165,7 +165,7 @@ namespace VkCore
 		VkShaderModule shaderModule;
 		VkResult res = vkCreateShaderModule(device, &shaderCreateInfo, NULL, &shaderModule);
 		CHECK_VK_RESULT(res, "vkCreateShaderModule\n");
-		VKCORE_DEBUG("Created shader from binary %s\n", pShaderPath);
+		LOG_DEBUG("Created shader from binary %s\n", pShaderPath);
 
 		free(pShaderCode);
 
@@ -191,13 +191,13 @@ namespace VkCore
 
         if (success)
         {
-			VKCORE_DEBUG("Shader compiled successfully: {}", pShaderPath);
+			LOG_DEBUG("Shader compiled successfully: {}", pShaderPath);
 			shaderModule = m_ShaderModule.ShaderModule;
 			std::string BinaryFileName = std::string(pShaderPath) + ".spv";
 			std::ofstream BinaryFile(BinaryFileName, std::ios::binary);
 			CoreUtils::WriteBinaryFile(BinaryFileName.c_str(), m_ShaderModule.SPIRV.data(), m_ShaderModule.SPIRV.size() * sizeof(uint32_t));
 		}else{
-			VKCORE_ERROR("Shader compilation failed: {}", pShaderPath);
+			LOG_ERROR("Shader compilation failed: {}", pShaderPath);
 		}
 
         glslang_finalize_process();

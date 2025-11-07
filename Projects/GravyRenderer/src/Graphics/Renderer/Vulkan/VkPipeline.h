@@ -3,7 +3,7 @@
 #include "Core/Base.h"
 
 #include "Graphics\Renderer\Vulkan\VkUtils.h"
-#include "Graphics\Renderer\Vulkan\VkLogger.h"
+#include "Logger.h"
 #include "Graphics\Renderer\Vulkan\VkMesh.h"
 
 #include "Window/GLFW/glfw.h"
@@ -12,7 +12,7 @@
 
 namespace VkCore
 {
-    class VkCore_Pipeline
+    class LOG_Pipeline
     {
     private:
         void CreateDescriptorSets(Mesh* pMesh, uint32_t NumberImages);
@@ -28,11 +28,11 @@ namespace VkCore
         std::vector<VkDescriptorSet> m_DescriptorSets;
         VkDevice m_Device = VK_NULL_HANDLE;
     public:
-        VkCore_Pipeline(VkDevice device, GLFWwindow* pWindow, VkRenderPass renderPass,
+        LOG_Pipeline(VkDevice device, GLFWwindow* pWindow, VkRenderPass renderPass,
             VkShaderModule vs, VkShaderModule fs,
             Mesh* pMesh, uint32_t NumberImages);
 
-        ~VkCore_Pipeline();
+        ~LOG_Pipeline();
 
         void Bind(VkCommandBuffer CmdBuf, int32_t ImageIndex);
     };

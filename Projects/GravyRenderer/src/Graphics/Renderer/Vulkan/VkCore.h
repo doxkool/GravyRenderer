@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Renderer/Vulkan/VkLogger.h"
+#include "Logger.h"
 #include "Graphics/Renderer/Vulkan/VkUtils.h"
 #include "Graphics/Renderer/Vulkan/VkDevice.h"
 #include "Graphics/Renderer/Vulkan/VkWrapper.h"
@@ -44,8 +44,8 @@ namespace VkCore
 	    std::vector<VkImageView> m_ImageViews;
         std::vector<VkFramebuffer> m_FrameBuffers;
 
-        VkCore_Device m_PhysicalDevice;
-        VkCore_Queue m_Queue;
+        LOG_Device m_PhysicalDevice;
+        LOG_Queue m_Queue;
         uint32_t m_PhysicalDeviceQueueFamily = 0;
     public:
         Instance();
@@ -57,7 +57,7 @@ namespace VkCore
         std::vector<VkFramebuffer> CreateFrameBuffers(VkRenderPass renderPass);
         BufferAndMemory CreateVertexBuffer(const void* pVertices, size_t size);
 
-        VkCore_Queue* GetQueue() { return &m_Queue; }
+        LOG_Queue* GetQueue() { return &m_Queue; }
         const VkImage& GetImage(int Index) const;
         uint32_t GetSwapChainImagesCount() const { return static_cast<uint32_t>(m_Images.size()); }
         std::vector<VkImage> GetSwapChainImages() const { return m_Images; }

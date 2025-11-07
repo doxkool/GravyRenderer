@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics\Renderer\Vulkan\VkLogger.h"
+#include "Logger.h"
 #include "Graphics\Renderer\Vulkan\VkUtils.h"
 
 #include <vulkan/vulkan.h>
@@ -21,14 +21,14 @@ namespace VkCore
         VkFormat m_DepthFormat;
     };
 
-    class VkCore_Device
+    class LOG_Device
     {
     private:
         std::vector<PhysicalDevice> PhysicalDevices;
         int m_DeviceIndex = -1;
     public:
-        VkCore_Device() {}
-        ~VkCore_Device() {}
+        LOG_Device() {}
+        ~LOG_Device() {}
 
         void Init(const VkInstance& vkInstance, const VkSurfaceKHR& vkSurface);
 

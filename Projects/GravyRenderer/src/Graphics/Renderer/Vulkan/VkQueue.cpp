@@ -2,44 +2,44 @@
 
 namespace VkCore
 {
-    VkCore_Queue::VkCore_Queue()
+    LOG_Queue::LOG_Queue()
     {
     }
     
-    VkCore_Queue::~VkCore_Queue()
+    LOG_Queue::~LOG_Queue()
     {
     }
 
-    void VkCore_Queue::CreateSemaphores()
+    void LOG_Queue::CreateSemaphores()
     {
         m_RenderComplete = CreateSemaphore(m_Device);
         m_PresentComplete = CreateSemaphore(m_Device);
     }
 
-    void VkCore_Queue::Init(VkDevice device, VkSwapchainKHR swapchain, uint32_t queueFamily, uint32_t queueFamilyIndex)
+    void LOG_Queue::Init(VkDevice device, VkSwapchainKHR swapchain, uint32_t queueFamily, uint32_t queueFamilyIndex)
     {
         m_Device = device;
         m_SwapChain = swapchain;
 
         vkGetDeviceQueue(device, queueFamily, queueFamilyIndex, &m_Queue);
 
-        VKCORE_DEBUG("Queue created.");
+        LOG_DEBUG("Queue created.");
         CreateSemaphores();
     }
 
-    void VkCore_Queue::WaitIdle()
+    void LOG_Queue::WaitIdle()
     {
         vkQueueWaitIdle(m_Queue);
     }
 
-    void VkCore_Queue::Destroy()
+    void LOG_Queue::Destroy()
     {
-        VKCORE_DEBUG("Destroying queue...");
+        LOG_DEBUG("Destroying queue...");
         vkDestroySemaphore(m_Device, m_RenderComplete, nullptr);
         vkDestroySemaphore(m_Device, m_PresentComplete, nullptr);
     }
 
-    uint32_t VkCore_Queue::AcquireNextImage()
+    uint32_t LOG_Queue::AcquireNextImage()
     {
         uint32_t imageIndex = 0;
         VkResult res = vkAcquireNextImageKHR(m_Device, m_SwapChain, UINT64_MAX, m_PresentComplete, nullptr, &imageIndex);
@@ -50,7 +50,7 @@ namespace VkCore
         return imageIndex;
     }
 
-    void VkCore_Queue::SubmitSync(VkCommandBuffer cmdBuf)
+    void LOG_Queue::SubmitSync(VkCommandBuffer cmdBuf)
     {
         VkSubmitInfo submitInfo = {
             .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
@@ -69,7 +69,7 @@ namespace VkCore
         
     }
 
-    void VkCore_Queue::SubmitAsync(VkCommandBuffer cmdBuf, VkPipelineStageFlags waitStages)
+    void LOG_Queue::SubmitAsync(VkCommandBuffer cmdBuf, VkPipelineStageFlags waitStages)
     {
         VkPipelineStageFlags waitFlags = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
         
@@ -89,7 +89,7 @@ namespace VkCore
         CHECK_VK_RESULT(res, "Failed to submit command buffer!");
     }
 
-    void VkCore_Queue::Present(uint32_t imageIndex)
+    void LOG_Queue::Present(uint32_t imageIndex)
     {
         VkPresentInfoKHR presentInfo = {
             .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,

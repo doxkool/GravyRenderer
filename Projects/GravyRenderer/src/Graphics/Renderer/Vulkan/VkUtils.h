@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics\Renderer\Vulkan\VkLogger.h"
+#include "Logger.h"
 
 #include <vulkan/vulkan.h>
 
@@ -10,7 +10,7 @@ namespace VkCore
 
     void ParseVkResult(VkResult res, const char* pFile, int line, const char* msg);
 
-    #define CHECK_VK_RESULT(res, msg) ParseVkResult(res, __FILE__, __LINE__, msg) // { VKCORE_ERROR("Error in {}:{} - {}, code {}", __FILE__, __LINE__, msg, (int)res); }
+    #define CHECK_VK_RESULT(res, msg) ParseVkResult(res, __FILE__, __LINE__, msg) // { LOG_ERROR("Error in {}:{} - {}, code {}", __FILE__, __LINE__, msg, (int)res); }
 
     const char* GetDebugSeverityStr(VkDebugUtilsMessageSeverityFlagBitsEXT Severity);
     const char* GetDebugType(VkDebugUtilsMessageTypeFlagsEXT Type);

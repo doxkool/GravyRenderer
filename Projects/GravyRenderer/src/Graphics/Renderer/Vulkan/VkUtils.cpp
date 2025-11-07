@@ -10,31 +10,31 @@ namespace VkCore
 			return;
 
 		case VK_NOT_READY:
-			VKCORE_WARN("VK_NOT_READY in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_WARN("VK_NOT_READY in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 
 		case VK_TIMEOUT:
-			VKCORE_WARN("VK_TIMEOUT in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_WARN("VK_TIMEOUT in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 
 		case VK_EVENT_SET:
-			VKCORE_WARN("VK_EVENT_SET in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_WARN("VK_EVENT_SET in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 
 		case VK_EVENT_RESET:
-			VKCORE_WARN("VK_EVENT_RESET in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_WARN("VK_EVENT_RESET in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 
 		case VK_INCOMPLETE:
-			VKCORE_WARN("VK_INCOMPLETE in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_WARN("VK_INCOMPLETE in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 
 		case VK_ERROR_OUT_OF_HOST_MEMORY:
-			VKCORE_WARN("VK_ERROR_OUT_OF_HOST_MEMORY in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_WARN("VK_ERROR_OUT_OF_HOST_MEMORY in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 
 		case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-			VKCORE_WARN("VK_ERROR_OUT_OF_DEVICE_MEMORY in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_WARN("VK_ERROR_OUT_OF_DEVICE_MEMORY in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 
 		case VK_ERROR_INITIALIZATION_FAILED:
-			VKCORE_WARN("VK_ERROR_INITIALIZATION_FAILED in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_WARN("VK_ERROR_INITIALIZATION_FAILED in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 
 		default:
-			VKCORE_ERROR("Error in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
+			LOG_ERROR("Error in {}:{} - {} - Code {}", pFile, line, msg, (int)res);
 		}
 	}
 

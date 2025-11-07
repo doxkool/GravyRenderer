@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics\Renderer\Vulkan\VkLogger.h"
+#include "Logger.h"
 #include "Graphics\Renderer\Vulkan\VkWrapper.h"
 #include "Graphics\Renderer\Vulkan\VkUtils.h"
 
@@ -8,7 +8,7 @@
 
 namespace VkCore
 {
-    class VkCore_Queue
+    class LOG_Queue
     {
     private:
         void CreateSemaphores();
@@ -19,8 +19,8 @@ namespace VkCore
         VkSemaphore m_RenderComplete = nullptr;
         VkSemaphore m_PresentComplete = nullptr;
     public:
-        VkCore_Queue();
-        ~VkCore_Queue();
+        LOG_Queue();
+        ~LOG_Queue();
 
         void Init(VkDevice device, VkSwapchainKHR swapchain, uint32_t queueFamily, uint32_t queueFamilyIndex);
         void Destroy();
