@@ -20,7 +20,7 @@ int Logger::Init(std::string app_name)
     s_Logger->set_level(spdlog::level::trace);
     s_Logger->flush_on(spdlog::level::trace);
     LOG_INFO("\n====== New logging session ======");
-    if (GetLogger)
+    if (GetLogger())
     {
         LOG_DEBUG("Logger is ready!");
     }
