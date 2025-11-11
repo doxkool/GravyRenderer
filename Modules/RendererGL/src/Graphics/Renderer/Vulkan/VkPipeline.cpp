@@ -1,8 +1,8 @@
-#include "Graphics\Renderer\Vulkan\VkPipeline.h"
+#include "Graphics/Renderer/Vulkan/VkPipeline.h"
 
 namespace VkCore
 {    
-    VkCore_Pipeline::VkCore_Pipeline(VkDevice device, GLFWwindow* pWindow, VkRenderPass renderPass,
+    LOG_Pipeline::LOG_Pipeline(VkDevice device, GLFWwindow* pWindow, VkRenderPass renderPass,
         VkShaderModule vs, VkShaderModule fs,
         Mesh* pMesh, uint32_t NumberImages)
     {
@@ -181,16 +181,16 @@ namespace VkCore
         CHECK_VK_RESULT(res, "vkCreateGraphicsPipelines\n");
         if (res != VK_SUCCESS)
         {
-            VKCORE_ERROR("Failed to create graphics pipeline!");
+            LOG_ERROR("Failed to create graphics pipeline!");
             return;
         }
         else
         {
-            VKCORE_DEBUG("Created graphics pipeline.");
+            LOG_DEBUG("Created graphics pipeline.");
         }
     }
     
-    VkCore_Pipeline::~VkCore_Pipeline()
+    LOG_Pipeline::~LOG_Pipeline()
     {
         vkDestroyDescriptorSetLayout(m_Device, m_DescriptorSetLayout, NULL);
 	    vkDestroyPipelineLayout(m_Device, m_PipelineLayout, NULL);
@@ -198,7 +198,7 @@ namespace VkCore
 	    vkDestroyPipeline(m_Device, m_Pipeline, NULL);
     }
 
-    void VkCore_Pipeline::CreateDescriptorSets(Mesh* pMesh, uint32_t NumberImages)
+    void LOG_Pipeline::CreateDescriptorSets(Mesh* pMesh, uint32_t NumberImages)
     {
         CreateDescriptorPool(NumberImages);
         CreateDescriptorSetLayout();
@@ -206,7 +206,7 @@ namespace VkCore
         UpdateDescriptorSets(pMesh, NumberImages);
     }
 
-    void VkCore_Pipeline::CreateDescriptorPool(uint32_t NumberImages)
+    void LOG_Pipeline::CreateDescriptorPool(uint32_t NumberImages)
     {
         VkDescriptorPoolSize poolSize = {
             .type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
@@ -226,16 +226,16 @@ namespace VkCore
         CHECK_VK_RESULT(res, "vkCreateDescriptorPool\n");
         if (res != VK_SUCCESS)
         {
-            VKCORE_ERROR("Failed to create descriptor pool!");
+            LOG_ERROR("Failed to create descriptor pool!");
             return;
         }
         else
         {
-            VKCORE_DEBUG("Created descriptor pool.");
+            LOG_DEBUG("Created descriptor pool.");
         }
     }
 
-    void VkCore_Pipeline::CreateDescriptorSetLayout()
+    void LOG_Pipeline::CreateDescriptorSetLayout()
     {
         std::vector<VkDescriptorSetLayoutBinding> layoutBindings;
 
@@ -261,16 +261,16 @@ namespace VkCore
         CHECK_VK_RESULT(res, "vkCreateDescriptorSetLayout\n");
         if (res != VK_SUCCESS)
         {
-            VKCORE_ERROR("Failed to create descriptor set layout!");
+            LOG_ERROR("Failed to create descriptor set layout!");
             return;
         }
         else
         {
-            VKCORE_DEBUG("Created descriptor set layout.");
+            LOG_DEBUG("Created descriptor set layout.");
         }
     }
     
-    void VkCore_Pipeline::AllocateDescriptorSets(uint32_t NumberImages)
+    void LOG_Pipeline::AllocateDescriptorSets(uint32_t NumberImages)
     {
         std::vector<VkDescriptorSetLayout> layouts(NumberImages, m_DescriptorSetLayout);
 
@@ -288,16 +288,16 @@ namespace VkCore
         CHECK_VK_RESULT(res, "vkAllocateDescriptorSets\n");
         if (res != VK_SUCCESS)
         {
-            VKCORE_ERROR("Failed to allocate descriptor sets!");
+            LOG_ERROR("Failed to allocate descriptor sets!");
             return;
         }
         else
         {
-            VKCORE_DEBUG("Allocated descriptor sets.");
+            LOG_DEBUG("Allocated descriptor sets.");
         }
     }
     
-    void VkCore_Pipeline::UpdateDescriptorSets(Mesh* pMesh, uint32_t NumberImages)
+    void LOG_Pipeline::UpdateDescriptorSets(Mesh* pMesh, uint32_t NumberImages)
     {
         for (size_t i = 0; i < NumberImages; i++)
         {
@@ -329,7 +329,7 @@ namespace VkCore
     }
     
 
-    void VkCore_Pipeline::Bind(VkCommandBuffer CmdBuf, int32_t ImageIndex)
+    void LOG_Pipeline::Bind(VkCommandBuffer CmdBuf, int32_t ImageIndex)
     {
         vkCmdBindPipeline(CmdBuf, VK_PIPELINE_BIND_POINT_GRAPHICS, m_Pipeline);
 

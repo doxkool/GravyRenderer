@@ -42,7 +42,7 @@ include_directories(
 
 SET(Vulkan_Dep Vulkan::Vulkan SPIRV-Tools-static glslang::glslang-default-resource-limits glslang::glslang)
 
-target_link_libraries(RendererGL PUBLIC ${CoreUtils_static} ${Tracy_static} ${Vulkan_Dep} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
+target_link_libraries(RendererGL PUBLIC ${CoreUtils_static} ${Tracy_static} ${Vulkan_Dep} libInputs.a OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
 
 set_target_properties(RendererGL PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lib"

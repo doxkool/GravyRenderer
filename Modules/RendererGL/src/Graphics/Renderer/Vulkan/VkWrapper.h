@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Graphics\Renderer\Vulkan\VkLogger.h"
-#include "Graphics\Renderer\Vulkan\VkUtils.h"
+#include "Logger.h"
+#include "Graphics/Renderer/Vulkan/VkUtils.h"
 
 #include <vulkan/vulkan.h>
 

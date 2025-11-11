@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Graphics\Renderer\Vulkan\VkUtils.h"
-#include "Graphics\Renderer\Vulkan\VkBufferMem.h"
+#include "Graphics/Renderer/Vulkan/VkUtils.h"
+#include "Graphics/Renderer/Vulkan/VkBufferMem.h"
 
 #include <vulkan/vulkan.h>
 

@@ -1,6 +1,6 @@
 #include "VkCore.h"
 
-#include "Graphics\Renderer\Vulkan\VkUtils.h"
+#include "Graphics/Renderer/Vulkan/VkUtils.h"
 
 namespace VkCore
 {
@@ -103,7 +103,7 @@ namespace VkCore
     
     Instance::~Instance()
     {
-        VKCORE_DEBUG("---- Shutting down Vulkan instance ----");
+        LOG_DEBUG("---- Shutting down Vulkan instance ----");
 
         for (size_t i = 0; i < m_FrameBuffers.size(); i++) {
             vkDestroyFramebuffer(m_Device, m_FrameBuffers[i], nullptr);
@@ -136,15 +136,15 @@ namespace VkCore
 	    vkDestroyDebugUtilsMessenger = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(m_Instance, "vkDestroyDebugUtilsMessengerEXT");
 	    if (!vkDestroyDebugUtilsMessenger) 
         {
-	    	VKCORE_ERROR("Cannot find address of vkDestroyDebugUtilsMessengerEXT!");
+	    	LOG_ERROR("Cannot find address of vkDestroyDebugUtilsMessengerEXT!");
 	    	exit(1);
 	    }else{
             vkDestroyDebugUtilsMessenger(m_Instance, m_DebugMessenger, NULL);
-	        VKCORE_DEBUG("Debug callback destroyed.");
+	        LOG_DEBUG("Debug callback destroyed.");
         }
 
         vkDestroyInstance(m_Instance, NULL);
-        VKCORE_DEBUG("Vulkan instance has been destroyed.");
+        LOG_DEBUG("Vulkan instance has been destroyed.");
     }
     
     int Instance::Init(const char* pAppName, const char* pEngineName, GLFWwindow* pWindow)
@@ -220,18 +220,18 @@ namespace VkCore
         CHECK_VK_RESULT(res, "Create instance");
 
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to create Vulkan instance!");
+            LOG_ERROR("Failed to create Vulkan instance!");
             return -1;
         }
 
-        VKCORE_DEBUG("Vulkan instance created.");
+        LOG_DEBUG("Vulkan instance created.");
         return 0;
     }
 
     const VkImage& Instance::GetImage(int Index) const
 {
 	if (Index >= m_Images.size()) {
-		VKCORE_ERROR("Invalid image index {}", Index);
+		LOG_ERROR("Invalid image index {}", Index);
 		exit(1);
 	}
 
@@ -257,7 +257,7 @@ namespace VkCore
         PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessenger = VK_NULL_HANDLE;
         vkCreateDebugUtilsMessenger = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(m_Instance, "vkCreateDebugUtilsMessengerEXT");
         if (!vkCreateDebugUtilsMessenger) {
-            VKCORE_ERROR("Cannot find address of vkCreateDebugUtilsMessenger");
+            LOG_ERROR("Cannot find address of vkCreateDebugUtilsMessenger");
             exit(1);
         }
     
@@ -265,11 +265,11 @@ namespace VkCore
         CHECK_VK_RESULT(res, "debug utils messenger");
 
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to create debug utils messenger!");
+            LOG_ERROR("Failed to create debug utils messenger!");
             return -1;
         }
     
-        VKCORE_DEBUG("Debug utils messenger created");
+        LOG_DEBUG("Debug utils messenger created");
         return 0;
     }
 
@@ -280,11 +280,11 @@ namespace VkCore
         CHECK_VK_RESULT(res, "Failed to create window surface!");
 
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to create window surface!");
+            LOG_ERROR("Failed to create window surface!");
             return -1;
         }
 
-        VKCORE_DEBUG("Window surface created.");
+        LOG_DEBUG("Window surface created.");
         return 0;
     }
 
@@ -307,12 +307,12 @@ namespace VkCore
         };
 
         if (m_PhysicalDevice.GetDevice().m_PhysicalDeviceFeatures.geometryShader == VK_FALSE) {
-            VKCORE_ERROR("Geometry shader not supported!");
+            LOG_ERROR("Geometry shader not supported!");
             return -1;
         }
         
         if (m_PhysicalDevice.GetDevice().m_PhysicalDeviceFeatures.tessellationShader == VK_FALSE) {
-            VKCORE_ERROR("Tessellation shader not supported!");
+            LOG_ERROR("Tessellation shader not supported!");
             return -1;
         }
 
@@ -338,11 +338,11 @@ namespace VkCore
         CHECK_VK_RESULT(res, "Failed to create logical device!");
 
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to create logical device!");
+            LOG_ERROR("Failed to create logical device!");
             return -1;
         }
 
-        VKCORE_DEBUG("Logical device created.");
+        LOG_DEBUG("Logical device created.");
         return 0;
     }
 
@@ -381,17 +381,17 @@ namespace VkCore
         CHECK_VK_RESULT(res, "Failed to create swap chain!");
 
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to create swap chain!");
+            LOG_ERROR("Failed to create swap chain!");
             return -1;
         }
 
-        VKCORE_DEBUG("Swap chain created.");
+        LOG_DEBUG("Swap chain created.");
 
         uint32_t NumSwapChainImages = 0;
         res = vkGetSwapchainImagesKHR(m_Device, m_SwapChain, &NumSwapChainImages, nullptr);
         CHECK_VK_RESULT(res, "Failed to get swap chain images!");
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to get swap chain images!");
+            LOG_ERROR("Failed to get swap chain images!");
             return -1;
         }
 
@@ -400,7 +400,7 @@ namespace VkCore
         res = vkGetSwapchainImagesKHR(m_Device, m_SwapChain, &NumSwapChainImages, m_Images.data());
         CHECK_VK_RESULT(res, "Failed to get swap chain images!");
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to get swap chain images!");
+            LOG_ERROR("Failed to get swap chain images!");
             return -1;
         }
 
@@ -424,10 +424,10 @@ namespace VkCore
 
         VkResult res = vkCreateCommandPool(m_Device, &CommandPoolCreateInfo, nullptr, &m_CommandPool);
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to create command pool!");
+            LOG_ERROR("Failed to create command pool!");
             return -1;
         }
-        VKCORE_DEBUG("Command pool created.");
+        LOG_DEBUG("Command pool created.");
         return 0;
     }
 
@@ -496,11 +496,11 @@ namespace VkCore
 
         VkResult res = vkCreateRenderPass(m_Device, &RenderPassCreateInfo, nullptr, &RenderPass);
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to create render pass!");
+            LOG_ERROR("Failed to create render pass!");
             return RenderPass;
         }
 
-        VKCORE_DEBUG("Render pass created.");
+        LOG_DEBUG("Render pass created.");
         return RenderPass;
     }
 
@@ -528,7 +528,7 @@ namespace VkCore
             CHECK_VK_RESULT(res, "Failed to create framebuffer!");
 
             if (res != VK_SUCCESS) {
-                VKCORE_ERROR("Failed to create framebuffer!");
+                LOG_ERROR("Failed to create framebuffer!");
                 return {};
             }
         }
@@ -549,7 +549,7 @@ namespace VkCore
     		}
     	}
 
-    	VKCORE_CRITICAL("Cannot find memory type for type %x requested mem props %x\n", MemTypeBitsMask, ReqMemPropFlags);
+    	LOG_CRITICAL("Cannot find memory type for type %x requested mem props %x\n", MemTypeBitsMask, ReqMemPropFlags);
     	exit(1);
     	return -1;
     }
@@ -568,18 +568,18 @@ namespace VkCore
         // Step 1: create a buffer
         VkResult res = vkCreateBuffer(m_Device, &vbCreateInfo, NULL, &Buf.m_buffer);
         CHECK_VK_RESULT(res, "vkCreateBuffer\n");
-        VKCORE_DEBUG("Buffer created\n");
+        LOG_DEBUG("Buffer created\n");
 
         // Step 2: get the buffer memory requirements
         VkMemoryRequirements MemReqs = { 0 };
         vkGetBufferMemoryRequirements(m_Device, Buf.m_buffer, &MemReqs);
-        VKCORE_TRACE("Buffer requires {} bytes.", (int)MemReqs.size);
+        LOG_TRACE("Buffer requires {} bytes.", (int)MemReqs.size);
 
         Buf.m_allocationSize = MemReqs.size;
 
         // Step 3: get the memory type index
         uint32_t MemoryTypeIndex = GetMemoryTypeIndex(MemReqs.memoryTypeBits, Properties);
-        VKCORE_TRACE("Memory type index {}.", MemoryTypeIndex);
+        LOG_TRACE("Memory type index {}.", MemoryTypeIndex);
 
         // Step 4: allocate memory
         VkMemoryAllocateInfo MemAllocInfo = {

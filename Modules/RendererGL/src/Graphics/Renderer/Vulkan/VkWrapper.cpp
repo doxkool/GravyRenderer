@@ -1,4 +1,4 @@
-#include "Graphics\Renderer\Vulkan\VkWrapper.h"
+#include "Graphics/Renderer/Vulkan/VkWrapper.h"
 
 namespace VkCore
 {
@@ -13,7 +13,7 @@ namespace VkCore
 
         VkResult res = vkBeginCommandBuffer(cmdBuf, &BeginInfo);
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to reset command buffer!");
+            LOG_ERROR("Failed to reset command buffer!");
             return;
         }
     }
@@ -30,11 +30,11 @@ namespace VkCore
         VkResult res = vkCreateSemaphore(device, &semaphoreInfo, nullptr, &semaphore);
         CHECK_VK_RESULT(res, "Failed to create semaphore!");
         if (res != VK_SUCCESS) {
-            VKCORE_ERROR("Failed to create semaphore!");
+            LOG_ERROR("Failed to create semaphore!");
             return VK_NULL_HANDLE;
         }
 
-        VKCORE_DEBUG("Semaphore created.");
+        LOG_DEBUG("Semaphore created.");
 
         return semaphore;
     }

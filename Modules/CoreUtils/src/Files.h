@@ -7,6 +7,18 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include <cerrno>
+#include <clocale>
+#include <cmath>
+#include <cstring>
+
+#ifdef _WIN32_
+#include <Windows.h>
+#else
+#include <sys/time.h>
+#include <sys/stat.h>
+#endif
+
 namespace CoreUtils
 {
    bool CheckIfFolderExist(std::string folderPath);

@@ -1,4 +1,4 @@
-#include "Graphics\Renderer\Vulkan\VkDevice.h"
+#include "Graphics/Renderer/Vulkan/VkDevice.h"
 
 namespace VkCore
 {
@@ -61,7 +61,7 @@ namespace VkCore
         }
     }
 
-    void VkCore_Device::Init(const VkInstance& vkInstance, const VkSurfaceKHR& vkSurface)
+    void LOG_Device::Init(const VkInstance& vkInstance, const VkSurfaceKHR& vkSurface)
     {
         uint32_t deviceCount = 0;
         VkResult res = vkEnumeratePhysicalDevices(vkInstance, &deviceCount, nullptr);
@@ -148,7 +148,7 @@ namespace VkCore
             for (uint32_t j = 0; j < presentModeCount; j++)
             {
                 const VkPresentModeKHR& presentMode = PhysicalDevices[i].m_PresentModes[j];
-                VKCORE_TRACE("Present mode {}:\n  Present mode = {}", j, (int)presentMode);
+                LOG_TRACE("Present mode {}:\n  Present mode = {}", j, (int)presentMode);
             }
 
             printf("Num memory types %d\n", PhysicalDevices[i].m_PhysicalDeviceMemoryProperties.memoryTypeCount);
@@ -169,11 +169,11 @@ namespace VkCore
 
             vkGetPhysicalDeviceFeatures(devices[i], &PhysicalDevices[i].m_PhysicalDeviceFeatures);
             
-            VKCORE_DEBUG("Initialized physical device: {} (index: {}).", PhysicalDevices[i].m_PhysicalDeviceProperties.deviceName, i);
+            LOG_DEBUG("Initialized physical device: {} (index: {}).", PhysicalDevices[i].m_PhysicalDeviceProperties.deviceName, i);
         }
     }
 
-    uint32_t VkCore_Device::SelectPhysicalDevice(VkQueueFlags RequiredQueueType, bool SupportsPresent)
+    uint32_t LOG_Device::SelectPhysicalDevice(VkQueueFlags RequiredQueueType, bool SupportsPresent)
     {
         for (uint32_t i = 0; i < PhysicalDevices.size(); i++)
         {
@@ -188,21 +188,21 @@ namespace VkCore
                     if ((queueFamilyProperties.queueFlags & RequiredQueueType) == RequiredQueueType)
                     {
                         m_DeviceIndex = i;
-                        VKCORE_DEBUG("Selected physical device: {} (index: {})", properties.deviceName, m_DeviceIndex);
+                        LOG_DEBUG("Selected physical device: {} (index: {})", properties.deviceName, m_DeviceIndex);
                         return m_DeviceIndex;
                     }
                 }
             }
         }
-        VKCORE_ERROR("No suitable physical device found!");
+        LOG_ERROR("No suitable physical device found!");
         return -1;
     }
 
-    const PhysicalDevice& VkCore_Device::GetDevice() const
+    const PhysicalDevice& LOG_Device::GetDevice() const
     {
         if (m_DeviceIndex == -1)
         {
-            VKCORE_ERROR("No physical device selected!");
+            LOG_ERROR("No physical device selected!");
             exit(1);
         }
         return PhysicalDevices[m_DeviceIndex];
