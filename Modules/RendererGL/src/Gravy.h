@@ -16,7 +16,7 @@
 
 #include "Window/Window.h"
 
-#include "Core/Input.h"
+#include "Input.h"
 
 #include <tracy/Tracy.hpp>
 

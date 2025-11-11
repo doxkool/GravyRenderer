@@ -32,6 +32,7 @@ file(GLOB_RECURSE RENDERER_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}
 add_library(RendererGL SHARED ${RENDERER_SOURCES})
 
 include_directories(
+    ${CMAKE_SOURCE_DIR}/Modules/Inputs/src
     ${CMAKE_SOURCE_DIR}/Modules/CoreUtils/src
     ${CMAKE_SOURCE_DIR}/Modules/RendererGL/src
     ${CMAKE_SOURCE_DIR}/Modules/RendererGL/Vendors/Tracy/public
@@ -42,3 +43,7 @@ include_directories(
 SET(Vulkan_Dep Vulkan::Vulkan SPIRV-Tools-static glslang::glslang-default-resource-limits glslang::glslang)
 
 target_link_libraries(RendererGL PUBLIC ${CoreUtils_static} ${Tracy_static} ${Vulkan_Dep} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
+
+set_target_properties(RendererGL PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lib"
+)

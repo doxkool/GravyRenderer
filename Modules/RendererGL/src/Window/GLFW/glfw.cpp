@@ -1,7 +1,7 @@
 #include "Graphics/Renderer/OpenGL/OpenGL.h"
 #include "glfw.h"
 
-#include "Core/Input.h"
+#include "Input.h"
 
 #include <stb_image.h>
 
@@ -147,7 +147,7 @@ namespace Renderer
         glfwSetMouseButtonCallback(window, mouse_button_callback);
         glfwSetWindowSizeCallback(window, WindowSizeCallback);
 
-        Input::BindWindow(this);
+        Input::BindWindow(window);
 
         return 0;
     }

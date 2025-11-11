@@ -2,7 +2,7 @@
 
 #include "Graphics/Renderer/OpenGL/OpenGL.h"
 
-#include "Core/Input.h"
+#include "Input.h"
 
 #include <tracy/Tracy.hpp>
 #include <tracy/TracyOpenGL.hpp>
