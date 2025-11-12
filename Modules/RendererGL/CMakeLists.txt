@@ -10,6 +10,7 @@ if (WIN32)
 endif(WIN32)
 
 if (UNIX)
+    #SET(Inputs_static ${CMAKE_BINARY_DIR}/Modules/Inputs/libInputs.a)
     SET(CoreUtils_static ${CMAKE_BINARY_DIR}/Modules/CoreUtils/libCoreUtils.a)
     SET(Tracy_static ${CMAKE_BINARY_DIR}/Modules/RendererGL/Vendors/Tracy/libTracyClient.a)
 endif(UNIX)
@@ -40,9 +41,9 @@ include_directories(
     ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-linux/include
     )
 
-SET(Vulkan_Dep Vulkan::Vulkan SPIRV-Tools-static glslang::glslang-default-resource-limits glslang::glslang)
+SET(Vulkan_Dep Vulkan::Vulkan SPIRV-Tools glslang::glslang-default-resource-limits glslang::glslang)
 
-target_link_libraries(RendererGL PUBLIC ${CoreUtils_static} ${Tracy_static} ${Vulkan_Dep} libInputs.a OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
+target_link_libraries(RendererGL PUBLIC ${CoreUtils_static} ${Tracy_static} ${Vulkan_Dep} OpenGL::GL glfw GLEW::GLEW glm::glm imgui::imgui spdlog::spdlog tinyobjloader::tinyobjloader)
 
 set_target_properties(RendererGL PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lib"

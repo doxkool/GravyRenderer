@@ -23,32 +23,29 @@ enum CursorMode {
     released
 };
 
-class Input
+namespace Input
 {
-private:
-    
-public:
-    static void BindWindow(GLFWwindow* window);
-    
-    static void RecieveKeyCallback(int key, int scancode, int action, int mods);
-    static void RecieveMouseCallback(double xpos, double ypos);
-    static void RecieveMouseButtonCallback(int button, int action, int mods);
-    static void RecieveMouseScrollCallback(double xoffset, double yoffset);
+    void BindWindow(GLFWwindow* window);
 
-    static bool IsKeyPressed(int key);
-    static bool IsKeyJustPressed(int key);
-    static bool IsKeyJustReleased(int key);
-    static bool IsMouseButtonPressed(int button);
-    static bool IsMouseButtonJustPressed(int button);
+    void RecieveKeyCallback(int key, int scancode, int action, int mods);
+    void RecieveMouseCallback(double xpos, double ypos);
+    void RecieveMouseButtonCallback(int button, int action, int mods);
+    void RecieveMouseScrollCallback(double xoffset, double yoffset);
 
-    static void SetCursorMode(CursorMode mode);
-    static CursorMode GetCursorMode();
+    bool IsKeyPressed(int key);
+    bool IsKeyJustPressed(int key);
+    bool IsKeyJustReleased(int key);
+    bool IsMouseButtonPressed(int button);
+    bool IsMouseButtonJustPressed(int button);
 
-    static bool IsMouseGrabed();
+    void SetCursorMode(CursorMode mode);
+    CursorMode GetCursorMode();
 
-    static glm::vec2 GetMouseCursorPosition();
-    static void SetMouseCursorPosition();
+    bool IsMouseGrabed();
 
-    static void ResetKeyBuffer();
-    static void ResetMouseBuffer();
-};
+    glm::vec2 GetMouseCursorPosition();
+    void SetMouseCursorPosition();
+
+    void ResetKeyBuffer();
+    void ResetMouseBuffer();
+}

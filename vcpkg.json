@@ -92,17 +92,17 @@
     },
     {
       "name": "vulkan",
-      "platform": "windows",
+      "platform": "linux",
       "default-features": true
     },
     {
       "name": "spirv-tools",
-      "platform": "windows",
+      "platform": "linux",
       "default-features": true
     },
     {
       "name": "glslang",
-      "platform": "windows",
+      "platform": "linux",
       "default-features": true
     },
     {
