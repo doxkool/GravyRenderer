@@ -2,8 +2,6 @@
 
 #include "Window/GLFW/glfw.h"
 
-#include <tracy/Tracy.hpp>
-
 double d_mTime;
 float deltaTime = 0.0f; // time between current frame and last frame
 float lastFrame = 0.0f;
@@ -27,8 +25,6 @@ namespace Renderer
 
     float Time::UpdateDeltaTime()
     {
-        ZoneScopedN("Update Delta Time");
-
         float currentFrame = static_cast<float>(Renderer::glfw::GetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;

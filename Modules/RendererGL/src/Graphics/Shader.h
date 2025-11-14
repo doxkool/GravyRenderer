@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Renderer/OpenGL/glshader.h"
+#include "Graphics/Renderer/glshader.h"
 
 namespace Renderer
 {

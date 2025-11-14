@@ -2,13 +2,17 @@
 
 #include "Logger.h"
 
-#include "Core/Base.h"
-#include "Core/Defines.h"
-
 #include <GL/glew.h>
 
 namespace Renderer
 {
+
+	enum ColorSpace
+	{
+		RGB,
+		SRGB
+	};
+
 	class OpenGLTexture
 	{
 	public:
@@ -28,9 +32,9 @@ namespace Renderer
 
 		virtual void Delete();
 
-		static Ref<OpenGLTexture> Create(uint32_t width, uint32_t height);
-		static Ref<OpenGLTexture> Create(void* data, uint32_t size, ColorSpace colorSpace = ColorSpace::RGB);
-		static Ref<OpenGLTexture> Create(const std::string &texPath, ColorSpace colorSpace = ColorSpace::RGB);
+		//static Ref<OpenGLTexture> Create(uint32_t width, uint32_t height);
+		//static Ref<OpenGLTexture> Create(void* data, uint32_t size, ColorSpace colorSpace = ColorSpace::RGB);
+		//static Ref<OpenGLTexture> Create(const std::string &texPath, ColorSpace colorSpace = ColorSpace::RGB);
 
 		uint32_t ID;
 		bool b_hasAlpha = false;

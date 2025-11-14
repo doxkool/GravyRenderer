@@ -8,6 +8,8 @@
 #include "tiny_obj_loader.h"
 #include "tiny_gltf.h"
 
+#include <iostream>
+
 namespace Renderer
 {
     Model::Model(std::string filename)

@@ -2,12 +2,10 @@
 
 #include "Camera.h"
 
-#include "Core/Defines.h"
-
 #include "Buffers.h"
 #include "Shader.h"
 #include "Texture.h"
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL.h"
 
 namespace Renderer
 {

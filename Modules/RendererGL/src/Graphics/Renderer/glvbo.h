@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Core/Base.h"
-
 #include <GL/glew.h>
+
+#include <vector>
 
 struct Vertex
 {

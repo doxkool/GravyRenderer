@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Core/Base.h"
-
+#include <glm/glm.hpp>
 #include <GL/glew.h>
+#include <vector>
 
 class glebo
 {

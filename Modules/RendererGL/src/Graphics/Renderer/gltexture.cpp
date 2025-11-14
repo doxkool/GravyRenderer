@@ -1,25 +1,25 @@
 #include "gltexture.h"
 
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL.h"
 
 #include <stb_image.h>
 
 namespace Renderer
 {
-	Ref<OpenGLTexture> OpenGLTexture::Create(uint32_t width, uint32_t height)
-	{
-		return CreateRef<OpenGLTexture>(width, height);
-	}
-
-	Ref<OpenGLTexture> OpenGLTexture::Create(void* data, uint32_t size, ColorSpace colorSpace)
-	{
-		return CreateRef<OpenGLTexture>(data, size, colorSpace);
-	}
-
-	Ref<OpenGLTexture> OpenGLTexture::Create(const std::string &texPath, ColorSpace colorSpace)
-	{
-		return CreateRef<OpenGLTexture>(texPath, colorSpace);
-	}
+	//Ref<OpenGLTexture> OpenGLTexture::Create(uint32_t width, uint32_t height)
+	//{
+	//	return CreateRef<OpenGLTexture>(width, height);
+	//}
+	//
+	//Ref<OpenGLTexture> OpenGLTexture::Create(void* data, uint32_t size, ColorSpace colorSpace)
+	//{
+	//	return CreateRef<OpenGLTexture>(data, size, colorSpace);
+	//}
+	//
+	//Ref<OpenGLTexture> OpenGLTexture::Create(const std::string &texPath, ColorSpace colorSpace)
+	//{
+	//	return CreateRef<OpenGLTexture>(texPath, colorSpace);
+	//}
 
 	OpenGLTexture::OpenGLTexture(uint32_t width, uint32_t height)
 		: m_Width(width), m_Height(height)

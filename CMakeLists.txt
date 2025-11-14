@@ -20,7 +20,7 @@ endif()
 
 project("Gravy")
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/Modules/Inputs)
+add_subdirectory(${CMAKE_SOURCE_DIR}/Modules/Application)
 add_subdirectory(${CMAKE_SOURCE_DIR}/Modules/CoreUtils)
 add_subdirectory(${CMAKE_SOURCE_DIR}/Modules/RendererGL)
 add_subdirectory(${CMAKE_SOURCE_DIR}/Modules/SandboxGL)

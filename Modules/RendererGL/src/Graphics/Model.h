@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Time.h"
+//#include "Core/Time.h"
 
 #include "Graphics/Mesh.h"
 #include "Graphics/Camera.h"
@@ -38,21 +38,21 @@ namespace Renderer
             UpdateMatrix();
         }
 
-        virtual void Move(glm::vec3 unit)
+        virtual void Move(glm::vec3 unit, float dt)
         {
-            Transform.Position = Transform.Position + unit * Time::GetDeltaTime();
+            Transform.Position = Transform.Position + unit * dt;
             UpdateMatrix();
         }
 
-        virtual void Rotate(glm::vec3 unit)
+        virtual void Rotate(glm::vec3 unit, float dt)
         {
-            Transform.Rotation = Transform.Rotation + unit * Time::GetDeltaTime();
+            Transform.Rotation = Transform.Rotation + unit * dt;
             UpdateMatrix();
         }
 
-        virtual void Scale(glm::vec3 unit)
+        virtual void Scale(glm::vec3 unit, float dt)
         {
-            Transform.Scale = Transform.Scale + unit * Time::GetDeltaTime();
+            Transform.Scale = Transform.Scale + unit * dt;
             UpdateMatrix();
         }
 

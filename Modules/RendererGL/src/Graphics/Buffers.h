@@ -1,12 +1,10 @@
 #pragma once
 
-#include "Core/Base.h"
-
-#include "Graphics/Renderer/OpenGL/glvao.h"
-#include "Graphics/Renderer/OpenGL/glvbo.h"
-#include "Graphics/Renderer/OpenGL/glebo.h"
-#include "Graphics/Renderer/OpenGL/glibo.h"
-#include "Graphics/Renderer/OpenGL/glfbo.h"
+#include "Graphics/Renderer/glvao.h"
+#include "Graphics/Renderer/glvbo.h"
+#include "Graphics/Renderer/glebo.h"
+#include "Graphics/Renderer/glibo.h"
+#include "Graphics/Renderer/glfbo.h"
 
 namespace Renderer
 {

@@ -1,9 +1,9 @@
 #include "glfbo.h"
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL.h"
 
 namespace Renderer
 {
-	GLuint glfbo::Create(float width, float height, bool shadowMap, ColorSpace colorSpace)
+	GLuint glfbo::Create(float width, float height, bool shadowMap)
 	{
 		b_isShadowMap = shadowMap;
 		FBO_Res = {width, height};
@@ -35,11 +35,11 @@ namespace Renderer
 			glGenTextures(1, &texture_id); GLCHECK
 			glBindTexture(GL_TEXTURE_2D, texture_id); GLCHECK
 
-			if (colorSpace == ColorSpace::SRGB){
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); GLCHECK
-			}else{
+			//if (colorSpace == ColorSpace::SRGB){
+			//	glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB8_ALPHA8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); GLCHECK
+			//}else{
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); GLCHECK
-			}
+			//}
 
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0); GLCHECK
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLCHECK

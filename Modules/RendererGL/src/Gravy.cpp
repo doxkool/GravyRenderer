@@ -1,6 +1,6 @@
 #include "Gravy.h"
 
-namespace Renderer
+/* namespace Renderer
 {
     bool b_RendererInit = false;
     Window m_Window;
@@ -133,4 +133,4 @@ namespace Renderer
     {
         return camera;
     }
-}
+} */

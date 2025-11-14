@@ -2,9 +2,9 @@
 
 #include "Logger.h"
 
-#include "Core/Base.h"
-
+#include <glm/glm.hpp>
 #include <GL/glew.h>
+#include <vector>
 
 namespace Renderer
 {
@@ -20,7 +20,7 @@ namespace Renderer
         glfbo() {}
         ~glfbo() {}
 
-        GLuint Create(float width, float height, bool shadowMap = false, ColorSpace colorSpace = ColorSpace::RGB);
+        GLuint Create(float width, float height, bool shadowMap = false);
 
         virtual void Bind();
         virtual void UnBind();

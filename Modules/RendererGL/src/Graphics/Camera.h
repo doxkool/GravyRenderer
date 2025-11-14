@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Base.h"
-#include "Core/Time.h"
+//#include "Core/Base.h"
+//#include "Core/Time.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -44,9 +44,9 @@ namespace Renderer
         glm::mat4 GetProjectionMatrix(float nearPlane = 0.1f, float farPlane = 1000.0f);
 
         // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-        void Move(camera_Movement direction);
+        void Move(camera_Movement direction, double deltaTime);
 
-        void Update();
+        void Update(glm::vec2 mousePos);
 
         //void ConstrainMousePitch (bool constrainPitch);
         //void EnableMouseInput(bool enable);        

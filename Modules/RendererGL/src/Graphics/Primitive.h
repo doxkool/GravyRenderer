@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/Base.h"
-
 enum Primitive
 {
     Quad,

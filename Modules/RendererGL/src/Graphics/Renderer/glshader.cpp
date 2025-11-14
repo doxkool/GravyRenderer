@@ -1,16 +1,14 @@
 #include "glshader.h"
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Core/Tracing.h"
-
 namespace Renderer
 {
-	Ref<OpenGLShader> OpenGLShader::Create(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile)
-	{
-			return CreateRef<OpenGLShader>(vertexShaderFile, fragmentShaderFile,geometryShaderFile);
-	}
+	//Ref<OpenGLShader> OpenGLShader::Create(const char* vertexShaderFile, const char* fragmentShaderFile, const char* geometryShaderFile)
+	//{
+	//		return CreateRef<OpenGLShader>(vertexShaderFile, fragmentShaderFile,geometryShaderFile);
+	//}
 
 	OpenGLShader::OpenGLShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
 	{
@@ -24,8 +22,6 @@ namespace Renderer
 
 	void OpenGLShader::LoadShader(const char* _vertexShaderFile, const char* _fragmentShaderFile, const char* _geometryShaderFile)
 	{
-		ZoneScoped;
-
 		unsigned int vertexShader;
 		unsigned int fragmentShader;
 		unsigned int geometryShader;

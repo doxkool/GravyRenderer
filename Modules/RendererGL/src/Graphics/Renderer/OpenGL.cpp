@@ -1,6 +1,4 @@
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
-
-#include <tracy/Tracy.hpp>
+#include "Graphics/Renderer/OpenGL.h"
 
 //#define GLMESSAGECALLBACK_ENABLED
 #define GLCHECKERROR_ENABLED
@@ -90,7 +88,7 @@ void GlCheckError(const char *function, const char *file, int line)
 
 namespace Renderer
 {
-    int OpenGL::Init(RendererSpec* confInit)
+    int OpenGL::Init(OpenGLConfig* glConfInit)
     {
         glewExperimental = GL_TRUE;
 
@@ -109,7 +107,7 @@ namespace Renderer
             glEnable(GL_DEPTH_TEST);
             glEnable(GL_BLEND);
 
-            if(confInit->apiEnableMessageCallBack)
+            if(glConfInit->apiEnableMessageCallBack)
             {
                 glEnable(GL_DEBUG_OUTPUT);
                 glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -140,8 +138,6 @@ namespace Renderer
 
     void OpenGL::ClearBuffer(std::vector<int> buffers)
     {
-        ZoneScopedN("Clear Buffer");
-
         for (auto buffer : buffers)
         {
             glClear(buffer); GLCHECK

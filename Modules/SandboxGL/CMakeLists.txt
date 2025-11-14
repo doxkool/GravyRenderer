@@ -18,7 +18,7 @@ file(GLOB_RECURSE SANDBOX_SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/
 add_executable(SandboxGL ${SANDBOX_SOURCES})
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/Modules/Inputs/src
+    ${CMAKE_SOURCE_DIR}/Modules/Application/src
     ${CMAKE_SOURCE_DIR}/Modules/SandboxGL/src
     ${CMAKE_SOURCE_DIR}/Modules/RendererGL/src
     ${CMAKE_SOURCE_DIR}/Modules/RendererGL/Vendors/Tracy/public

@@ -16,3 +16,7 @@ include_directories(
     )
 
 target_link_libraries(CoreUtils PUBLIC spdlog::spdlog)
+
+set_target_properties(CoreUtils PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/lib"
+)

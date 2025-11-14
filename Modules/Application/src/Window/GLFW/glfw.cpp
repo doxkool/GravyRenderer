@@ -1,4 +1,4 @@
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL.h"
 #include "glfw.h"
 
 #include "Input.h"

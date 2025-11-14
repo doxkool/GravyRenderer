@@ -6,10 +6,6 @@
 
 #include <GL/glew.h>
 
-#include "Core/Time.h"
-#include "Core/Base.h"
-#include "Core/ConfigsDef.h"
-
 #include "glshader.h"
 #include "glvao.h"
 #include "glvbo.h"
@@ -31,6 +27,13 @@
 
 void GlCheckError(const char *function, const char *file, int line);
 
+struct OpenGLConfig
+{
+    int apiVersionMajor = 0;
+    int apiVersionMinor = 0;
+    bool apiEnableMessageCallBack = false;
+};
+
 namespace Renderer
 {
     class OpenGL
@@ -41,7 +44,7 @@ namespace Renderer
         OpenGL() {}
         ~OpenGL() {}
 
-        static int Init(RendererSpec* confInit);
+        static int Init(OpenGLConfig* glConfInit);
 
         static void SetClearColor(glm::vec4 color);
 

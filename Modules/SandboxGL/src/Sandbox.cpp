@@ -10,32 +10,32 @@
 
 #include "Entity/Light.h"
 
-using namespace Renderer;
+//using namespace Renderer;
 
-Window* m_window = nullptr;
-Camera MainCam;
+Renderer::Window* m_window = nullptr;
+Renderer::Camera MainCam;
 
 Audio m_Audio;
 ImGUI m_ImGUI;
 int Audio1ID = -1;
 
-std::vector<Light> Lights;
+std::vector<Renderer::Light> Lights;
 
-Model sponza;
-Model cube0;
-Light dirLight(DirectionalLight);
-Light spotLight0(SpotLight);
+Renderer::Model sponza;
+Renderer::Model cube0;
+Renderer::Light dirLight(Renderer::DirectionalLight);
+Renderer::Light spotLight0(Renderer::SpotLight);
 
 void CheckForInput()
 {
     ZoneScopedN("Input");
 
-    auto m_Window = GetWindowInst();
+    auto m_Window = Renderer::GetWindowInst();
 
     if (Input::IsKeyJustPressed(KEY_GRAVE_ACCENT))
     {
         LOG_INFO("Escape key pressed, exiting Sandbox...");
-        CloseWindow();
+        Renderer::CloseWindow();
     }
 
     if (Input::IsMouseButtonJustPressed(MOUSE_RIGHT_CLICK))
@@ -70,7 +70,7 @@ void CheckForInput()
     }
 }
 
-void RenderScene(Shader &shader)
+void RenderScene(Renderer::Shader &shader)
 {
     shader.Set1i(true, "blinn");
     shader.Set1i(false, "fogEnabled");
@@ -117,7 +117,7 @@ void RenderScene(Shader &shader)
     cube0.Rotate({10.0, 10.0, 10.0});
 }
 
-void RenderShadowMap(Light light)
+void RenderShadowMap(Renderer::Light light)
 {
     ZoneScopedN("Render ShadowMap");
     light.UpdateMatrices();
@@ -125,9 +125,9 @@ void RenderShadowMap(Light light)
     light.m_DepthShader.Bind();
     light.m_DepthShader.SetMat4fv(light.GetLightSpaceMatrix(), "lightSpaceMatrix");
 
-    OpenGL::SetViewportRes(light.m_ShadowRes);
+    Renderer::OpenGL::SetViewportRes(light.m_ShadowRes);
     light.m_DepthMapFBO.Bind();
-    OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
+    Renderer::OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
     light.m_DepthMapTexture.SetActiveTexture(GL_TEXTURE0);
     light.m_DepthMapTexture.Bind();
     RenderScene(light.m_DepthShader);
@@ -135,15 +135,15 @@ void RenderShadowMap(Light light)
     light.m_DepthMapFBO.UnBind();
 
     // reset viewport
-    OpenGL::SetViewportRes(GetCurrentResolution());
-    OpenGL::ClearBuffer({GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT});
+    Renderer::OpenGL::SetViewportRes(Renderer::GetCurrentResolution());
+    Renderer::OpenGL::ClearBuffer({GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT});
 }
 
 void Run()
 {
-    m_window = GetWindowInst();
+    m_window = Renderer::GetWindowInst();
 
-    SetClearColor(GRAY);
+    Renderer::SetClearColor(GRAY);
 
     MainCam.Position = {0.0, 15.0, -5.0};
     SetMainCamera(&MainCam);
@@ -155,7 +155,7 @@ void Run()
     };
     Audio1ID = m_Audio.LoadAudioTrack(&audio1);
 
-    Shader shader;
+    Renderer::Shader shader;
     shader.LoadShader(DEFAULT_VER_SHADER, DEFAULT_FRAG_SHADER);
 
     sponza.LoadModel("assets/models/sponza/sponza.obj");
@@ -166,7 +166,7 @@ void Run()
 
     // load textures
     // -------------
-    Texture texture;
+    Renderer::Texture texture;
     texture.LoadTexture(DEFAULT_TEX);
  
     // configure lights
@@ -188,14 +188,14 @@ void Run()
     //shader.Set1i(1, "material.specular");
     shader.Set1i(2, "material.shadowMap");
 
-    while (IsRunning())
+    while (Renderer::IsRunning())
     {
         FrameMarkStart("Main Loop");
 
         CheckForInput();
 
-        Time::UpdateDeltaTime();
-        OpenGL::ClearBuffer();
+        Renderer::Time::UpdateDeltaTime();
+        Renderer::OpenGL::ClearBuffer();
 
         MainCam.Update();
 
@@ -258,7 +258,7 @@ int main()
         .apiLoggingLevel = trace
     };
     
-    int ret_Gravy = Init(&rendererSpec);
+    int ret_Gravy = Renderer::Init(&rendererSpec);
 
     Logger::Init(windowSpec.windowName);
 
@@ -270,7 +270,7 @@ int main()
         Run();
     }
 
-    Shutdown();
+    Renderer::Shutdown();
 
     m_ImGUI.Shutdown();
     m_Audio.Shutdown();

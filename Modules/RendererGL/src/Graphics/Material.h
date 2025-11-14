@@ -2,6 +2,13 @@
 
 #include "Texture.h"
 
+struct Transform_t
+{
+	glm::vec3 Position  = {0.0f, 0.0f, 0.0f};
+    glm::vec3 Rotation  = {0.0f, 0.0f, 0.0f};
+    glm::vec3 Scale     = {1.0f, 1.0f, 1.0f};
+};
+
 namespace Renderer
 {
     class Material : public OpenGLTexture
@@ -11,10 +18,10 @@ namespace Renderer
         Material(const char* diffuseFile, const char* specularFile = nullptr, ColorSpace colorSpace = ColorSpace::RGB)
             : OpenGLTexture(diffuseFile, colorSpace)
         {
-            Diffuse_Texture.Create(diffuseFile);
+            Diffuse_Texture.LoadTexture(diffuseFile);
             if (specularFile)
             {
-                Specular_Texture.Create(specularFile);
+                Specular_Texture.LoadTexture(specularFile);
             }
         }
         Material(const Material&) = default;

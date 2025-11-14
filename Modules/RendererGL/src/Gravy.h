@@ -1,10 +1,6 @@
 #pragma once
 
-#include "Core/Base.h"
-#include "Core/ConfigsDef.h"
-#include "Core/Time.h"
-
-#include "Graphics/Renderer/Renderer.h"
+#include "Graphics/Renderer/OpenGL.h"
 #include "Graphics/Buffers.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Material.h"
@@ -14,13 +10,7 @@
 #include "Graphics/Shader.h"
 #include "Graphics/Texture.h"
 
-#include "Window/Window.h"
-
-#include "Input.h"
-
-#include <tracy/Tracy.hpp>
-
-namespace Renderer
+/* namespace Renderer
 {
     int Init(RendererSpec* rendererSpec);
     RendererSpec* GetInitConfig();
@@ -46,4 +36,4 @@ namespace Renderer
 
     void SetMainCamera(Camera* cam);
     Camera* GetMainCamera();
-}
+} */

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/Base.h"
-
 #include "glibo.h"
 
 #include <GL/glew.h>
@@ -15,8 +13,6 @@ namespace Renderer
     public:
         glvao();
         ~glvao() {}
-
-        //GLuint Create();
 
         void LinkAttribF(GLuint layout, GLuint numComponents, GLsizei stride, void* offset);
 

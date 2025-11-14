@@ -42,9 +42,6 @@ struct RendererSpec
 {
     WindowSpec windowSpec;
     e_RendererApi renderingAPI = Opengl;
-    int apiVersionMajor = 0;
-    int apiVersionMinor = 0;
-    bool apiEnableMessageCallBack = false;
     e_ApiLoggingLevel apiLoggingLevel = info;
 };
 

@@ -1,5 +1,5 @@
 #include "glebo.h"
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL.h"
 
 GLuint glebo::Create(std::vector<unsigned int> *indices)
 {

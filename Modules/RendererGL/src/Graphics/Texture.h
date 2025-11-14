@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Renderer/OpenGL/gltexture.h"
+#include "Graphics/Renderer/gltexture.h"
 
 namespace Renderer
 {

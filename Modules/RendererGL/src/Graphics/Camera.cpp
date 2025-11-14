@@ -1,11 +1,6 @@
 #include "Camera.h"
 
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
-
-#include "Input.h"
-
-#include <tracy/Tracy.hpp>
-#include <tracy/TracyOpenGL.hpp>
+#include "Graphics/Renderer/OpenGL.h"
 
 namespace Renderer
 {
@@ -48,9 +43,9 @@ namespace Renderer
     }
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-    void Camera::Move(camera_Movement direction)
+    void Camera::Move(camera_Movement direction, double deltaTime)
     {
-        float velocity = MovementSpeed * Time::GetDeltaTime();
+        float velocity = MovementSpeed * deltaTime;
         if (direction == FORWARD)
             Position += Front * velocity;
         if (direction == BACKWARD)
@@ -66,11 +61,9 @@ namespace Renderer
     }
 
     // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-    void Camera::Update()
+    void Camera::Update(glm::vec2 mousePos)
     {
-        ZoneScopedN("Camera Update");
-
-        glm::vec2 mousePos = Input::GetMouseCursorPosition();
+        //glm::vec2 mousePos = mousePos; //Input::GetMouseCursorPosition();
 
         float xoffset = mousePos.x - lastX;
         float yoffset = lastY - mousePos.y; // reversed since y-coordinates go from bottom to top
@@ -111,8 +104,6 @@ namespace Renderer
 
     void Camera::UpdateCameraVectors()
     {
-        ZoneScopedN("Camera Update Vectors");
-
         // calculate the new Front vector
         glm::vec3 front;
         front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));

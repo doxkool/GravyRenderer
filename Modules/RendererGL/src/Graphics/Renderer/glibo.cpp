@@ -1,5 +1,5 @@
 #include "glibo.h"
-#include "Graphics/Renderer/OpenGL/OpenGL.h"
+#include "Graphics/Renderer/OpenGL.h"
 
 namespace Renderer
 {
