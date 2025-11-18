@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Gravy.h"
+#include "RendererGL.h"
 
 class ImGUI
 {
@@ -9,7 +9,7 @@ private:
 public:
     ImGUI() {}
     ~ImGUI() {}
-    void Init();
+    void Init(GLFWwindow* glfwWindow);
     void Shutdown();
     void NewFrame();
     void EndFrame();

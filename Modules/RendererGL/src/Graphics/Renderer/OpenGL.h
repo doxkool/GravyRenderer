@@ -20,9 +20,9 @@
 #define CHECK_GL_ERRORS
 
 #ifdef CHECK_GL_ERRORS
-    #define GLCHECK GlCheckError(__FUNCTION__, __FILE__, __LINE__);
+#define GLCHECK GlCheckError(__FUNCTION__, __FILE__, __LINE__);
 #else
-    #define GLCHECK
+#define GLCHECK
 #endif
 
 void GlCheckError(const char *function, const char *file, int line);
@@ -34,36 +34,32 @@ struct OpenGLConfig
     bool apiEnableMessageCallBack = false;
 };
 
-namespace Renderer
+class OpenGL
 {
-    class OpenGL
-    {
-        private:
+private:
+public:
+    OpenGL() {}
+    ~OpenGL() {}
 
-        public:
-        OpenGL() {}
-        ~OpenGL() {}
+    static int Init(OpenGLConfig *glConfInit);
 
-        static int Init(OpenGLConfig* glConfInit);
+    static void SetClearColor(glm::vec4 color);
 
-        static void SetClearColor(glm::vec4 color);
+    static void ClearBuffer(std::vector<int> buffers = {GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GL_STENCIL_BUFFER_BIT});
 
-        static void ClearBuffer(std::vector<int> buffers = {GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GL_STENCIL_BUFFER_BIT});
+    static void WireframeRendering(bool enable);
+    static void WireframeRendering(bool enable, float wireWidth);
 
-        static void WireframeRendering(bool enable);
-        static void WireframeRendering(bool enable, float wireWidth);
+    static void DrawArray(GLsizei count);
+    static void DrawElements(GLsizei count);
 
-        static void DrawArray(GLsizei count);
-        static void DrawElements(GLsizei count);
+    static void SetViewportRes(glm::vec2 resolution);
+    static void SetViewportRes(int width, int height);
 
-        static void SetViewportRes(glm::vec2 resolution);
-        static void SetViewportRes(int width, int height);
+    static void SetFrameBufferRes(glm::vec2 resolution);
+    static void SetFrameBufferRes(int width, int height);
 
-        static void SetFrameBufferRes(glm::vec2 resolution);
-        static void SetFrameBufferRes(int width, int height);
-        
-        static glm::vec2 GetFrameBufferRes();
+    static glm::vec2 GetFrameBufferRes();
 
-        static float GetAspectRatio();
-    };
-}
+    static float GetAspectRatio();
+};

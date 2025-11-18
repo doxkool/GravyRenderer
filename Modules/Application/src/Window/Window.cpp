@@ -1,67 +1,63 @@
 #include "Window.h"
 
-namespace Renderer
+WindowSpec sWindowSettings;
+
+int Window::Init(RendererSpec *confInit)
 {
-    WindowSpec sWindowSettings;
+    m_glfw.Init(confInit);
+    return 0;
+}
 
-    int Window::Init(RendererSpec* confInit)
+void Window::Create(WindowSpec *confWindow)
+{
+    m_glfw.Create(confWindow);
+    if (confWindow->iconPath)
     {
-        m_glfw.Init(confInit);
-        return 0;
+        m_glfw.SetWindowIcon(confWindow->iconPath);
     }
+}
 
-    void Window::Create(WindowSpec* confWindow)
-    {
-        m_glfw.Create(confWindow);
+void Window::SwapScreenBuffer()
+{
+    m_glfw.SwapBuffer();
+}
 
-        if(confWindow->iconPath)
-        {
-            m_glfw.SetWindowIcon(confWindow->iconPath);
-        }
-    }
+bool Window::GetWindowShouldClose()
+{
+    return m_glfw.GetShouldWindowClose();
+}
 
-    void Window::SwapScreenBuffer()
-    {
-        m_glfw.SwapBuffer();
-    }
+bool Window::IsWindowminimized()
+{
+    return false;
+}
 
-    bool Window::GetWindowShouldClose()
-    {
-        return m_glfw.GetShouldWindowClose();
-    }
+void Window::ChangeResolution(glm::vec2 resolution)
+{
+    m_glfw.SetWindowResolution(resolution);
+}
 
-    bool Window::IsWindowminimized()
-    {
-        return false;
-    }
+void Window::ChangeWindowMode(e_WindowMode windowMode)
+{
+    LOG_WARN("Function 'window::changeWindowMode' not implemented yet...");
+}
 
-    void Window::ChangeResolution(glm::vec2 resolution)
-    {
-        m_glfw.SetWindowResolution(resolution);
-    }
+WindowSpec *Window::GetWindowSettings()
+{
+    return &sWindowSettings;
+}
 
-    void Window::ChangeWindowMode(e_WindowMode windowMode)
-    {
-        LOG_WARN("Function 'window::changeWindowMode' not implemented yet...");
-    }
+void Window::Update()
+{
+    m_glfw.Update();
+}
 
-    WindowSpec* Window::GetWindowSettings()
-    {
-        return &sWindowSettings;
-    }
+int Window::PollKeyInput(int key)
+{
+    return m_glfw.PollKeyInput(key);
+}
 
-    void Window::Update()
-    {
-        m_glfw.Update();
-    }
-
-    int Window::PollKeyInput(int key)
-    {
-        return m_glfw.PollKeyInput(key);
-    }
-
-    void Window::Quit()
-    {
-        m_glfw.SetShouldWindowClose();
-    }
+void Window::Quit()
+{
+    m_glfw.SetShouldWindowClose();
 }

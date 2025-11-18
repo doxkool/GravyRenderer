@@ -6,35 +6,32 @@
 
 #include "Window/GLFW/glfw.h"
 
-namespace Renderer
+class Window
 {
-    class Window
-    {
-    private:
-        glfw m_glfw;
-    public:
-        Window() {}
-        ~Window() {}
+private:
+    glfw m_glfw;
+public:
+    Window() {}
+    ~Window() {}
 
-        int Init(RendererSpec* confInit);
+    int Init(RendererSpec* confInit);
 
-        void Create(WindowSpec* confWindow);
-        void SwapScreenBuffer();
+    void Create(WindowSpec* confWindow);
+    void SwapScreenBuffer();
 
-        bool GetWindowShouldClose();
-        bool IsWindowminimized();
+    bool GetWindowShouldClose();
+    bool IsWindowminimized();
 
-        glfw* GetGLFW() { return &m_glfw; }
+    glfw* GetGLFW() { return &m_glfw; }
 
-        void ChangeResolution(glm::vec2 resolution);
-        void ChangeWindowMode(e_WindowMode windowMode);
+    void ChangeResolution(glm::vec2 resolution);
+    void ChangeWindowMode(e_WindowMode windowMode);
 
-        static WindowSpec* GetWindowSettings();
+    static WindowSpec* GetWindowSettings();
 
-        void Update();
+    void Update();
 
-        int PollKeyInput(int key);
+    int PollKeyInput(int key);
 
-        void Quit();
+    void Quit();
     };
-}

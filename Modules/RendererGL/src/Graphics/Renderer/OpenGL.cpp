@@ -86,131 +86,118 @@ void GlCheckError(const char *function, const char *file, int line)
     #endif
 }
 
-namespace Renderer
+int OpenGL::Init(OpenGLConfig* glConfInit)
 {
-    int OpenGL::Init(OpenGLConfig* glConfInit)
+    glewExperimental = GL_TRUE;
+
+    GLenum err = glewInit();
+
+    if (GLEW_OK != err)
     {
-        glewExperimental = GL_TRUE;
-
-        GLenum err = glewInit();
-
-        if (GLEW_OK != err)
+        auto errChar = (const char*)glewGetErrorString(err);
+        LOG_CRITICAL("ERROR! GLEW_INIT_FAILED :: {}", errChar);
+        return -1;
+    }else{
+        LOG_DEBUG("GLEW_INIT_SUCCESS");
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        if(glConfInit->apiEnableMessageCallBack)
         {
-            auto errChar = (const char*)glewGetErrorString(err);
-            LOG_CRITICAL("ERROR! GLEW_INIT_FAILED :: {}", errChar);
-            return -1;
+            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+            glDebugMessageCallback(MessageCallback, 0);
         }
-        else
-        {
-            LOG_DEBUG("GLEW_INIT_SUCCESS");
 
-            glEnable(GL_DEPTH_TEST);
-            glEnable(GL_BLEND);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CCW);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        ClearBuffer();
 
-            if(glConfInit->apiEnableMessageCallBack)
-            {
-                glEnable(GL_DEBUG_OUTPUT);
-                glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-                glDebugMessageCallback(MessageCallback, 0);
-            }
-
-            glEnable(GL_CULL_FACE);
-            glCullFace(GL_BACK);
-            glFrontFace(GL_CCW);
-
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-            ClearBuffer();
-
-            std::string gl_vendor = std::string((const char *)glGetString(GL_VENDOR));
-            std::string gl_renderer = std::string((const char *)glGetString(GL_RENDERER));
-            std::string gl_version = std::string((const char *)glGetString(GL_VERSION));
-
-            LOG_INFO("OpenGL_API Information :\n    {} \n    {}\n    {}\n", gl_vendor, gl_renderer, gl_version);
-        }
-        return 0;
+        std::string gl_vendor = std::string((const char *)glGetString(GL_VENDOR));
+        std::string gl_renderer = std::string((const char *)glGetString(GL_RENDERER));
+        std::string gl_version = std::string((const char *)glGetString(GL_VERSION));
+        LOG_INFO("OpenGL_API Information :\n    {} \n    {}\n    {}\n", gl_vendor, gl_renderer, gl_version);
     }
+    
+    return 0;
+}
 
-    void OpenGL::SetClearColor(glm::vec4 color)
+void OpenGL::SetClearColor(glm::vec4 color)
+{
+    glClearColor(color.r, color.g, color.b, color.a); GLCHECK
+}
+
+void OpenGL::ClearBuffer(std::vector<int> buffers)
+{
+    for (auto buffer : buffers)
     {
-        glClearColor(color.r, color.g, color.b, color.a); GLCHECK
+        glClear(buffer); GLCHECK
     }
+}
 
-    void OpenGL::ClearBuffer(std::vector<int> buffers)
+void OpenGL::SetFrameBufferRes(glm::vec2 resolution)
+{
+    SetFrameBufferRes(resolution.x, resolution.y);
+}
+
+void OpenGL::SetViewportRes(glm::vec2 resolution)
+{
+    SetViewportRes(resolution.x, resolution.y);
+}
+
+void OpenGL::SetViewportRes(int width, int height)
+{
+    glViewport(0, 0, width, height); GLCHECK
+}
+
+void OpenGL::SetFrameBufferRes(int width, int height)
+{
+    FrameBuffer_Height = height;
+    FrameBuffer_Width = width;
+}
+
+glm::vec2 OpenGL::GetFrameBufferRes()
+{
+    return glm::vec2(FrameBuffer_Width, FrameBuffer_Height);
+}
+
+float OpenGL::GetAspectRatio()
+{
+    glm::vec2 res = GetFrameBufferRes();
+    return res.x / res.y;
+}
+
+void OpenGL::WireframeRendering(bool enable)
+{
+    glLineWidth(2.0f);
+
+    if (enable)
     {
-        for (auto buffer : buffers)
-        {
-            glClear(buffer); GLCHECK
-        }
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); GLCHECK
+    }else{
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); GLCHECK
     }
+}
 
-    void OpenGL::SetFrameBufferRes(glm::vec2 resolution)
+void OpenGL::WireframeRendering(bool enable, float wireWidth)
+{
+    glLineWidth(wireWidth);
+
+    if (enable)
     {
-        SetFrameBufferRes(resolution.x, resolution.y);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); GLCHECK
+    }else{
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); GLCHECK
     }
+}
 
-    void OpenGL::SetViewportRes(glm::vec2 resolution)
-    {
-        SetViewportRes(resolution.x, resolution.y);
-    }
+void OpenGL::DrawArray(GLsizei count)
+{
+    glDrawArrays(GL_TRIANGLES, 0, count); GLCHECK
+}
 
-    void OpenGL::SetViewportRes(int width, int height)
-    {
-        glViewport(0, 0, width, height); GLCHECK
-    }
-
-    void OpenGL::SetFrameBufferRes(int width, int height)
-    {
-        FrameBuffer_Height = height;
-        FrameBuffer_Width = width;
-    }
-
-    glm::vec2 OpenGL::GetFrameBufferRes()
-    {
-        return glm::vec2(FrameBuffer_Width, FrameBuffer_Height);
-    }
-
-    float OpenGL::GetAspectRatio()
-    {
-        glm::vec2 res = GetFrameBufferRes();
-        return res.x / res.y;
-    }
-
-    void OpenGL::WireframeRendering(bool enable)
-    {
-        glLineWidth(2.0f);
-
-        if (enable)
-        {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); GLCHECK
-        }
-        else
-        {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); GLCHECK
-        }
-    }
-
-    void OpenGL::WireframeRendering(bool enable, float wireWidth)
-    {
-        glLineWidth(wireWidth);
-
-        if (enable)
-        {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); GLCHECK
-        }
-        else
-        {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); GLCHECK
-        }
-    }
-
-    void OpenGL::DrawArray(GLsizei count)
-    {
-        glDrawArrays(GL_TRIANGLES, 0, count); GLCHECK
-    }
-
-    void OpenGL::DrawElements(GLsizei count)
-    {
-        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr); GLCHECK
-    }
+void OpenGL::DrawElements(GLsizei count)
+{
+    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr); GLCHECK
 }

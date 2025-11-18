@@ -10,6 +10,10 @@
 #include "Graphics/Shader.h"
 #include "Graphics/Texture.h"
 
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 /* namespace Renderer
 {
     int Init(RendererSpec* rendererSpec);

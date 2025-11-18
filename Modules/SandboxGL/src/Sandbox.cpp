@@ -1,4 +1,5 @@
-#include "Gravy.h"
+#include "RendererGL.h"
+#include "Application.h"
 
 #include "Input.h"
 
@@ -12,7 +13,11 @@
 
 //using namespace Renderer;
 
-Renderer::Window* m_window = nullptr;
+Application AppInst;
+
+double DeltaTime;
+
+Window* m_window = nullptr;
 Renderer::Camera MainCam;
 
 Audio m_Audio;
@@ -28,14 +33,12 @@ Renderer::Light spotLight0(Renderer::SpotLight);
 
 void CheckForInput()
 {
-    ZoneScopedN("Input");
-
-    auto m_Window = Renderer::GetWindowInst();
+    auto m_Window = AppInst.GetWindowInst();
 
     if (Input::IsKeyJustPressed(KEY_GRAVE_ACCENT))
     {
         LOG_INFO("Escape key pressed, exiting Sandbox...");
-        Renderer::CloseWindow();
+        AppInst.CloseWindow();
     }
 
     if (Input::IsMouseButtonJustPressed(MOUSE_RIGHT_CLICK))
@@ -52,12 +55,12 @@ void CheckForInput()
         }
     }
 
-    if (Input::IsKeyPressed(KEY_W))              { MainCam.Move(FORWARD); }
-    if (Input::IsKeyPressed(KEY_S))              { MainCam.Move(BACKWARD); }
-    if (Input::IsKeyPressed(KEY_A))              { MainCam.Move(LEFT); }
-    if (Input::IsKeyPressed(KEY_D))              { MainCam.Move(RIGHT); }
-    if (Input::IsKeyPressed(KEY_SPACE))          { MainCam.Move(UP); }
-    if (Input::IsKeyPressed(KEY_LEFT_CONTROL))   { MainCam.Move(DOWN); }
+    if (Input::IsKeyPressed(KEY_W))              { MainCam.Move(FORWARD, DeltaTime); }
+    if (Input::IsKeyPressed(KEY_S))              { MainCam.Move(BACKWARD, DeltaTime); }
+    if (Input::IsKeyPressed(KEY_A))              { MainCam.Move(LEFT, DeltaTime); }
+    if (Input::IsKeyPressed(KEY_D))              { MainCam.Move(RIGHT, DeltaTime); }
+    if (Input::IsKeyPressed(KEY_SPACE))          { MainCam.Move(UP, DeltaTime); }
+    if (Input::IsKeyPressed(KEY_LEFT_CONTROL))   { MainCam.Move(DOWN, DeltaTime); }
 
     if(Input::IsKeyJustPressed(KEY_1))
     {
@@ -114,20 +117,19 @@ void RenderScene(Renderer::Shader &shader)
     shader.SetMat4fv(model, "model");
     sponza.Render();
 
-    cube0.Rotate({10.0, 10.0, 10.0});
+    cube0.Rotate({10.0, 10.0, 10.0}, DeltaTime);
 }
 
 void RenderShadowMap(Renderer::Light light)
 {
-    ZoneScopedN("Render ShadowMap");
     light.UpdateMatrices();
 
     light.m_DepthShader.Bind();
     light.m_DepthShader.SetMat4fv(light.GetLightSpaceMatrix(), "lightSpaceMatrix");
 
-    Renderer::OpenGL::SetViewportRes(light.m_ShadowRes);
+    OpenGL::SetViewportRes(light.m_ShadowRes);
     light.m_DepthMapFBO.Bind();
-    Renderer::OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
+    OpenGL::ClearBuffer({GL_DEPTH_BUFFER_BIT});
     light.m_DepthMapTexture.SetActiveTexture(GL_TEXTURE0);
     light.m_DepthMapTexture.Bind();
     RenderScene(light.m_DepthShader);
@@ -135,18 +137,18 @@ void RenderShadowMap(Renderer::Light light)
     light.m_DepthMapFBO.UnBind();
 
     // reset viewport
-    Renderer::OpenGL::SetViewportRes(Renderer::GetCurrentResolution());
-    Renderer::OpenGL::ClearBuffer({GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT});
+    OpenGL::SetViewportRes(AppInst.GetCurrentResolution());
+    OpenGL::ClearBuffer({GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT});
 }
 
 void Run()
 {
-    m_window = Renderer::GetWindowInst();
+    m_window = AppInst.GetWindowInst();
 
-    Renderer::SetClearColor(GRAY);
+    //Renderer::SetClearColor(GRAY);
 
     MainCam.Position = {0.0, 15.0, -5.0};
-    SetMainCamera(&MainCam);
+    //SetMainCamera(&MainCam);
 
     t_AudioTrackInfo audio1 = {
         .filePath   = "assets/musics/Ice_and_Snow.mp3",
@@ -188,16 +190,14 @@ void Run()
     //shader.Set1i(1, "material.specular");
     shader.Set1i(2, "material.shadowMap");
 
-    while (Renderer::IsRunning())
+    while (AppInst.IsRunning())
     {
-        FrameMarkStart("Main Loop");
-
         CheckForInput();
 
-        Renderer::Time::UpdateDeltaTime();
-        Renderer::OpenGL::ClearBuffer();
+        DeltaTime = Time::UpdateDeltaTime();
+        OpenGL::ClearBuffer();
 
-        MainCam.Update();
+        //MainCam.Update();
 
         // render scene from light's point of view
         for (auto light : Lights)
@@ -212,7 +212,6 @@ void Run()
         shader.SetMat4fv(dirLight.GetLightSpaceMatrix(), "lightSpaceMatrix");
 
         {
-            ZoneScopedN("Set Textures");
             texture.SetActiveTexture(GL_TEXTURE0);
             texture.Bind();
             glActiveTexture(GL_TEXTURE2);
@@ -220,7 +219,6 @@ void Run()
         }
         
         {
-            ZoneScopedN("Render Scene");
             RenderScene(shader);
         }
 
@@ -232,13 +230,15 @@ void Run()
         //ZoneScopedN("Window stuff");
         m_window->SwapScreenBuffer();
         m_window->Update();
-
-        FrameMarkEnd("Main Loop");
     }    
 }
 
 int main()
 {
+    AppSpec appSpec = {
+
+    };
+
     WindowSpec windowSpec = {
         .windowName         = "Sandbox",
         .windowResX         = 1920,
@@ -252,26 +252,25 @@ int main()
     RendererSpec rendererSpec = {
         .windowSpec = windowSpec,
         .renderingAPI = Opengl,
-        .apiVersionMajor = 4,
-        .apiVersionMinor = 6,
-        .apiEnableMessageCallBack = true,
-        .apiLoggingLevel = trace
+        //.apiVersionMajor = 4,
+        //.apiVersionMinor = 6,
+        //.apiEnableMessageCallBack = true,
+        //.apiLoggingLevel = trace
     };
     
-    int ret_Gravy = Renderer::Init(&rendererSpec);
+    int ret_Gravy = AppInst.Init(&appSpec);
 
     Logger::Init(windowSpec.windowName);
 
     m_Audio.Init();
-    m_ImGUI.Init();
+    m_ImGUI.Init(AppInst.GetWindowInst()->GetGLFW()->GetNativeWindow());
 
     if(ret_Gravy == 0)
     {
         Run();
     }
 
-    Renderer::Shutdown();
-
+    AppInst.Shutdown();
     m_ImGUI.Shutdown();
     m_Audio.Shutdown();
 

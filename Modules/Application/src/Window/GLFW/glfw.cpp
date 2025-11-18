@@ -5,255 +5,254 @@
 
 #include <stb_image.h>
 
-namespace Renderer
+void error_callback(int error_code, const char *description)
 {
-    void error_callback(int error_code, const char* description)
+    LOG_ERROR("\nERROR::{} >> {}", error_code, description);
+}
+
+void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+{
+    OpenGL::SetFrameBufferRes(width, height);
+}
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+    // auto state = glfwGetKey(window, key);
+    Input::RecieveKeyCallback(key, scancode, action, mods);
+}
+
+void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+{
+    Input::RecieveMouseCallback(xpos, ypos);
+}
+
+void mouse_scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    Input::RecieveMouseScrollCallback(xoffset, yoffset);
+}
+
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
+{
+    Input::RecieveMouseButtonCallback(button, action, mods);
+}
+
+void WindowSizeCallback(GLFWwindow *window, int width, int height)
+{
+    glfwSetWindowSize(window, width, height);
+    OpenGL::SetFrameBufferRes(width, height);
+}
+
+int glfw::Init(RendererSpec *confInit)
+{
+    /* Initialize the library */
+    if (!glfwInit())
     {
-        LOG_ERROR("\nERROR::{} >> {}", error_code, description);
+        LOG_ERROR("ERROR! GLFW_INIT_FAILED");
+        return -1;
     }
 
-    void framebuffer_size_callback(GLFWwindow *window, int width, int height)
-    {
-        OpenGL::SetFrameBufferRes(width, height);
-    }
-    void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-    {
-        // auto state = glfwGetKey(window, key);
-        Input::RecieveKeyCallback(key, scancode, action, mods);
-    }
+#ifdef DEBUG
+    // LOG_WARN("Running in Debug mode!");
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
 
-    void mouse_callback(GLFWwindow *window, double xpos, double ypos)
-    {
-        Input::RecieveMouseCallback(xpos, ypos);
-    }
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 
-    void mouse_scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
-    {
-        Input::RecieveMouseScrollCallback(xoffset, yoffset);
-    }
+    return 0;
+}
 
-    void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
-    {
-        Input::RecieveMouseButtonCallback(button, action, mods);
-    }
+void glfw::Shutdown()
+{
+    glfwTerminate();
+}
 
-    void WindowSizeCallback(GLFWwindow* window, int width, int height)
+int glfw::Create(WindowSpec *confWindow)
+{
+    GLFWmonitor *primaryMonitor = glfwGetPrimaryMonitor();
+    if (!primaryMonitor)
     {
-        glfwSetWindowSize(window, width, height);
-        OpenGL::SetFrameBufferRes(width, height);
+        // Handle error getting primary monitor
+        LOG_CRITICAL("GLFW ERROR :: Failed to get the primary monitor!");
+        glfwTerminate();
+        return -1;
     }
 
-    int glfw::Init(RendererSpec* confInit)
+    const GLFWvidmode *mode = glfwGetVideoMode(primaryMonitor);
+
+    m_windowName = confWindow->windowName;
+    glfwWindowHint(GLFW_RESIZABLE, confWindow->windowResizable);
+    glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, confWindow->transparentFB);
+
+    switch (confWindow->windowMode)
     {
-        /* Initialize the library */
-        if (!glfwInit())
-        {
-            LOG_ERROR("ERROR! GLFW_INIT_FAILED");
-            return -1;
-        }
+    case windowed:
+        window = glfwCreateWindow(confWindow->windowResX, confWindow->windowResY, confWindow->windowName, NULL, NULL);
+        window_width = confWindow->windowResX;
+        window_height = confWindow->windowResY;
+        break;
 
-        #ifdef DEBUG
-            //LOG_WARN("Running in Debug mode!");
-            glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-        #endif
+    case borderless:
+        LOG_WARN("Borderless mode is not supported yet!");
+        window = glfwCreateWindow(confWindow->windowResX, confWindow->windowResY, confWindow->windowName, NULL, NULL);
+        break;
 
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, confInit->apiVersionMajor);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, confInit->apiVersionMinor);
+    case fullscreen:
+        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-        return 0;
+        glfwWindowHint(GLFW_FLOATING, true);
+
+        window = glfwCreateWindow(mode->width, mode->height, confWindow->windowName, primaryMonitor, NULL);
+        window_width = mode->width;
+        window_height = mode->height;
+        break;
+
+    default:
+        window = glfwCreateWindow(confWindow->windowResX, confWindow->windowResY, confWindow->windowName, NULL, NULL);
+        window_width = confWindow->windowResX;
+        window_height = confWindow->windowResY;
+        break;
     }
 
-    void glfw::Shutdown()
+#ifdef LINUX_WAYLAND
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
+    glfwWindowHintString(GLFW_WAYLAND_APP_ID, confWindow->windowName);
+#endif
+#ifdef LINUX_X11
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
+    glfwWindowHintString(GLFW_X11_CLASS_NAME, confWindow->windowName);
+    glfwWindowHintString(GLFW_X11_INSTANCE_NAME, confWindow->windowName);
+#endif
+
+    if (!window)
     {
         glfwTerminate();
+        LOG_CRITICAL("ERROR! FAILED TO CREATE WINDOW");
     }
 
-    int glfw::Create(WindowSpec* confWindow)
+    /* Make the window's context current */
+    glfwMakeContextCurrent(window);
+
+    // Setting the callbacks
+    glfwSetErrorCallback(error_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, mouse_scroll_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetWindowSizeCallback(window, WindowSizeCallback);
+
+    Input::BindWindow(window);
+
+    return 0;
+}
+
+void glfw::SetWindowIcon(const std::string &IconPath)
+{
+    if (IconPath.c_str())
     {
-        GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
-        if (!primaryMonitor) {
-            // Handle error getting primary monitor
-            LOG_CRITICAL("GLFW ERROR :: Failed to get the primary monitor!");
-            glfwTerminate();
-            return -1;
-        }
-
-        const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
-
-        m_windowName = confWindow->windowName;
-        glfwWindowHint(GLFW_RESIZABLE, confWindow->windowResizable);
-        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, confWindow->transparentFB);
-
-        switch (confWindow->windowMode)
-        {
-        case windowed:
-            window = glfwCreateWindow(confWindow->windowResX, confWindow->windowResY, confWindow->windowName, NULL, NULL);
-            window_width = confWindow->windowResX;
-            window_height = confWindow->windowResY;
-            break;
-        
-        case borderless:
-            LOG_WARN("Borderless mode is not supported yet!");
-            window = glfwCreateWindow(confWindow->windowResX, confWindow->windowResY, confWindow->windowName, NULL, NULL);
-            break;
-        
-        case fullscreen:
-            glfwWindowHint(GLFW_RED_BITS, mode->redBits);
-            glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-            glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
-            glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-
-            glfwWindowHint(GLFW_FLOATING, true);
-
-            window = glfwCreateWindow(mode->width, mode->height, confWindow->windowName, primaryMonitor, NULL);
-            window_width = mode->width;
-            window_height = mode->height;
-            break;
-        
-        default:
-            window = glfwCreateWindow(confWindow->windowResX, confWindow->windowResY, confWindow->windowName, NULL, NULL);
-            window_width = confWindow->windowResX;
-            window_height = confWindow->windowResY;
-            break;
-        }
-
-        #ifdef LINUX_WAYLAND
-            glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
-            glfwWindowHintString(GLFW_WAYLAND_APP_ID, confWindow->windowName);
-        #endif
-        #ifdef LINUX_X11
-            glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
-            glfwWindowHintString(GLFW_X11_CLASS_NAME, confWindow->windowName);
-            glfwWindowHintString(GLFW_X11_INSTANCE_NAME, confWindow->windowName);
-        #endif
-
-        if (!window)
-        {
-            glfwTerminate();
-            LOG_CRITICAL("ERROR! FAILED TO CREATE WINDOW");
-        }
-
-        /* Make the window's context current */
-        glfwMakeContextCurrent(window);
-
-        // Setting the callbacks
-        glfwSetErrorCallback(error_callback);
-        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-        glfwSetKeyCallback(window, key_callback);
-        glfwSetCursorPosCallback(window, mouse_callback);
-        glfwSetScrollCallback(window, mouse_scroll_callback);
-        glfwSetMouseButtonCallback(window, mouse_button_callback);
-        glfwSetWindowSizeCallback(window, WindowSizeCallback);
-
-        Input::BindWindow(window);
-
-        return 0;
+        GLFWimage images[1];
+        images[0].pixels = stbi_load(IconPath.c_str(), &images[0].width, &images[0].height, 0, 4); // rgba channels
+        glfwSetWindowIcon(window, 1, images);
+        stbi_image_free(images[0].pixels);
     }
+}
 
-    void glfw::SetWindowIcon(const std::string &IconPath)
+void glfw::UpdateWindowName(std::string newTitle)
+{
+    glfwSetWindowTitle(window, newTitle.c_str());
+}
+
+void glfw::SwapBuffer()
+{
+    glfwSwapBuffers(window);
+}
+
+void glfw::EnableVsync(bool enabled)
+{
+    if (enabled)
     {
-        if(IconPath.c_str())
-        {
-            GLFWimage images[1];
-            images[0].pixels = stbi_load(IconPath.c_str(), &images[0].width, &images[0].height, 0, 4); //rgba channels 
-            glfwSetWindowIcon(window, 1, images); 
-            stbi_image_free(images[0].pixels);
-        }
+        glfwSwapInterval(1);
     }
-
-    void glfw::UpdateWindowName(std::string newTitle)
+    else
     {
-        glfwSetWindowTitle(window, newTitle.c_str());
+        glfwSwapInterval(0);
     }
+}
 
-    void glfw::SwapBuffer()
+bool *glfw::IsVsyncEnable()
+{
+    return &b_vsync;
+}
+
+void glfw::GrabMouseInput(bool enable)
+{
+    if (enable)
     {
-        glfwSwapBuffers(window);
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        mouseCaptured = true;
     }
-
-    void glfw::EnableVsync(bool enabled)
+    else
     {
-        if(enabled)
-        {
-            glfwSwapInterval(1);
-        }else{
-            glfwSwapInterval(0);
-        }
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        mouseCaptured = false;
     }
+}
 
-    bool* glfw::IsVsyncEnable()
-    {
-        return &b_vsync;
-    }
+bool glfw::IsMouseGrabed()
+{
+    return mouseCaptured;
+}
 
-    void glfw::GrabMouseInput(bool enable)
-    {
-        if (enable)
-        {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            mouseCaptured = true;
-        }
-        else
-        {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            mouseCaptured = false;
-        }
-    }
+glm::vec2 glfw::GetCurrentResolution()
+{
+    return OpenGL::GetFrameBufferRes();
+}
 
-    bool glfw::IsMouseGrabed()
-    {
-        return mouseCaptured;
-    }
+bool glfw::GetShouldWindowClose()
+{
+    return glfwWindowShouldClose(window);
+}
 
-    glm::vec2 glfw::GetCurrentResolution()
-    {
-        return OpenGL::GetFrameBufferRes();
-    }
+void glfw::SetShouldWindowClose()
+{
+    glfwSetWindowShouldClose(window, true);
+}
 
-    bool glfw::GetShouldWindowClose()
-    {
-        return glfwWindowShouldClose(window);
-    }
+void glfw::SetWindowResolution(glm::vec2 resolution)
+{
+    glfwSetWindowSize(window, resolution.x, resolution.y);
+    OpenGL::SetFrameBufferRes(resolution.x, resolution.y);
+}
 
-    void glfw::SetShouldWindowClose()
-    {
-        glfwSetWindowShouldClose(window, true);
-    }
+void glfw::SetWindowMode(e_WindowMode windowMode)
+{
+}
 
-    void glfw::SetWindowResolution(glm::vec2 resolution)
-    {
-        glfwSetWindowSize(window, resolution.x, resolution.y);
-        OpenGL::SetFrameBufferRes(resolution.x, resolution.y);
-    }
+glm::vec2 glfw::GetWindowScalling()
+{
+    glm::vec2 scalling = glm::vec2(0, 0);
 
-    void glfw::SetWindowMode(e_WindowMode windowMode)
-    {
+    glfwGetWindowContentScale(window, &scalling.x, &scalling.y);
 
-    }
+    return scalling;
+}
 
-    glm::vec2 glfw::GetWindowScalling()
-    {
-        glm::vec2 scalling = glm::vec2(0, 0);
+void glfw::Update()
+{
+    glfwPollEvents();
+}
 
-        glfwGetWindowContentScale(window, &scalling.x, &scalling.y);
+int glfw::PollKeyInput(int key)
+{
+    return glfwGetKey(window, key);
+}
 
-        return scalling;
-    }
-
-    void glfw::Update()
-    {
-        glfwPollEvents();
-    }
-
-    int glfw::PollKeyInput(int key)
-    {
-        return glfwGetKey(window, key);
-    }
-
-    double glfw::GetTime()
-    {
-        return glfwGetTime();
-    }
+double glfw::GetTime()
+{
+    return glfwGetTime();
 }

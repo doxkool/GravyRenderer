@@ -9,7 +9,7 @@ if (WIN32)
 endif(WIN32)
 
 if (UNIX)
-    SET(CoreUtils_static ${CMAKE_BINARY_DIR}/Modules/CoreUtils/libCoreUtils.a)
+    SET(CoreUtils_static ${CMAKE_BINARY_DIR}/bin/lib/libCoreUtils.a)
 endif(UNIX)
 
 find_package(OpenGL REQUIRED)
